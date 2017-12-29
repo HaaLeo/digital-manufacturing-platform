@@ -1,26 +1,32 @@
 /**
- * Write your model definitions here
+ * Business Model for the 3D Printer use case
  */
 
 namespace org.usecase.printer
 
-abstract participant Trader identified by traderID {
-    o String traderID
-    o String enduserId
+abstract participant Stakeholder identified by stakeholderID {
+    o String stakeholderID
+    o String pubKey
+    
+}
+
+participant Enduser extends Stakeholder {
     o String firstName
     o String lastName
-    o String pubKey
+    o String contactInformation
     --> Cash cash
 }
 
-participant Enduser extends Trader {}
+participant Designer extends Stakeholder {
+    o String firstName
+    o String lastName
+    o String contactInformation
+    --> Cash cash
+}
 
-participant Designer extends Trader {}
-
-participant Printer identified by printerId {
-    o String printerId
+// Not sure if Printer should be participant or rather asset?
+participant Printer extends Stakeholder {
     o String name
-    o String pubKey
 }
 
 enum OwnerEntity {
@@ -28,6 +34,7 @@ enum OwnerEntity {
   o Designer
 }
 
+//This class represents a "wallet" of a Trader
 asset Cash identified by cashID {
     o String cashID
     o String currency
@@ -36,17 +43,35 @@ asset Cash identified by cashID {
     o OwnerEntity ownerEntity
 } 
 
-asset Blueprint identified by blueprintID {
-    o String blueprintID
-    o String address
-    o String description
+//This class represents a Master-Blueprint stored on BCDB
+asset BlueprintMaster identified by blueprintMasterID {
+    o String blueprintMasterID
+    o String assetHash
+    o Double price
+    o String metadata
     --> Designer owner
 }
 
-transaction CashTransfer {      
-    o Double cashValue  
+//This class represents a copy of a Master-Blueprint 
+asset BlueprintCopy identified by blueprintCopyID {
+    o String blueprintCopyID
+    o Boolean printed
+    --> BlueprintMaster blueprintMaster
+    --> Stakeholder owner
+}
+
+// Transaction that 
+transaction initTransfer {     
+    --> Designer designer
+    --> Enduser enduser
+    --> Printer printer
+    --> BlueprintMaster blueprintMaster
+}
+
+// Transaction after succesful printing
+transaction finishTransfer {
+    --> Printer printer    
     --> Cash cashInc
     --> Cash cashDec
-    --> Blueprint bueprintInc
-    --> Blueprint blueprintDec
+    --> BlueprintCopy blueprintCopy
 }
