@@ -1,0 +1,52 @@
+/**
+ * Write your model definitions here
+ */
+
+namespace org.usecase.printer
+
+abstract participant Trader identified by traderID {
+    o String traderID
+    o String enduserId
+    o String firstName
+    o String lastName
+    o String pubKey
+    --> Cash cash
+}
+
+participant Enduser extends Trader {}
+
+participant Designer extends Trader {}
+
+participant Printer identified by printerId {
+    o String printerId
+    o String name
+    o String pubKey
+}
+
+enum OwnerEntity {
+  o Enduser
+  o Designer
+}
+
+asset Cash identified by cashID {
+    o String cashID
+    o String currency
+    o Double value
+    o String ownerID
+    o OwnerEntity ownerEntity
+} 
+
+asset Blueprint identified by blueprintID {
+    o String blueprintID
+    o String address
+    o String description
+    --> Designer owner
+}
+
+transaction CashTransfer {      
+    o Double cashValue  
+    --> Cash cashInc
+    --> Cash cashDec
+    --> Blueprint bueprintInc
+    --> Blueprint blueprintDec
+}
