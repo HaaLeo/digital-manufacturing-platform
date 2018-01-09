@@ -65,7 +65,7 @@ asset BlueprintCopy identified by blueprintCopyID {
 }
 
 // Transaction after succesful printing
-transaction executeTransfer {
+transaction ExecuteTransfer {
     --> Printer printer    
     --> Cash cashInc
     --> Cash cashDec
