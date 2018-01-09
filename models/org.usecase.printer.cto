@@ -56,20 +56,16 @@ asset BlueprintMaster identified by blueprintMasterID {
 asset BlueprintCopy identified by blueprintCopyID {
     o String blueprintCopyID
     o Boolean printed
+    o String OTPencryptedWithDesignerPubKey
+    o String OTPencryptedWithPrinterPubKey
+    --> Printer printer
+    --> Enduser buyer
     --> BlueprintMaster blueprintMaster
     --> Stakeholder owner
 }
 
-// Transaction that 
-transaction initTransfer {     
-    --> Designer designer
-    --> Enduser enduser
-    --> Printer printer
-    --> BlueprintMaster blueprintMaster
-}
-
 // Transaction after succesful printing
-transaction finishTransfer {
+transaction executeTransfer {
     --> Printer printer    
     --> Cash cashInc
     --> Cash cashDec

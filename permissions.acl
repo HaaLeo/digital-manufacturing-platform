@@ -1,0 +1,188 @@
+/**
+ * Access control rules for decentralized-energy-network
+ */
+
+
+//Residents to have access only to their own account
+rule EnduserAccessOwnRecord {
+    description: "Allow endusers to access only their profile"
+    participant(p): "org.usecase.printer.Enduser"
+    operation: READ, UPDATE, DELETE
+    resource(r): "org.usecase.printer.Enduser"
+    condition: (r.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+//Endusers to have read only access to other Endusers
+rule EnduserReadAccessEndusers {
+    description: "Allow Endusers read access to other Endusers"
+    participant: "org.usecase.printer.Enduser"
+    operation: READ
+    resource: "org.usecase.printer.Enduser"
+    action: ALLOW
+}
+
+//Endusers to have read only access to other Designers
+rule EnduserReadAccessDesigners {
+    description: "Allow Endusers read access to other Designers"
+    participant: "org.usecase.printer.Enduser"
+    operation: READ
+    resource: "org.usecase.printer.Designer"
+    action: ALLOW
+}
+
+//Endusers to have read only access to other Printer
+rule EnduserReadAccessPrinters {
+    description: "Allow Endusers read access to other Printer"
+    participant: "org.usecase.printer.Enduser"
+    operation: READ
+    resource: "org.usecase.printer.Printer"
+    action: ALLOW
+}
+
+//Endusers to have read access to all BlueprintMaster assets
+rule EnduserAccessBlueprintMasterRecord {
+    description: "Allow Endusers read access to all BlueprintMaster assets"
+    participant: "org.usecase.printer.Enduser"
+    operation: READ
+    resource: "org.usecase.printer.BlueprintMaster"
+    action: ALLOW
+}
+
+//Endusers to have read access to all BlueprintCopy assets
+rule EnduserAccessBlueprintCopyRecord {
+    description: "Allow Endusers read access to all BlueprintCopy assets"
+    participant: "org.usecase.printer.Enduser"
+    operation: READ
+    resource: "org.usecase.printer.BlueprintCopy"
+    action: ALLOW
+}
+
+//Endusers to have read access to all cash assets
+rule EnduserAccessCashRecord {
+    description: "Allow Endusers read access to all cash assets"
+    participant: "org.usecase.printer.Enduser"
+    operation: READ
+    resource: "org.usecase.printer.Cash"
+    action: ALLOW
+}
+
+
+//Designers to have access to their own account
+rule DesignerAccessOwnRecord {
+    description: "Allow Designers to access only their profile"
+    participant(p): "org.usecase.printer.Designer"
+    operation: READ, UPDATE, DELETE
+    resource(r): "org.usecase.printer.Designer"
+    condition: (r.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+//Designers to have read only access to other Designers
+rule DesignerReadAccessDesigners {
+    description: "Allow Designers read access to other Designers"
+    participant: "org.usecase.printer.Designer"
+    operation: READ
+    resource: "org.usecase.printer.Designer"
+    action: ALLOW
+}
+
+//Designers to have read only access to other Endusers
+rule DesignerReadAccessEndusers {
+    description: "Allow Designers read access to other Endusers"
+    participant: "org.usecase.printer.Designer"
+    operation: READ
+    resource: "org.usecase.printer.Enduser"
+    action: ALLOW
+}
+
+
+//Designers to have read access to all BlueprintMaster assets
+rule DesignerAccessBlueprintMasterRecord {
+    description: "Allow Designer read access to all BlueprintMaster assets"
+    participant: "org.usecase.printer.Designer"
+    operation: READ
+    resource: "org.usecase.printer.BlueprintMaster"
+    action: ALLOW
+}
+
+//Designers to have read access to all BlueprintCopy assets
+rule DesignerAccessBlueprintCopyRecord {
+    description: "Allow Designer read access to all BlueprintCopy assets"
+    participant: "org.usecase.printer.Designer"
+    operation: READ
+    resource: "org.usecase.printer.BlueprintCopy"
+    action: ALLOW
+}
+
+//Designers to have read access to all cash assets
+rule DesignerAccessCashRecord {
+    description: "Allow Designer read access to all cash assets"
+    participant: "org.usecase.printer.Designer"
+    operation: READ
+    resource: "org.usecase.printer.Cash"
+    action: ALLOW
+}
+
+//Printers to have access to their own account
+rule PrinterAccessOwnRecord {
+    description: "Allow Printers to access only their profile"
+    participant(p): "org.usecase.printer.Printer"
+    operation: READ, UPDATE, DELETE
+    resource(r): "org.usecase.printer.Printer"
+    condition: (r.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+//Printers to have read only access to other Endusers
+rule PrinterReadAccessEndusers {
+    description: "Allow Printers read access to other Endusers"
+    participant: "org.usecase.printer.Printer"
+    operation: READ
+    resource: "org.usecase.printer.Enduser"
+    action: ALLOW
+}
+
+
+//Printers to have read access to all BlueprintMaster assets
+rule PrinterAccessBlueprintMasterRecord {
+    description: "Allow Printers read access to all BlueprintMaster assets"
+    participant: "org.usecase.printer.Printer"
+    operation: READ
+    resource: "org.usecase.printer.BlueprintMaster"
+    action: ALLOW
+}
+
+//Printers to have read access to all BlueprintCopy assets
+rule PrinterAccessBlueprintCopyRecord {
+    description: "Allow Printers read access to all BlueprintCopy assets"
+    participant: "org.usecase.printer.Printer"
+    operation: READ
+    resource: "org.usecase.printer.BlueprintCopy"
+    action: ALLOW
+}
+
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "org.hyperledger.composer.system.Participant"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}

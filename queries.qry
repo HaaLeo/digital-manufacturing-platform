@@ -1,38 +1,36 @@
 
-query selectResidents {
-  description: "Select all residents"
+query selectEndusers {
+  description: "Select all endusers"
   statement:
-      SELECT org.decentralized.energy.network.Resident
+      SELECT org.usecase.printer.Enduser
 }
 
-query selectBanks {
-  description: "Select all banks"
+query selectDesigner {
+  description: "Select all designers"
   statement:
-      SELECT org.decentralized.energy.network.Bank
+      SELECT org.usecase.printer.Designer
 }
 
-query selectUtilityCompanies {
-  description: "Select all utility companies"
+query selectUtilityPrinter {
+  description: "Select all utility printer"
   statement:
-      SELECT org.decentralized.energy.network.UtilityCompany
+      SELECT org.usecase.printer.Printer
 }
 
-query selectCoins {
-  description: "Select all coin assets"
+query selectBlueprintMaster {
+  description: "Select all BlueprintMaster assets"
   statement:
-      SELECT org.decentralized.energy.network.Coins
+      SELECT org.usecase.printer.BlueprintMaster
 }
 
-query selectEnergy {
-  description: "Select all energy assets"
+query selectBlueprintCopy {
+  description: "Select all BlueprintCopy assets"
   statement:
-      SELECT org.decentralized.energy.network.Energy
+      SELECT org.usecase.printer.BlueprintCopy
 }
 
 query selectCash {
   description: "Select all cash assets"
   statement:
-      SELECT org.decentralized.energy.network.Cash
+      SELECT org.usecase.printer.Cash
 }
-
-
