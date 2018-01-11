@@ -12,7 +12,7 @@ export class BlueprintCopyComponent implements OnInit {
 
   myForm: FormGroup;
 
-  private allAssets;
+  private allBlueprintCopyAssets;
   private asset;
   private currentId;
 	private errorMessage;
@@ -103,7 +103,7 @@ export class BlueprintCopyComponent implements OnInit {
       result.forEach(asset => {
         tempList.push(asset);
       });
-      this.allAssets = tempList;
+      this.allBlueprintCopyAssets = tempList;
     })
     .catch((error) => {
         if(error == 'Server error'){

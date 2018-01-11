@@ -7,17 +7,16 @@ import { Configuration }     from './configuration';
 import { DataService }     from './data.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-// import { TransactionComponent } from './Transaction/Transaction.component'
-
 import { CashComponent } from './Cash/Cash.component';
 import { BlueprintMasterComponent } from './BlueprintMaster/BlueprintMaster.component';
 import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component';
+import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
 
 @NgModule({
   declarations: [
     AppComponent,
 		HomeComponent,
-    // TransactionComponent,
+    BuyAssetTRComponent,
     CashComponent,
 		BlueprintMasterComponent,
 		
