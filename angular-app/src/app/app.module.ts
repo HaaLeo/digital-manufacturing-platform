@@ -11,6 +11,9 @@ import { CashComponent } from './Cash/Cash.component';
 import { BlueprintMasterComponent } from './BlueprintMaster/BlueprintMaster.component';
 import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component';
 import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
+import { EnduserComponent } from 'app/Enduser/Enduser.component';
+
+// import { TransactionComponent } from './Transaction/Transaction.component'
 
 @NgModule({
   declarations: [
@@ -19,7 +22,7 @@ import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
     BuyAssetTRComponent,
     CashComponent,
 		BlueprintMasterComponent,
-		
+		EnduserComponent,
     BlueprintCopyComponent
 		
   ],
