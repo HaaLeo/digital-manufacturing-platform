@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { Cash } from '../org.usecase.printer';
+import { Cash, Designer } from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -9,32 +9,37 @@ import 'rxjs/Rx';
 export class CashService {
 
 	
-		private NAMESPACE: string = 'org.usecase.printer.Cash';
+    private CASH: string = 'org.usecase.printer.Cash';
+    private DESIGNER: string = 'org.usecase.printer.Designer';
 	
 
 
 
-    constructor(private dataService: DataService<Cash>) {
+    constructor(private dataService: DataService<Cash>, private designerService: DataService<Designer>) {
     };
 
     public getAll(): Observable<Cash[]> {
-        return this.dataService.getAll(this.NAMESPACE);
+        return this.dataService.getAll(this.CASH);
     }
 
     public getAsset(id: any): Observable<Cash> {
-      return this.dataService.getSingle(this.NAMESPACE, id);
+      return this.dataService.getSingle(this.CASH, id);
     }
 
     public addAsset(itemToAdd: any): Observable<Cash> {
-      return this.dataService.add(this.NAMESPACE, itemToAdd);
+      return this.dataService.add(this.CASH, itemToAdd);
     }
 
     public updateAsset(id: any, itemToUpdate: any): Observable<Cash> {
-      return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
+      return this.dataService.update(this.CASH, id, itemToUpdate);
     }
 
     public deleteAsset(id: any): Observable<Cash> {
-      return this.dataService.delete(this.NAMESPACE, id);
+      return this.dataService.delete(this.CASH, id);
     }
 
+    public deleteDesigner(id: any): Observable<Designer> {
+      console.log(id);
+      return this.designerService.delete(this.DESIGNER, id);
+    }
 }

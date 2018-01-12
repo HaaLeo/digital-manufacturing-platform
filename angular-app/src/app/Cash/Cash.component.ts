@@ -269,7 +269,16 @@ export class CashComponent implements OnInit {
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
-      location.reload();
+      
+      var ownerID = this.currentId.split("_")[1];
+            
+      this.serviceCash.deleteDesigner(ownerID)
+      .toPromise() 
+      .then(() => {
+        console.log("Cash owner deleted");
+        location.reload();
+
+      });
 		})
 		.catch((error) => {
             if(error == 'Server error'){
@@ -295,44 +304,20 @@ export class CashComponent implements OnInit {
     .then((result) => {
 			this.errorMessage = null;
       let formObject = {
-        
-          
-            "cashID":null,
-          
-        
-          
-            "currency":null,
-          
-        
-          
-            "value":null,
-          
-        
-          
-            "ownerID":null,
-          
-        
-          
-            "ownerEntity":null 
-          
-        
+        "cashID":null,
+        "currency":null,
+        "value":null,
+        "ownerID":null,
+        "ownerEntity":null    
       };
-
-
-
-      
-        if(result.cashID){
-          
+        if(result.cashID){  
             formObject.cashID = result.cashID;
-          
         }else{
           formObject.cashID = null;
         }
-      
-        if(result.currency){
-          
+
+        if(result.currency){          
             formObject.currency = result.currency;
-          
         }else{
           formObject.currency = null;
         }

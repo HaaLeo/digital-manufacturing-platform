@@ -12,6 +12,7 @@ import { BlueprintMasterComponent } from './BlueprintMaster/BlueprintMaster.comp
 import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component';
 import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
+import { DesignerComponent } from 'app/Designer/Designer.component';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -22,7 +23,8 @@ import { EnduserComponent } from 'app/Enduser/Enduser.component';
     BuyAssetTRComponent,
     CashComponent,
 		BlueprintMasterComponent,
-		EnduserComponent,
+    EnduserComponent,
+    DesignerComponent,
     BlueprintCopyComponent
 		
   ],
