@@ -196,6 +196,7 @@ export class BlueprintMasterComponent implements OnInit {
         
       
       });
+      location.reload();
     })
     .catch((error) => {
         if(error == 'Server error'){
@@ -245,7 +246,8 @@ export class BlueprintMasterComponent implements OnInit {
     return this.serviceBlueprintMaster.updateAsset(form.get("blueprintMasterID").value,this.asset)
 		.toPromise()
 		.then(() => {
-			this.errorMessage = null;
+      this.errorMessage = null;
+      location.reload();
 		})
 		.catch((error) => {
             if(error == 'Server error'){
@@ -266,7 +268,8 @@ export class BlueprintMasterComponent implements OnInit {
     return this.serviceBlueprintMaster.deleteAsset(this.currentId)
 		.toPromise()
 		.then(() => {
-			this.errorMessage = null;
+      this.errorMessage = null;
+      location.reload();
 		})
 		.catch((error) => {
             if(error == 'Server error'){

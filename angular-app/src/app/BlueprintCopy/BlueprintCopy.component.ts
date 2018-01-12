@@ -256,6 +256,7 @@ export class BlueprintCopyComponent implements OnInit {
         
       
       });
+      location.reload();
     })
     .catch((error) => {
         if(error == 'Server error'){
@@ -323,7 +324,8 @@ export class BlueprintCopyComponent implements OnInit {
     return this.serviceBlueprintCopy.updateAsset(form.get("blueprintCopyID").value,this.asset)
 		.toPromise()
 		.then(() => {
-			this.errorMessage = null;
+      this.errorMessage = null;
+      location.reload();
 		})
 		.catch((error) => {
             if(error == 'Server error'){
@@ -344,7 +346,8 @@ export class BlueprintCopyComponent implements OnInit {
     return this.serviceBlueprintCopy.deleteAsset(this.currentId)
 		.toPromise()
 		.then(() => {
-			this.errorMessage = null;
+      this.errorMessage = null;
+      location.reload();
 		})
 		.catch((error) => {
             if(error == 'Server error'){
