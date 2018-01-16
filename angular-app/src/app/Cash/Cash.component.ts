@@ -269,16 +269,29 @@ export class CashComponent implements OnInit {
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
-      
-      var ownerID = this.currentId.split("_")[1];
-            
-      this.serviceCash.deleteDesigner(ownerID)
-      .toPromise() 
-      .then(() => {
-        console.log("Cash owner deleted");
-        location.reload();
+      console.log("Cash deleted");
+      location.reload();
+      // var ownerID = this.currentId.split("_")[1];
 
-      });
+      // if(this.ownerEntity.value == "Designer") {
+      //   this.serviceCash.deleteDesigner(ownerID)
+      //     .toPromise() 
+      //     .then(() => {
+      //       console.log("Cash owner deleted");
+      //       location.reload();
+
+      //     });  
+      // } else if(this.ownerEntity.value == "Enduser") {
+      //   console.log("DELETING ENDUSER");
+      //   this.serviceCash.deleteEnduser(ownerID)
+      //   .toPromise() 
+      //   .then(() => {
+      //     console.log("Cash owner deleted");
+      //     location.reload();
+
+      //   });  
+      // }      
+      
 		})
 		.catch((error) => {
             if(error == 'Server error'){
