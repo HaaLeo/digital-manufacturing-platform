@@ -10,6 +10,7 @@ import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component'
 import { BuyAssetTRComponent } from './BuyAssetTR/BuyAssetTR.component';
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
 import { DesignerComponent } from 'app/Designer/Designer.component';
+import { PrinterComponent } from 'app/Printer/Printer.component';
 
 const routes: Routes = [
     // { path: 'transaction', component: TransactionComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
 
     { path: 'Designer', component: DesignerComponent},
 
+    { path: 'Printer', component: PrinterComponent},
 
 		{path: '**', redirectTo:''}
 
