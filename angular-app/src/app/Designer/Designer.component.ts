@@ -19,6 +19,7 @@ export class DesignerComponent {
   private errorMessage;
 
   private cash;
+  private current_db_id;
 
   
       stakeholderID = new FormControl("", Validators.required);
@@ -247,6 +248,11 @@ export class DesignerComponent {
       }
 
       this.allDesigners = designerList;
+      if (0 < designerList.length) {
+        this.current_db_id = designerList[designerList.length - 1].stakeholderID.substr(2)
+      } else {
+        this.current_db_id = 0
+      }
     });
 
   }
@@ -283,24 +289,26 @@ export class DesignerComponent {
   //create cash asset associated with the Designer, followed by the Designer
   createAssetsDesigner(): Promise<any> {
 
+    this.current_db_id++;
 
     this.cash = {
       $class: "org.usecase.printer.Cash",
-          "cashID":"CA_" + this.stakeholderID.value,
+          "cashID":"CA_D_" + this.current_db_id,
           "currency":this.cashCurrency.value,
           "value":this.cashValue.value,
-          "ownerID":this.stakeholderID.value,
+          "ownerID":"D_" + this.current_db_id,
           "ownerEntity":'Designer'        
     };    
     
+
     this.designer = {
       $class: "org.usecase.printer.Designer",
-          "stakeholderID":this.stakeholderID.value,
+          "stakeholderID":"D_" + this.current_db_id,
           "pubKey":this.pubKey.value,
           "firstName":this.firstName.value,
           "lastName":this.lastName.value,
           "contactInformation":this.contactInformation.value,
-          "cash":"CA_" + this.stakeholderID.value
+          "cash":"CA_D_" + this.current_db_id
       };    
 
     return this.serviceDesigner.addCash(this.cash)

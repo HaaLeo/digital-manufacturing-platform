@@ -18,6 +18,8 @@ export class PrinterComponent {
   private currentId;
   private errorMessage;
 
+  private current_db_id;
+
   
     stakeholderID = new FormControl("", Validators.required);
     pubKey = new FormControl("", Validators.required);
@@ -189,6 +191,11 @@ export class PrinterComponent {
         printerList.push(printer);
       });     
       this.allPrinters = printerList;
+      if (0 < printerList.length) {
+        this.current_db_id = printerList[printerList.length - 1].stakeholderID.substr(2)
+      } else {
+        this.current_db_id = 0
+      }
     });
   }
 
@@ -220,9 +227,11 @@ export class PrinterComponent {
   //create cash asset associated with the Printer, followed by the Printer
   createAssetsPrinter(): Promise<any> {
 
+    this.current_db_id++;
+
     this.printer = {
       $class: "org.usecase.printer.Printer",
-          "stakeholderID":this.stakeholderID.value,
+          "stakeholderID":"P_" + this.current_db_id,
           "pubKey":this.pubKey.value,
           "name":this.name.value
 

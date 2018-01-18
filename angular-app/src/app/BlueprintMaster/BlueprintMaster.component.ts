@@ -18,6 +18,8 @@ export class BlueprintMasterComponent implements OnInit {
   private errorMessage;
   private allDesigners;
 
+  private current_db_id;
+
           blueprintMasterID = new FormControl("", Validators.required);
           assetHash = new FormControl("", Validators.required);
           price = new FormControl("", Validators.required);
@@ -38,11 +40,10 @@ export class BlueprintMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
-    this.loadAllDesigners()
   }
 
 	//get all designers
-	loadAllDesigners(): Promise<any> {
+	load_OnlyDesigners(): Promise<any> {
 		let tempList = [];
 		return this.serviceBlueprintMaster.getAllDesigners()
 		.toPromise()
@@ -66,7 +67,7 @@ export class BlueprintMasterComponent implements OnInit {
 		});
   }
 
-  loadAll(): Promise<any> {
+  loadAll_OnlyBlueprintMaster(): Promise<any> {
     let tempList = [];
     return this.serviceBlueprintMaster.getAll()
     .toPromise()
@@ -76,6 +77,7 @@ export class BlueprintMasterComponent implements OnInit {
         tempList.push(asset);
       });
       this.allAssets = tempList;
+      
     })
     .catch((error) => {
         if(error == 'Server error'){
@@ -88,6 +90,52 @@ export class BlueprintMasterComponent implements OnInit {
             this.errorMessage = error;
         }
     });
+  }
+
+
+  //load all Designers and the cash assets associated to them 
+  loadAll(): Promise<any>  {
+    
+    //retrieve all designers
+    let tempList = [];
+    return this.serviceBlueprintMaster.getAll()
+    .toPromise()
+    .then((result) => {
+			this.errorMessage = null;
+      result.forEach(blueprintMaster => {
+        tempList.push(blueprintMaster);
+      });     
+    })
+    .then(() => {
+
+      for (let blueprintMaster of tempList) {
+        console.log("in for loop")
+
+        var splitted_ownerID = blueprintMaster.owner.split("#", 2); 
+        var ownerID = String(splitted_ownerID[1]);
+        console.log("Owner ID: " + ownerID);
+        this.serviceBlueprintMaster.getDesigner(ownerID)
+        .toPromise()
+        .then((result) => {
+          this.errorMessage = null;
+          if(result.firstName){
+            console.log(result.firstName)
+            blueprintMaster.firstName = result.firstName;
+          }
+          if(result.lastName){
+            blueprintMaster.lastName = result.lastName;
+          }
+        });
+      }
+
+      this.allAssets = tempList;
+      if (0 < tempList.length) {
+        this.current_db_id = tempList[tempList.length - 1].blueprintMasterID.substr(2)
+      } else {
+        this.current_db_id = 0
+      }
+    });
+
   }
 
 	/**
@@ -116,10 +164,13 @@ export class BlueprintMasterComponent implements OnInit {
   }
 
   addAsset(form: any): Promise<any> {
+
+    this.current_db_id++;
+
     this.asset = {
       $class: "org.usecase.printer.BlueprintMaster",
       
-          "blueprintMasterID":this.blueprintMasterID.value,
+          "blueprintMasterID":"B_" + this.current_db_id,
           "assetHash":this.assetHash.value,
           "price":this.price.value,
           "metadata":this.metadata.value,

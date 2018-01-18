@@ -8,12 +8,12 @@
       <form [formGroup]="myForm">
         <div class="modal-body">
 
+          <!--
               <div class="form-group text-left">
                 <label for="blueprintMasterID">blueprintMasterID</label>
-                
                   <input formControlName="blueprintMasterID" type="text" class="form-control">
-                
               </div>
+            -->
             
               <div class="form-group text-left">
                 <label for="assetHash">assetHash</label>
@@ -39,7 +39,7 @@
               <div class="form-group text-left">
                 <label for="owner">owner</label>
                 <select name="designers" formControlName="owner" >
-                  <option *ngFor="let designer of allDesigners" value="{{designer.stakeholderID}}">{{designer.stakeholderID}}</option>
+                  <option *ngFor="let designer of allDesigners" value="{{designer.stakeholderID}}">{{designer.firstName + " " + designer.lastName}}</option>
                 </select>
                   <!-- <textarea formControlName="owner" class="form-control" rows="3"></textarea> -->
                 
@@ -203,7 +203,7 @@
             
                 <td>{{asset.metadata}}</td>
             
-                <td>{{asset.owner}}</td>
+                <td>{{asset.firstName + " " + asset.lastName}}</td>
             
             <td>
               <button (click)="getForm(asset.blueprintMasterID);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update Asset</button>

@@ -19,7 +19,7 @@ export class EnduserComponent {
   private errorMessage;
 
   private cash;
-
+  private current_db_id;
   
       stakeholderID = new FormControl("", Validators.required);
       pubKey = new FormControl("", Validators.required);
@@ -249,6 +249,11 @@ export class EnduserComponent {
       }
 
       this.allEndusers = enduserList;
+      if (0 < enduserList.length) {
+        this.current_db_id = enduserList[enduserList.length - 1].stakeholderID.substr(3)
+      } else {
+        this.current_db_id = 0
+      }
     });
 
   }
@@ -285,24 +290,25 @@ export class EnduserComponent {
   //create cash asset associated with the Enduser, followed by the Enduser
   createAssetsEnduser(): Promise<any> {
 
+    this.current_db_id++;
 
     this.cash = {
       $class: "org.usecase.printer.Cash",
-          "cashID":"CA_" + this.stakeholderID.value,
+          "cashID":"CA_EU_" + this.current_db_id,
           "currency":this.cashCurrency.value,
           "value":this.cashValue.value,
-          "ownerID":this.stakeholderID.value,
+          "ownerID":"EU_" + this.current_db_id,
           "ownerEntity":'Enduser'        
     };    
     
     this.enduser = {
       $class: "org.usecase.printer.Enduser",
-          "stakeholderID":this.stakeholderID.value,
+          "stakeholderID":"EU_" + this.current_db_id,
           "pubKey":this.pubKey.value,
           "firstName":this.firstName.value,
           "lastName":this.lastName.value,
           "contactInformation":this.contactInformation.value,
-          "cash":"CA_" + this.stakeholderID.value
+          "cash":"CA_EU_" + this.current_db_id
 
       };    
 

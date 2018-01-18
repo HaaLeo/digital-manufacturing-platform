@@ -41,4 +41,8 @@ export class BlueprintMasterService {
       return this.designerService.getAll(this.DESIGNER);
   }
 
+  public getDesigner(id: any): Observable<Designer> {
+    return this.designerService.getSingle(this.DESIGNER, id);
+  }
+
 }
