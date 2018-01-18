@@ -52,8 +52,8 @@ export class BuyAssetTRComponent {
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
-		result.forEach(resident => {
-			tempList.push(resident);
+		result.forEach(blueprintCopy => {
+			tempList.push(blueprintCopy);
 		});
 		this.allBlueprintCopies = tempList;
 		})

@@ -4,17 +4,17 @@ import { Observable } from 'rxjs/Observable';
 import { BlueprintMaster } from '../org.usecase.printer';
 import 'rxjs/Rx';
 
+import { Designer} from 'app/org.usecase.printer';
+
 // Can be injected into a constructor
 @Injectable()
 export class BlueprintMasterService {
 
 	
 		private NAMESPACE: string = 'org.usecase.printer.BlueprintMaster';
-	
+    private DESIGNER: string = 'org.usecase.printer.Designer';
 
-
-
-    constructor(private dataService: DataService<BlueprintMaster>) {
+    constructor(private dataService: DataService<BlueprintMaster>, private designerService: DataService<Designer>) {
     };
 
     public getAll(): Observable<BlueprintMaster[]> {
@@ -36,5 +36,9 @@ export class BlueprintMasterService {
     public deleteAsset(id: any): Observable<BlueprintMaster> {
       return this.dataService.delete(this.NAMESPACE, id);
     }
+
+    public getAllDesigners(): Observable<Designer[]> {
+      return this.designerService.getAll(this.DESIGNER);
+  }
 
 }

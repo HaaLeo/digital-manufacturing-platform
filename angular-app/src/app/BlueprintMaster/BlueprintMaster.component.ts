@@ -15,59 +15,55 @@ export class BlueprintMasterComponent implements OnInit {
   private allAssets;
   private asset;
   private currentId;
-	private errorMessage;
+  private errorMessage;
+  private allDesigners;
 
-  
-      
           blueprintMasterID = new FormControl("", Validators.required);
-        
-  
-      
           assetHash = new FormControl("", Validators.required);
-        
-  
-      
           price = new FormControl("", Validators.required);
-        
-  
-      
           metadata = new FormControl("", Validators.required);
-        
-  
-      
           owner = new FormControl("", Validators.required);
         
-  
-
-
   constructor(private serviceBlueprintMaster:BlueprintMasterService, fb: FormBuilder) {
     this.myForm = fb.group({
     
-        
           blueprintMasterID:this.blueprintMasterID,
-        
-    
-        
           assetHash:this.assetHash,
-        
-    
-        
           price:this.price,
-        
-    
-        
           metadata:this.metadata,
-        
-    
-        
           owner:this.owner
-        
     
     });
   };
 
   ngOnInit(): void {
     this.loadAll();
+    this.loadAllDesigners()
+  }
+
+	//get all designers
+	loadAllDesigners(): Promise<any> {
+		let tempList = [];
+		return this.serviceBlueprintMaster.getAllDesigners()
+		.toPromise()
+		.then((result) => {
+				this.errorMessage = null;
+		result.forEach(designer => {
+      tempList.push(designer);
+		});
+		this.allDesigners = tempList;
+		})
+		.catch((error) => {
+			if(error == 'Server error'){
+				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+			}
+			else if(error == '404 - Not Found'){
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+			}
+			else{
+				this.errorMessage = error;
+			}
+		});
   }
 
   loadAll(): Promise<any> {
@@ -123,50 +119,19 @@ export class BlueprintMasterComponent implements OnInit {
     this.asset = {
       $class: "org.usecase.printer.BlueprintMaster",
       
-        
           "blueprintMasterID":this.blueprintMasterID.value,
-        
-      
-        
           "assetHash":this.assetHash.value,
-        
-      
-        
           "price":this.price.value,
-        
-      
-        
           "metadata":this.metadata.value,
-        
-      
-        
           "owner":this.owner.value
-        
-      
     };
 
     this.myForm.setValue({
-      
-        
           "blueprintMasterID":null,
-        
-      
-        
           "assetHash":null,
-        
-      
-        
           "price":null,
-        
-      
-        
           "metadata":null,
-        
-      
-        
           "owner":null
-        
-      
     });
 
     return this.serviceBlueprintMaster.addAsset(this.asset)
@@ -174,27 +139,11 @@ export class BlueprintMasterComponent implements OnInit {
     .then(() => {
 			this.errorMessage = null;
       this.myForm.setValue({
-      
-        
           "blueprintMasterID":null,
-        
-      
-        
           "assetHash":null,
-        
-      
-        
           "price":null,
-        
-      
-        
           "metadata":null,
-        
-      
-        
           "owner":null 
-        
-      
       });
       location.reload();
     })
@@ -212,35 +161,10 @@ export class BlueprintMasterComponent implements OnInit {
    updateAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.usecase.printer.BlueprintMaster",
-      
-        
-          
-        
-    
-        
-          
             "assetHash":this.assetHash.value,
-          
-        
-    
-        
-          
             "price":this.price.value,
-          
-        
-    
-        
-          
             "metadata":this.metadata.value,
-          
-        
-    
-        
-          
             "owner":this.owner.value
-          
-        
-    
     };
 
     return this.serviceBlueprintMaster.updateAsset(form.get("blueprintMasterID").value,this.asset)
@@ -295,32 +219,13 @@ export class BlueprintMasterComponent implements OnInit {
     .then((result) => {
 			this.errorMessage = null;
       let formObject = {
-        
-          
             "blueprintMasterID":null,
-          
-        
-          
             "assetHash":null,
-          
-        
-          
             "price":null,
-          
-        
-          
             "metadata":null,
-          
-        
-          
             "owner":null 
-          
-        
       };
 
-
-
-      
         if(result.blueprintMasterID){
           
             formObject.blueprintMasterID = result.blueprintMasterID;
@@ -381,27 +286,11 @@ export class BlueprintMasterComponent implements OnInit {
 
   resetForm(): void{
     this.myForm.setValue({
-      
-        
           "blueprintMasterID":null,
-        
-      
-        
           "assetHash":null,
-        
-      
-        
           "price":null,
-        
-      
-        
           "metadata":null,
-        
-      
-        
           "owner":null 
-        
-      
       });
   }
 
