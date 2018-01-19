@@ -18,6 +18,14 @@ export class BlueprintMasterComponent implements OnInit {
   private errorMessage;
   private allDesigners;
 
+  private allEndusers;
+  private allPrinters;
+
+  private printer;
+  private buyer;
+  private blueprintMaster
+  private requestBlueprintMasterObj;
+
   private current_db_id;
 
           blueprintMasterID = new FormControl("", Validators.required);
@@ -25,6 +33,8 @@ export class BlueprintMasterComponent implements OnInit {
           price = new FormControl("", Validators.required);
           metadata = new FormControl("", Validators.required);
           owner = new FormControl("", Validators.required);
+          printerID = new FormControl("");
+          buyerID = new FormControl("");
         
   constructor(private serviceBlueprintMaster:BlueprintMasterService, fb: FormBuilder) {
     this.myForm = fb.group({
@@ -33,7 +43,9 @@ export class BlueprintMasterComponent implements OnInit {
           assetHash:this.assetHash,
           price:this.price,
           metadata:this.metadata,
-          owner:this.owner
+          owner:this.owner,
+          printerID:this.printerID,
+          buyerID:this.buyerID
     
     });
   };
@@ -41,7 +53,12 @@ export class BlueprintMasterComponent implements OnInit {
   ngOnInit(): void {
     this.loadAll().then(() => {                     
       this.load_OnlyDesigners();
-});    
+    }).then(() => {                     
+      this.load_OnlyEndusers();
+    }).then(() => {                     
+      this.load_OnlyPrinters();
+    });    
+
   }
 
 	//get all designers
@@ -55,6 +72,55 @@ export class BlueprintMasterComponent implements OnInit {
       tempList.push(designer);
 		});
 		this.allDesigners = tempList;
+		})
+		.catch((error) => {
+			if(error == 'Server error'){
+				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+			}
+			else if(error == '404 - Not Found'){
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+			}
+			else{
+				this.errorMessage = error;
+			}
+		});
+  }
+
+  //get all printers
+	load_OnlyPrinters(): Promise<any> {
+		let tempList = [];
+		return this.serviceBlueprintMaster.getAllPrinters()
+		.toPromise()
+		.then((result) => {
+				this.errorMessage = null;
+		result.forEach(printer => {
+      tempList.push(printer);
+		});
+		this.allPrinters = tempList;
+		})
+		.catch((error) => {
+			if(error == 'Server error'){
+				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+			}
+			else if(error == '404 - Not Found'){
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+			}
+			else{
+				this.errorMessage = error;
+			}
+		});
+  }
+  //get all endusers
+	load_OnlyEndusers(): Promise<any> {
+		let tempList = [];
+		return this.serviceBlueprintMaster.getAllEndusers()
+		.toPromise()
+		.then((result) => {
+				this.errorMessage = null;
+		result.forEach(enduser => {
+      tempList.push(enduser);
+		});
+		this.allEndusers = tempList;
 		})
 		.catch((error) => {
 			if(error == 'Server error'){
@@ -183,7 +249,9 @@ export class BlueprintMasterComponent implements OnInit {
           "assetHash":null,
           "price":null,
           "metadata":null,
-          "owner":null
+          "owner":null,
+          "buyerID":null,
+          "printerID":null
     });
 
     return this.serviceBlueprintMaster.addAsset(this.asset)
@@ -195,7 +263,9 @@ export class BlueprintMasterComponent implements OnInit {
           "assetHash":null,
           "price":null,
           "metadata":null,
-          "owner":null 
+          "owner":null,
+          "buyerID":null,
+          "printerID":null
       });
       location.reload();
     })
@@ -259,6 +329,61 @@ export class BlueprintMasterComponent implements OnInit {
 			}
     });
   }
+
+
+  buyAsset(form: any): Promise<any> {
+   
+     //get printer
+     for (let printer of this.allPrinters) {    
+      if(printer.stakeholderID == this.printerID.value){
+        this.printer = printer;
+      }     
+    }
+
+    //get buyer
+    for (let buyer of this.allEndusers) {
+      if(buyer.stakeholderID == this.buyerID.value){
+        this.buyer = buyer;
+      }     
+    }
+
+    //get blueprintMaster
+    for (let blueprintMaster of this.allAssets) {
+      if(blueprintMaster.blueprintMasterID == this.currentId){
+        console.log("test2" + blueprintMaster.blueprintMasterID)
+        this.blueprintMaster = blueprintMaster;
+      }     
+    }
+
+    //transaction object
+    this.requestBlueprintMasterObj = {
+      $class: "org.usecase.printer.RequestBlueprint",
+      "buyer": this.buyer,
+      "printer": this.printer,
+      "blueprintMaster": this.blueprintMaster
+    };
+
+    return this.serviceBlueprintMaster.requestBlueprint(this.requestBlueprintMasterObj)
+    .toPromise()
+    .then((result) => {
+      this.errorMessage = null;
+      location.reload();
+    })
+    .catch((error) => {
+        if(error == 'Server error'){
+            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+        }
+        else if(error == '404 - Not Found'){
+        this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        }
+        else{
+            this.errorMessage = error;
+        }
+    });
+
+  }
+    
+
 
   setId(id: any): void{
     this.currentId = id;
@@ -342,7 +467,9 @@ export class BlueprintMasterComponent implements OnInit {
           "assetHash":null,
           "price":null,
           "metadata":null,
-          "owner":null 
+          "owner":null,
+          "buyerID":null,
+          "printerID":null
       });
   }
 

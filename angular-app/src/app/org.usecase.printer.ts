@@ -50,6 +50,14 @@ import {Event} from './org.hyperledger.composer.system';
       blueprintMaster: BlueprintMaster;
       owner: Stakeholder;
    }
+   export class RequestBlueprint extends Transaction {
+        buyer: Enduser;
+        printer: Printer;
+        blueprintMaster: BlueprintMaster;
+    }
+    export class ConfirmTransaction extends Transaction {
+        blueprintCopy: BlueprintCopy;
+    }
    export class ExecuteTransfer extends Transaction {
       printer: Printer;
       cashInc: Cash;
