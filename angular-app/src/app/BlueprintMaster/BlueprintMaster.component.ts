@@ -350,7 +350,6 @@ export class BlueprintMasterComponent implements OnInit {
     //get blueprintMaster
     for (let blueprintMaster of this.allAssets) {
       if(blueprintMaster.blueprintMasterID == this.currentId){
-        console.log("test2" + blueprintMaster.blueprintMasterID)
         this.blueprintMaster = blueprintMaster;
       }     
     }
