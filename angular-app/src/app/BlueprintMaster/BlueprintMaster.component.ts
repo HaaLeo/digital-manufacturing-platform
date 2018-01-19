@@ -39,7 +39,9 @@ export class BlueprintMasterComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.loadAll();
+    this.loadAll().then(() => {                     
+      this.load_OnlyDesigners();
+});    
   }
 
 	//get all designers
@@ -93,10 +95,10 @@ export class BlueprintMasterComponent implements OnInit {
   }
 
 
-  //load all Designers and the cash assets associated to them 
+  //load all blueprintMasters and the designers associated to them 
   loadAll(): Promise<any>  {
     
-    //retrieve all designers
+    //retrieve all BlueprintMaster
     let tempList = [];
     return this.serviceBlueprintMaster.getAll()
     .toPromise()
@@ -119,7 +121,6 @@ export class BlueprintMasterComponent implements OnInit {
         .then((result) => {
           this.errorMessage = null;
           if(result.firstName){
-            console.log(result.firstName)
             blueprintMaster.firstName = result.firstName;
           }
           if(result.lastName){

@@ -106,6 +106,17 @@ rule DesignerAccessBlueprintMasterRecord {
     action: ALLOW
 }
 
+//Designers to have access to their own BlueprintMaster Assets
+rule DesignerAccessOwnBlueprintMaster {
+    description: "Allow Designers to access only their own BlueprintMaster assets"
+    participant(p): "org.usecase.printer.Designer"
+    operation: UPDATE, DELETE
+    resource(r): "org.usecase.printer.BlueprintMaster"
+    // TODO: check if r.owner accessible here
+    condition: (r.owner.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
 //Designers to have read access to all BlueprintCopy assets
 rule DesignerAccessBlueprintCopyRecord {
     description: "Allow Designer read access to all BlueprintCopy assets"
