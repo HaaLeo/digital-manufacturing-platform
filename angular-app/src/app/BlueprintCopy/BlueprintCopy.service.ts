@@ -37,4 +37,7 @@ export class BlueprintCopyService {
       return this.dataService.delete(this.NAMESPACE, id);
     }
 
+    public getID(str) {
+      return str.split('#')[1];
+    }
 }

@@ -18,75 +18,34 @@ export class BlueprintCopyComponent implements OnInit {
 	private errorMessage;
 
   
-      
           blueprintCopyID = new FormControl("", Validators.required);
-        
-  
       
           printed = new FormControl("", Validators.required);
-        
-  
       
           OTPencryptedWithDesignerPubKey = new FormControl("", Validators.required);
-        
-  
       
           OTPencryptedWithPrinterPubKey = new FormControl("", Validators.required);
-        
-  
       
           printer = new FormControl("", Validators.required);
-        
-  
       
           buyer = new FormControl("", Validators.required);
-        
-  
       
           blueprintMaster = new FormControl("", Validators.required);
-        
-  
       
           owner = new FormControl("", Validators.required);
         
   
-
-
   constructor(private serviceBlueprintCopy:BlueprintCopyService, fb: FormBuilder) {
     this.myForm = fb.group({
     
-        
           blueprintCopyID:this.blueprintCopyID,
-        
-    
-        
           printed:this.printed,
-        
-    
-        
           OTPencryptedWithDesignerPubKey:this.OTPencryptedWithDesignerPubKey,
-        
-    
-        
           OTPencryptedWithPrinterPubKey:this.OTPencryptedWithPrinterPubKey,
-        
-    
-        
           printer:this.printer,
-        
-    
-        
           buyer:this.buyer,
-        
-    
-        
           blueprintMaster:this.blueprintMaster,
-        
-    
-        
           owner:this.owner
-        
-    
     });
   };
 
@@ -101,7 +60,28 @@ export class BlueprintCopyComponent implements OnInit {
     .then((result) => {
 			this.errorMessage = null;
       result.forEach(asset => {
-        tempList.push(asset);
+
+      let tempAsset = {
+      $class: "org.usecase.printer.BlueprintCopy",
+          "blueprintCopyID":asset.blueprintCopyID,
+        
+          "printed":asset.printed,
+        
+          "otpencryptedWithDesignerPubKey": asset.OTPencryptedWithDesignerPubKey,
+        
+          "otpencryptedWithPrinterPubKey": asset.OTPencryptedWithPrinterPubKey,
+        
+          "printer":this.serviceBlueprintCopy.getID(asset.printer),
+        
+          "buyer":this.serviceBlueprintCopy.getID(asset.buyer),
+        
+          "blueprintMaster":this.serviceBlueprintCopy.getID(asset.blueprintMaster),
+        
+          "owner":this.serviceBlueprintCopy.getID(asset.owner)
+      
+        };
+
+        tempList.push(tempAsset);
       });
       this.allBlueprintCopyAssets = tempList;
     })

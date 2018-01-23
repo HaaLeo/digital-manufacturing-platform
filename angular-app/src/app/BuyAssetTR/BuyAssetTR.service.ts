@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
+import { ConfirmTransaction } from '../org.usecase.printer';
 
 import 'rxjs/Rx';
 import { Designer, BlueprintCopy, Printer, Cash } from 'app/org.usecase.printer';
@@ -11,8 +12,9 @@ export class BuyAssetTRService {
 
     private NAMESPACE: string = 'org.usecase.printer.BlueprintCopy';
     private BLUEPRINTCOPY: string = 'org.usecase.printer.BlueprintCopy';
+    private CONFIRM_TRANSACTION: string = 'org.usecase.printer.ConfirmTransaction';
 
-    constructor(private printerService: DataService<Printer>, private cashIncService: DataService<Cash>, private cashDecService: DataService<Cash>, private blueprintCopyService: DataService<BlueprintCopy>) {
+    constructor(private blueprintCopyService: DataService<BlueprintCopy>, private confirmTransactionService: DataService<ConfirmTransaction>) {
     };
 
     // //get all Printers
@@ -24,4 +26,7 @@ export class BuyAssetTRService {
         return this.blueprintCopyService.getAll(this.BLUEPRINTCOPY)
     }
 
+    public printBlueprint(itemToAdd: any): Observable<ConfirmTransaction> {
+      return this.confirmTransactionService.add(this.CONFIRM_TRANSACTION, itemToAdd);
+    }
 }
