@@ -21,44 +21,12 @@
         <div class="panel-body">
         <form [formGroup]="myForm">
             
-            <!-- <p>Printer:           
-              <select name="printers" formControlName="printerID" >
-                <option *ngFor="let printer of allPrinters" value="{{printer.stakeholderID}}">{{printer.stakeholderID}}</option>
-              </select>
-            </p> 
-
-
-            <p>Enduser's wallet: 
-              <select name="cash" formControlName="cashDecID" >
-                <option *ngFor="let cash of allCash" value="{{cash.cashID}}">{{cash.cashID}}</option>
-              </select>
-            </p>
-
-            <p>Designer's wallet: 
-              <select name="cash" formControlName="cashIncID" >
-                <option *ngFor="let cash of allCash" value="{{cash.cashID}}">{{cash.cashID}}</option>
-              </select>
-            </p>   -->
-
             <p>BlueprintCopyID:
               <select name="blueprintCopy" formControlName="blueprintCopyID" >
                 <option *ngFor="let blueprintCopy of allBlueprintCopies" value="{{blueprintCopy.blueprintCopyID}}">{{blueprintCopy.blueprintCopyID}}</option>
               </select>
             </p>
 
-
-              <!-- <p>Consumer: 
-              <select name="residents" formControlName="consumerResidentID" >
-                <option *ngFor="let resident of allResidents" value="{{resident.residentID}}">{{resident.residentID}}</option>
-              </select>
-              </p>
-              
-
-            <p>Energy exchanged (kwh): <input formControlName="energyValue" type="number" step='any' class="form-control inlineInput">
-              </p>
-            
-            <p>Rate: <strong>{{residentCoinsPerEnergy}} Coins / kwh </strong>
-            </p> -->
             <br>
             </form>
         </div>
@@ -72,16 +40,6 @@
         <form [formGroup]="myForm">
             <p>Transaction ID: {{transactionID}}</p>
             <br>
-            <!-- p>Producer: {{producerResidentID.value}}</p> 
-            <p>Energy Provided ID: {{energyProvidedID}}</p>
-            <p>Coins Credited ID: {{coinsCreditID}}</p>             
-           <br>
-            <p>Consumer: {{consumerResidentID.value}}</p>           
-            <p>Energy Received ID: {{energyReceivedID}}</p>
-            <p>Coins Debited ID: {{coinsDebitID}}</p>             
-           <br>
-            <p>Energy exchanged: {{energyValue.value}}</p>
-            <p>Coins exchanged: {{coinsValue.value}}</p-->
           </form>
         </div>
       </div>
