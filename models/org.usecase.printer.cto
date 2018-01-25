@@ -69,6 +69,10 @@ transaction ConfirmTransaction {
     --> BlueprintCopy blueprintCopy
 }
 
+transaction CancelRequest {
+    --> BlueprintCopy blueprintCopy
+}
+
 transaction RequestBlueprint {
     --> Enduser buyer
     --> Printer printer

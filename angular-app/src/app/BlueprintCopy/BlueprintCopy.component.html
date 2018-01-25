@@ -1,3 +1,23 @@
+<div class="modal fade" id="cancelRequestModal" tabindex="-1" role="dialog" aria-labelledby="cancelRequestModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="cancelRequestModalLabel">Cancel Request</h4>
+      </div>
+      <form [formGroup]="myForm" (ngSubmit)="cancelRequest()">
+        <div class="modal-body">
+          Are you sure you want to cancel this request?
+        </div>
+        <div class="modal-footer">
+          <button (click)="cancelRequest()" type="submit" class="btn btn-danger" data-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="container">
 	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
 		<strong>Error:</strong> {{errorMessage}}
@@ -24,27 +44,31 @@
                 <th class="info">blueprintMaster</th>
             
                 <th class="info">owner</th>
+
+                <th class="info">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let asset of allBlueprintCopyAssets">
+            <td>{{asset.blueprintCopyID}}</td>
+            
+            <td>{{asset.printed}}</td>
+            
+            <td>{{asset.OTPencryptedWithDesignerPubKey}}</td>
+            
+            <td>{{asset.OTPencryptedWithPrinterPubKey}}</td>
+            
+            <td>{{asset.printer}}</td>
+            
+            <td>{{asset.buyer}}</td>
+            
+            <td>{{asset.blueprintMaster}}</td>
+            
+            <td>{{asset.owner}}</td>
 
-            
-                <td>{{asset.blueprintCopyID}}</td>
-            
-                <td>{{asset.printed}}</td>
-            
-                <td>{{asset.OTPencryptedWithDesignerPubKey}}</td>
-            
-                <td>{{asset.OTPencryptedWithPrinterPubKey}}</td>
-            
-                <td>{{asset.printer}}</td>
-            
-                <td>{{asset.buyer}}</td>
-            
-                <td>{{asset.blueprintMaster}}</td>
-            
-                <td>{{asset.owner}}</td>
+            <td>
+              <button *ngIf="!asset.printed;" (click)="setId(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelRequestModal">Cancel Request</button>
+            </td>
           </tr>
         </tbody>
       </table>

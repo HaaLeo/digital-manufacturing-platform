@@ -16,23 +16,25 @@ export class BlueprintCopyComponent implements OnInit {
   private asset;
   private currentId;
 	private errorMessage;
-
+  private cancelRequestObj;
+  private allBlueprintCopies;
+  private blueprintCopyCurrent;
   
-          blueprintCopyID = new FormControl("", Validators.required);
-      
-          printed = new FormControl("", Validators.required);
-      
-          OTPencryptedWithDesignerPubKey = new FormControl("", Validators.required);
-      
-          OTPencryptedWithPrinterPubKey = new FormControl("", Validators.required);
-      
-          printer = new FormControl("", Validators.required);
-      
-          buyer = new FormControl("", Validators.required);
-      
-          blueprintMaster = new FormControl("", Validators.required);
-      
-          owner = new FormControl("", Validators.required);
+  blueprintCopyID = new FormControl("", Validators.required);
+
+  printed = new FormControl("", Validators.required);
+
+  OTPencryptedWithDesignerPubKey = new FormControl("", Validators.required);
+
+  OTPencryptedWithPrinterPubKey = new FormControl("", Validators.required);
+
+  printer = new FormControl("", Validators.required);
+
+  buyer = new FormControl("", Validators.required);
+
+  blueprintMaster = new FormControl("", Validators.required);
+
+  owner = new FormControl("", Validators.required);
         
   
   constructor(private serviceBlueprintCopy:BlueprintCopyService, fb: FormBuilder) {
@@ -50,7 +52,34 @@ export class BlueprintCopyComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.loadAll();
+    this.loadAll().then(() => {
+      this.load_OnlyBlueprintCopies();   
+    });
+  }
+
+  //get all blueprintCopies
+  load_OnlyBlueprintCopies(): Promise<any> {
+    let tempList = [];
+    return this.serviceBlueprintCopy.getAllBlueprintCopies()
+    .toPromise()
+    .then((result) => {
+        this.errorMessage = null;
+    result.forEach(blueprintCopy => {
+        tempList.push(blueprintCopy);
+    });
+    this.allBlueprintCopies = tempList;
+    })
+    .catch((error) => {
+      if(error == 'Server error'){
+        this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+      }
+      else if(error == '404 - Not Found'){
+          this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+      }
+      else{
+        this.errorMessage = error;
+      }
+    });
   }
 
   loadAll(): Promise<any> {
@@ -130,71 +159,37 @@ export class BlueprintCopyComponent implements OnInit {
         
           "blueprintCopyID":this.blueprintCopyID.value,
         
-      
-        
           "printed":this.printed.value,
-        
-      
         
           "OTPencryptedWithDesignerPubKey":this.OTPencryptedWithDesignerPubKey.value,
         
-      
-        
           "OTPencryptedWithPrinterPubKey":this.OTPencryptedWithPrinterPubKey.value,
-        
-      
         
           "printer":this.printer.value,
         
-      
-        
           "buyer":this.buyer.value,
-        
-      
         
           "blueprintMaster":this.blueprintMaster.value,
         
-      
-        
           "owner":this.owner.value
-        
-      
     };
 
     this.myForm.setValue({
-      
-        
           "blueprintCopyID":null,
-        
-      
         
           "printed":null,
         
-      
-        
           "OTPencryptedWithDesignerPubKey":null,
-        
-      
         
           "OTPencryptedWithPrinterPubKey":null,
         
-      
-        
           "printer":null,
-        
-      
         
           "buyer":null,
         
-      
-        
           "blueprintMaster":null,
         
-      
-        
           "owner":null
-        
-      
     });
 
     return this.serviceBlueprintCopy.addAsset(this.asset)
@@ -253,52 +248,19 @@ export class BlueprintCopyComponent implements OnInit {
     this.asset = {
       $class: "org.usecase.printer.BlueprintCopy",
       
-        
-          
-        
-    
-        
-          
             "printed":this.printed.value,
-          
-        
-    
-        
           
             "OTPencryptedWithDesignerPubKey":this.OTPencryptedWithDesignerPubKey.value,
           
-        
-    
-        
-          
             "OTPencryptedWithPrinterPubKey":this.OTPencryptedWithPrinterPubKey.value,
-          
-        
-    
-        
           
             "printer":this.printer.value,
           
-        
-    
-        
-          
             "buyer":this.buyer.value,
-          
-        
-    
-        
           
             "blueprintMaster":this.blueprintMaster.value,
           
-        
-    
-        
-          
             "owner":this.owner.value
-          
-        
-    
     };
 
     return this.serviceBlueprintCopy.updateAsset(form.get("blueprintCopyID").value,this.asset)
@@ -321,6 +283,7 @@ export class BlueprintCopyComponent implements OnInit {
   }
 
 
+  //TODO not used???
   deleteAsset(): Promise<any> {
 
     return this.serviceBlueprintCopy.deleteAsset(this.currentId)
@@ -342,6 +305,45 @@ export class BlueprintCopyComponent implements OnInit {
     });
   }
 
+
+  cancelRequest(): Promise<any> {
+
+    console.log(this.allBlueprintCopies);
+    this.blueprintCopyID = this.currentId;
+
+    for (let blueprintCopy of this.allBlueprintCopies) {
+        console.log(blueprintCopy);
+      if(blueprintCopy.blueprintCopyID == this.blueprintCopyID) {
+        this.blueprintCopyCurrent = blueprintCopy;
+      }
+    }
+
+    //transaction object
+    this.cancelRequestObj = {
+      "$class": "org.usecase.printer.CancelRequest",
+      "blueprintCopy": "resource:org.usecase.printer.BlueprintCopy#"+this.blueprintCopyCurrent.blueprintCopyID
+    };
+
+    
+    return this.serviceBlueprintCopy.cancel(this.cancelRequestObj)
+    .toPromise()
+    .then(() => {
+      this.errorMessage = null;
+      location.reload();
+    })
+    .catch((error) => {
+            if(error == 'Server error'){
+        this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+      }
+      else if(error == '404 - Not Found'){
+        this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+      }
+      else{
+        this.errorMessage = error;
+      }
+    });
+  }
+
   setId(id: any): void{
     this.currentId = id;
   }
@@ -357,40 +359,21 @@ export class BlueprintCopyComponent implements OnInit {
           
             "blueprintCopyID":null,
           
-        
-          
             "printed":null,
-          
-        
           
             "OTPencryptedWithDesignerPubKey":null,
           
-        
-          
             "OTPencryptedWithPrinterPubKey":null,
-          
-        
           
             "printer":null,
           
-        
-          
             "buyer":null,
-          
-        
           
             "blueprintMaster":null,
           
-        
-          
             "owner":null 
-          
-        
       };
 
-
-
-      
         if(result.blueprintCopyID){
           
             formObject.blueprintCopyID = result.blueprintCopyID;
@@ -473,40 +456,25 @@ export class BlueprintCopyComponent implements OnInit {
 
   }
 
+
   resetForm(): void{
     this.myForm.setValue({
-      
         
           "blueprintCopyID":null,
         
-      
-        
           "printed":null,
-        
-      
         
           "OTPencryptedWithDesignerPubKey":null,
         
-      
-        
           "OTPencryptedWithPrinterPubKey":null,
-        
-      
         
           "printer":null,
         
-      
-        
           "buyer":null,
-        
-      
         
           "blueprintMaster":null,
         
-      
-        
           "owner":null 
-        
       
       });
   }

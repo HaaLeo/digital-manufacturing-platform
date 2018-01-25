@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { BlueprintCopy } from '../org.usecase.printer';
+import { BlueprintCopy, CancelRequest } from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -10,11 +10,13 @@ export class BlueprintCopyService {
 
 	
 		private NAMESPACE: string = 'org.usecase.printer.BlueprintCopy';
-	
+	  private CANCELREQUEST: string = 'org.usecase.printer.CancelRequest';
+    private BLUEPRINTCOPY: string = 'org.usecase.printer.BlueprintCopy'
 
 
 
-    constructor(private dataService: DataService<BlueprintCopy>) {
+    constructor(private dataService: DataService<BlueprintCopy>,
+                private cancelRequestService: DataService<CancelRequest>) {
     };
 
     public getAll(): Observable<BlueprintCopy[]> {
@@ -36,6 +38,15 @@ export class BlueprintCopyService {
     public deleteAsset(id: any): Observable<BlueprintCopy> {
       return this.dataService.delete(this.NAMESPACE, id);
     }
+
+    public cancel(itemToCancel: any): Observable<CancelRequest> {
+      return this.cancelRequestService.add(this.CANCELREQUEST,itemToCancel);
+    }
+
+    public getAllBlueprintCopies(): Observable<BlueprintCopy[]> {
+      return this.dataService.getAll(this.BLUEPRINTCOPY);
+    }
+
 
     public getID(str) {
       return str.split('#')[1];

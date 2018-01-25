@@ -55,6 +55,9 @@ import {Event} from './org.hyperledger.composer.system';
         printer: Printer;
         blueprintMaster: BlueprintMaster;
     }
+    export class CancelRequest extends Transaction {
+        blueprintCopy: BlueprintCopy;
+    }
     export class ConfirmTransaction extends Transaction {
         blueprintCopy: BlueprintCopy;
     }

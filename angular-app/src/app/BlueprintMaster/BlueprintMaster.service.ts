@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { BlueprintMaster } from '../org.usecase.printer';
 import 'rxjs/Rx';
 
-import { Designer, Enduser, Printer, RequestBlueprint} from 'app/org.usecase.printer';
+import { Designer, Enduser, Printer, RequestBlueprint, CancelRequest} from 'app/org.usecase.printer';
 
 // Can be injected into a constructor
 @Injectable()
@@ -17,7 +17,11 @@ export class BlueprintMasterService {
     private ENDUSER: string = 'org.usecase.printer.Enduser';
     private REQUESTBLUEPRINT: string = 'org.usecase.printer.RequestBlueprint';
 
-    constructor(private dataService: DataService<BlueprintMaster>, private designerService: DataService<Designer>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>, private requestBlueprintService: DataService<RequestBlueprint>) {
+    constructor(private dataService: DataService<BlueprintMaster>, 
+                private designerService: DataService<Designer>, 
+                private enduserService: DataService<Enduser>, 
+                private printerService: DataService<Printer>, 
+                private requestBlueprintService: DataService<RequestBlueprint>) {
     };
 
     public getAll(): Observable<BlueprintMaster[]> {
