@@ -43,8 +43,8 @@ import {Event} from './org.hyperledger.composer.system';
    export class BlueprintCopy extends Asset {
       blueprintCopyID: string;
       printed: boolean;
-      OTPencryptedWithDesignerPubKey: string;
-      OTPencryptedWithPrinterPubKey: string;
+      otpEncryptedWithDesignerPubKey: string;
+      otpEncryptedWithPrinterPubKey: string;
       printer: Printer;
       buyer: Enduser;
       blueprintMaster: BlueprintMaster;

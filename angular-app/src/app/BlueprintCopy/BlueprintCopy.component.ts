@@ -67,9 +67,9 @@ export class BlueprintCopyComponent implements OnInit {
         
           "printed":asset.printed,
         
-          "otpencryptedWithDesignerPubKey": asset.OTPencryptedWithDesignerPubKey,
+          "OTPencryptedWithDesignerPubKey": asset.otpEncryptedWithDesignerPubKey,
         
-          "otpencryptedWithPrinterPubKey": asset.OTPencryptedWithPrinterPubKey,
+          "OTPencryptedWithPrinterPubKey": asset.otpEncryptedWithPrinterPubKey,
         
           "printer":this.serviceBlueprintCopy.getID(asset.printer),
         
@@ -80,7 +80,7 @@ export class BlueprintCopyComponent implements OnInit {
           "owner":this.serviceBlueprintCopy.getID(asset.owner)
       
         };
-
+        
         tempList.push(tempAsset);
       });
       this.allBlueprintCopyAssets = tempList;
@@ -407,17 +407,17 @@ export class BlueprintCopyComponent implements OnInit {
           formObject.printed = null;
         }
       
-        if(result.OTPencryptedWithDesignerPubKey){
+        if(result.otpEncryptedWithDesignerPubKey){
           
-            formObject.OTPencryptedWithDesignerPubKey = result.OTPencryptedWithDesignerPubKey;
+            formObject.OTPencryptedWithDesignerPubKey = result.otpEncryptedWithDesignerPubKey;
           
         }else{
           formObject.OTPencryptedWithDesignerPubKey = null;
         }
       
-        if(result.OTPencryptedWithPrinterPubKey){
+        if(result.otpEncryptedWithPrinterPubKey){
           
-            formObject.OTPencryptedWithPrinterPubKey = result.OTPencryptedWithPrinterPubKey;
+            formObject.OTPencryptedWithPrinterPubKey = result.otpEncryptedWithPrinterPubKey;
           
         }else{
           formObject.OTPencryptedWithPrinterPubKey = null;
