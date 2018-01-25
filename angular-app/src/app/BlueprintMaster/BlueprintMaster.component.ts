@@ -28,13 +28,13 @@ export class BlueprintMasterComponent implements OnInit {
 
   private current_db_id;
 
-          blueprintMasterID = new FormControl("", Validators.required);
-          assetHash = new FormControl("", Validators.required);
-          price = new FormControl("", Validators.required);
-          metadata = new FormControl("", Validators.required);
-          owner = new FormControl("", Validators.required);
-          printerID = new FormControl("");
-          buyerID = new FormControl("");
+  blueprintMasterID = new FormControl("", Validators.required);
+  assetHash = new FormControl("", Validators.required);
+  price = new FormControl("", Validators.required);
+  metadata = new FormControl("", Validators.required);
+  owner = new FormControl("", Validators.required);
+  printerID = new FormControl("");
+  buyerID = new FormControl("");
         
   constructor(private serviceBlueprintMaster:BlueprintMasterService, fb: FormBuilder) {
     this.myForm = fb.group({
@@ -402,6 +402,8 @@ export class BlueprintMasterComponent implements OnInit {
             "assetHash":null,
             "price":null,
             "metadata":null,
+            "printerID":null,
+            "buyerID":null,
             "owner":null 
       };
 
