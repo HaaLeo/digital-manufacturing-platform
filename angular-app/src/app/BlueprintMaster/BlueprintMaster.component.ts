@@ -331,11 +331,12 @@ export class BlueprintMasterComponent implements OnInit {
   }
 
 
-  buyAsset(form: any): Promise<any> {
+  requestAsset(form: any): Promise<any> {
    
      //get printer
      for (let printer of this.allPrinters) {    
       if(printer.stakeholderID == this.printerID.value){
+        console.log(printer);
         this.printer = printer;
       }     
     }
@@ -343,6 +344,7 @@ export class BlueprintMasterComponent implements OnInit {
     //get buyer
     for (let buyer of this.allEndusers) {
       if(buyer.stakeholderID == this.buyerID.value){
+        console.log(buyer);
         this.buyer = buyer;
       }     
     }
@@ -350,6 +352,7 @@ export class BlueprintMasterComponent implements OnInit {
     //get blueprintMaster
     for (let blueprintMaster of this.allAssets) {
       if(blueprintMaster.blueprintMasterID == this.currentId){
+        console.log(blueprintMaster);
         this.blueprintMaster = blueprintMaster;
       }     
     }
@@ -357,9 +360,9 @@ export class BlueprintMasterComponent implements OnInit {
     //transaction object
     this.requestBlueprintMasterObj = {
       $class: "org.usecase.printer.RequestBlueprint",
-      "buyer": this.buyer,
-      "printer": this.printer,
-      "blueprintMaster": this.blueprintMaster
+      "buyer": this.buyerID.value,
+      "printer": this.printerID.value,
+      "blueprintMaster": this.currentId
     };
 
     return this.serviceBlueprintMaster.requestBlueprint(this.requestBlueprintMasterObj)
