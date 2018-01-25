@@ -239,12 +239,14 @@ export class EnduserComponent {
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
-          if(result.value){
+          console.log(result.value);
+          //ALLOW 0 values to be displayed
+          // if(result.value){
             enduser.cashValue = result.value;
-          }
-          if(result.currency){
+          // }
+          // if(result.currency){
             enduser.cashCurrency = result.currency;
-          }
+          // }
         });
       }
 

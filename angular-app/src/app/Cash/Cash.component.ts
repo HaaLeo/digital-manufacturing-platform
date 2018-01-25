@@ -174,27 +174,11 @@ export class CashComponent implements OnInit {
     .then(() => {
 			this.errorMessage = null;
       this.myForm.setValue({
-      
-        
           "cashID":null,
-        
-      
-        
           "currency":null,
-        
-      
-        
           "value":null,
-        
-      
-        
           "ownerID":null,
-        
-      
-        
           "ownerEntity":null 
-        
-      
       });
       location.reload();
     })
@@ -212,35 +196,10 @@ export class CashComponent implements OnInit {
    updateAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.usecase.printer.Cash",
-      
-        
-          
-        
-    
-        
-          
             "currency":this.currency.value,
-          
-        
-    
-        
-          
             "value":this.value.value,
-          
-        
-    
-        
-          
             "ownerID":this.ownerID.value,
-          
-        
-    
-        
-          
             "ownerEntity":this.ownerEntity.value
-          
-        
-    
     };
 
     return this.serviceCash.updateAsset(form.get("cashID").value,this.asset)
@@ -335,13 +294,14 @@ export class CashComponent implements OnInit {
           formObject.currency = null;
         }
       
-        if(result.value){
+        //ALLOW 0 value to be displayed
+        // if(result.value){
           
             formObject.value = result.value;
           
-        }else{
-          formObject.value = null;
-        }
+        // }else{
+        //   formObject.value = null;
+        // }
       
         if(result.ownerID){
           

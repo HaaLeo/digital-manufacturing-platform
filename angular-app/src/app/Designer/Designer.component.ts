@@ -238,12 +238,14 @@ export class DesignerComponent {
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
-          if(result.value){
+          //ALLOW 0 values to be displayed
+          // if(result.value){
+
             designer.cashValue = result.value;
-          }
-          if(result.currency){
+          // }
+          // if(result.currency){
             designer.cashCurrency = result.currency;
-          }
+          // }
         });
       }
 

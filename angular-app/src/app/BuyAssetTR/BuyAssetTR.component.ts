@@ -114,10 +114,6 @@ export class BuyAssetTRComponent {
                 else if(error == '404 - Not Found'){
                 	this.errorMessage = "404 - Could not find API route. Please check your available APIs."
                 }
-                else if(error == '500 - Internal Server Error') {
-                	this.errorMessage = 'Cannot buy asset. Not enough funds.';
-                	this.transactionFrom = false;
-                }
                 else{
                     this.errorMessage = error;
                 }
