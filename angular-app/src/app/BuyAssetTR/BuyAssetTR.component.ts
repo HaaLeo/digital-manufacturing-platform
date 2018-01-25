@@ -100,28 +100,32 @@ export class BuyAssetTRComponent {
 	      "$class": "org.usecase.printer.ConfirmTransaction",
 	      "blueprintCopy": "resource:org.usecase.printer.BlueprintCopy#"+this.blueprintCopyCurrent.blueprintCopyID
 	    };
-	    console.log(this.confirmTransactionObj);
 
-	    //TODO check if buyer has enough money to buy the blueprint
 	    return this.serviceTransaction.printBlueprint(this.confirmTransactionObj)
 	    .toPromise()
 	    .then((result) => {
 	    	this.errorMessage = null;
               this.transactionID = result.transactionId;
-              console.log(result)     
         })
 	    .catch((error) => {
                 if(error == 'Server error'){
                     this.errorMessage = "Could not connect to REST server. Please check your configuration details";
                 }
                 else if(error == '404 - Not Found'){
-                this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+                	this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+                }
+                else if(error == '500 - Internal Server Error') {
+                	this.errorMessage = 'Cannot buy asset. Not enough funds.';
+                	this.transactionFrom = false;
                 }
                 else{
                     this.errorMessage = error;
                 }
             }).then(() => {
-              this.transactionFrom = false;
+            	if(this.errorMessage == 'Cannot buy asset. Not enough funds.') {
+            		this.transactionFrom = true;		
+            	} else 
+ 		             this.transactionFrom = false;
             });
   	}
 }
