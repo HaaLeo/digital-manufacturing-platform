@@ -14,6 +14,7 @@ import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
 import { DesignerComponent } from 'app/Designer/Designer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
+import { UsersPipe} from 'app/BluePrintCopy/Pipe';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -27,7 +28,9 @@ import { PrinterComponent } from 'app/Printer/Printer.component';
     EnduserComponent,
     DesignerComponent,
     PrinterComponent,
-    BlueprintCopyComponent
+    BlueprintCopyComponent,
+    UsersPipe
+    
 		
   ],
   imports: [

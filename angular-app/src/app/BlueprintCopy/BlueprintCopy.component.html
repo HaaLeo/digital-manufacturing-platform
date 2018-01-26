@@ -37,7 +37,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let asset of allBlueprintCopyAssets | filter: filterStakeholders()">
+          <tr *ngFor="let asset of (allBlueprintCopyAssets | usersPipe: selectedElement)">
 
             
                 <td>{{asset.blueprintCopyID}}</td>

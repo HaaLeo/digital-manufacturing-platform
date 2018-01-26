@@ -1,13 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, NgModule } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { BlueprintCopyService } from './BlueprintCopy.service';
 import 'rxjs/add/operator/toPromise';
+import { UsersPipe} from './Pipe';
+
+
 @Component({
 	selector: 'app-BlueprintCopy',
 	templateUrl: './BlueprintCopy.component.html',
 	styleUrls: ['./BlueprintCopy.component.css'],
   providers: [BlueprintCopyService]
 })
+
 export class BlueprintCopyComponent implements OnInit {
 
   myForm: FormGroup;
@@ -16,6 +20,7 @@ export class BlueprintCopyComponent implements OnInit {
   private allEndusers;
   private allPrinters;
   private allDesigners;
+  private allBlueprintMasters;
   private allStakeholders = [];
 
   private asset;
@@ -84,9 +89,18 @@ export class BlueprintCopyComponent implements OnInit {
     let tempList = [];
     return this.serviceBlueprintCopy.getAll()
     .toPromise()
+
     .then((result) => {
 			this.errorMessage = null;
       result.forEach(asset => {
+
+        var bpMasterOwnerID;
+      //get blueprintMaster
+      for (let blueprintMaster of this.allBlueprintMasters) {
+        if(blueprintMaster.blueprintMasterID === this.serviceBlueprintCopy.getID(asset.blueprintMaster)){
+          bpMasterOwnerID = blueprintMaster.owner.stakeholderID;
+        }     
+      };
 
       let tempAsset = {
       $class: "org.usecase.printer.BlueprintCopy",
@@ -103,6 +117,8 @@ export class BlueprintCopyComponent implements OnInit {
           "buyer":this.serviceBlueprintCopy.getID(asset.buyer),
         
           "blueprintMaster":this.serviceBlueprintCopy.getID(asset.blueprintMaster),
+
+          "designer": this.serviceBlueprintCopy.getID(asset.owner),
         
           "owner":this.serviceBlueprintCopy.getID(asset.owner)
       
@@ -124,6 +140,43 @@ export class BlueprintCopyComponent implements OnInit {
         }
     });
   }
+
+   //load all BlueprintCopy assets and Master associated to it
+   loadAllx(): Promise<any>  {
+    
+    //retrieve all designers
+    let bpcList = [];
+    return this.serviceBlueprintCopy.getAll()
+    .toPromise()
+    .then((result) => {
+			this.errorMessage = null;
+      result.forEach(bpc => {
+        bpcList.push(bpc);
+      });     
+    })
+    .then(() => {
+
+      for (let bpc of bpcList) {
+        console.log(bpc.blueprintMaster.stakeholderID);
+        this.serviceBlueprintCopy.getBlueprintMaster(bpc.blueprintMaster)
+        .toPromise()
+        .then((result) => {
+          this.errorMessage = null;
+          if(result.owner){
+            bpc.designer = result.owner;
+          }
+          
+        });
+      }
+
+      this.allBlueprintCopyAssets = bpcList;
+    });
+
+  }
+
+
+
+  
 
   //get all printers
 	load_OnlyPrinters(): Promise<any> {
@@ -187,6 +240,34 @@ export class BlueprintCopyComponent implements OnInit {
         designerList.push(designer);
       });    
       this.allDesigners = designerList;
+    })
+    .catch((error) => {
+			if(error == 'Server error'){
+				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+			}
+			else if(error == '404 - Not Found'){
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+			}
+			else{
+				this.errorMessage = error;
+			}
+		});
+
+  }
+
+  //load all BlueprintMaster assets 
+  load_OnlyBlueprintMasters(): Promise<any>  {
+    
+    //retrieve all designers
+    let blueprintMastersList = [];
+    return this.serviceBlueprintCopy.getAllBlueprintMasters()
+    .toPromise()
+    .then((result) => {
+			this.errorMessage = null;
+      result.forEach(bpm => {
+        blueprintMastersList.push(bpm);
+      });    
+      this.allBlueprintMasters = blueprintMastersList;
     })
     .catch((error) => {
 			if(error == 'Server error'){

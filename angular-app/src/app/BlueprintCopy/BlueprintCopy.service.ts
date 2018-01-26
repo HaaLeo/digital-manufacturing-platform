@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { BlueprintCopy, Designer, Printer, Enduser } from '../org.usecase.printer';
+import { BlueprintCopy, Designer, Printer, Enduser, BlueprintMaster } from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -13,8 +13,9 @@ export class BlueprintCopyService {
     private DESIGNER: string = 'org.usecase.printer.Designer';
     private PRINTER: string = 'org.usecase.printer.Printer';
     private ENDUSER: string = 'org.usecase.printer.Enduser';
+    private BLUEPRINTMASTER: string = 'org.usecase.printer.BlueprintMaster';
 
-    constructor(private dataService: DataService<BlueprintCopy>, private designerService: DataService<Designer>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
+    constructor(private dataService: DataService<BlueprintCopy>, private designerService: DataService<Designer>, private blueprintMasterService: DataService<BlueprintMaster>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
     };
 
     public getAll(): Observable<BlueprintCopy[]> {
@@ -51,5 +52,13 @@ export class BlueprintCopyService {
 
     public getAllDesigners(): Observable<Designer[]> {
       return this.designerService.getAll(this.DESIGNER);
+    }
+
+    public getAllBlueprintMasters(): Observable<BlueprintMaster[]> {
+      return this.blueprintMasterService.getAll(this.BLUEPRINTMASTER);
+    }
+
+    public getBlueprintMaster(id: any): Observable<BlueprintMaster> {
+      return this.blueprintMasterService.getSingle(this.BLUEPRINTMASTER, id);
     }
 }

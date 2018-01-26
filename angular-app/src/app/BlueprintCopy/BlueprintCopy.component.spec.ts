@@ -9,20 +9,24 @@ import { Configuration } from '../configuration';
 import { DataService } from '../data.service';
 import { BlueprintCopyComponent } from './BlueprintCopy.component';
 import {BlueprintCopyService} from './BlueprintCopy.service';
+import { UsersPipe}    from './Pipe';
 describe('BlueprintCopyComponent', () => {
   let component: BlueprintCopyComponent;
   let fixture: ComponentFixture<BlueprintCopyComponent>;
+  let fixture2: ComponentFixture<UsersPipe>;
+  let component2: UsersPipe;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BlueprintCopyComponent ],
+      declarations: [ BlueprintCopyComponent, UsersPipe ],
 imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule
   ],
-providers: [BlueprintCopyService,DataService,Configuration]
+  
+providers: [BlueprintCopyService,DataService,Configuration, UsersPipe]
     })
     .compileComponents();
   }));
@@ -31,6 +35,9 @@ providers: [BlueprintCopyService,DataService,Configuration]
     fixture = TestBed.createComponent(BlueprintCopyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    fixture2 = TestBed.createComponent(UsersPipe);
+    component2 = fixture2.componentInstance;
+    fixture2.detectChanges();
   });
 
   it('should create', () => {
