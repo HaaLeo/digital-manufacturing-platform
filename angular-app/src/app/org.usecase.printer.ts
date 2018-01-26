@@ -61,10 +61,4 @@ import {Event} from './org.hyperledger.composer.system';
     export class ConfirmTransaction extends Transaction {
         blueprintCopy: BlueprintCopy;
     }
-   export class ExecuteTransfer extends Transaction {
-      printer: Printer;
-      cashInc: Cash;
-      cashDec: Cash;
-      blueprintCopy: BlueprintCopy;
-   }
 // }

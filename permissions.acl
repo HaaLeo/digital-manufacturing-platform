@@ -99,9 +99,9 @@ rule DesignerReadAccessEndusers {
 
 //Designers to have read access to all BlueprintMaster assets
 rule DesignerAccessBlueprintMasterRecord {
-    description: "Allow Designer read access to all BlueprintMaster assets"
+    description: "Allow Designer all access to all BlueprintMaster assets"
     participant: "org.usecase.printer.Designer"
-    operation: READ
+    operation: READ, UPDATE, DELETE
     resource: "org.usecase.printer.BlueprintMaster"
     action: ALLOW
 }

@@ -80,7 +80,7 @@ transaction RequestBlueprint {
 }
 
 transaction AddNewBlueprintMaster {
-    o String blueprintCopyID
+    o String blueprintMasterID
     o String assetHash
     o Double price
     o String metadata
