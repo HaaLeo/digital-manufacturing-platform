@@ -173,6 +173,42 @@ rule PrinterAccessBlueprintCopyRecord {
     action: ALLOW
 }
 
+//Designers to have read access to all AddNewBlueprintMaster 
+rule DesignerAccessAddNewBlueprintMaster {
+    description: "Allow Designer all access to all AddNewBlueprintMaster"
+    participant: "org.usecase.printer.Designer"
+    operation: ALL
+    resource: "org.usecase.printer.AddNewBlueprintMaster"
+    action: ALLOW
+}
+
+//Printers to have read access to all ConfirmTransaction 
+rule PrinterAccessConfirmTransaction {
+    description: "Allow Printer all access to all ConfirmTransaction"
+    participant: "org.usecase.printer.Printer"
+    operation: ALL
+    resource: "org.usecase.printer.ConfirmTransaction"
+    action: ALLOW
+}
+
+//Enduser to have read access to all RequestTransaction 
+rule EnduserAccesRequestTransaction {
+    description: "Allow Enduser all access to all RequestTransaction"
+    participant: "org.usecase.printer.Enduser"
+    operation: ALL
+    resource: "org.usecase.printer.RequestBlueprint"
+    action: ALLOW
+}
+
+//Enduser to have read access to all CancelTransaction 
+rule EnduserAccesCancelTransaction {
+    description: "Allow Enduser all access to all CancelTransaction"
+    participant: "org.usecase.printer.Enduser"
+    operation: ALL
+    resource: "org.usecase.printer.CancelRequest"
+    action: ALLOW
+}
+
 
 rule SystemACL {
   description:  "System ACL to permit all access"
