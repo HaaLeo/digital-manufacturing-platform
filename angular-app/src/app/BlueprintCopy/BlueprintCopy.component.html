@@ -3,6 +3,16 @@
 		<strong>Error:</strong> {{errorMessage}}
 	</div>
   <h1 id='assetName'>Transaction History (BlueprintCopy)</h1>
+
+  <div class="container">
+      <label for="stakeholder">stakeholder</label>
+      <select name="stakeholders" [(ngModel)]="selectedElement">
+          <option value="all">All</option>
+        <option *ngFor="let stakeholder of allDesigners" value="{{stakeholder.stakeholderID}}">{{stakeholder.stakeholderID}}</option>
+      </select>
+  </div>
+
+
   <div class="row">
     <div class="col-md-12">
       <table class="table table-bordered table-responsive table-striped">
@@ -27,7 +37,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let asset of allBlueprintCopyAssets">
+          <tr *ngFor="let asset of allBlueprintCopyAssets | filter: filterStakeholders()">
 
             
                 <td>{{asset.blueprintCopyID}}</td>

@@ -13,11 +13,17 @@ export class BlueprintCopyComponent implements OnInit {
   myForm: FormGroup;
 
   private allBlueprintCopyAssets;
+  private allEndusers;
+  private allPrinters;
+  private allDesigners;
+  private allStakeholders = [];
+
   private asset;
   private currentId;
-	private errorMessage;
+  private errorMessage;
+  private filterID;
 
-  
+
           blueprintCopyID = new FormControl("", Validators.required);
       
           printed = new FormControl("", Validators.required);
@@ -50,9 +56,30 @@ export class BlueprintCopyComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.loadAll();
+    this.loadAll().then(() => {                     
+      this.load_OnlyDesigners();
+    }).then(() => {                     
+      this.load_OnlyEndusers();
+    }).then(() => {                     
+      this.load_OnlyPrinters();
+    });    
+    //this.allStakeholders = [].concat(this.allDesigners).concat(this.allEndusers).concat(this.allPrinters);
+    //console.log(this.allStakeholders);
   }
 
+  filter(asset: string): boolean {
+    return true;
+  }
+  
+  transform(records: Array<any>, property:any): any {
+    let sortedArray=[];
+    if(property){
+    console.log(sortedArray);
+    return sortedArray
+    }
+}
+
+  // Load all BlueprintCopy assets
   loadAll(): Promise<any> {
     let tempList = [];
     return this.serviceBlueprintCopy.getAll()
@@ -96,6 +123,83 @@ export class BlueprintCopyComponent implements OnInit {
             this.errorMessage = error;
         }
     });
+  }
+
+  //get all printers
+	load_OnlyPrinters(): Promise<any> {
+		let tempList = [];
+		return this.serviceBlueprintCopy.getAllPrinters()
+		.toPromise()
+		.then((result) => {
+				this.errorMessage = null;
+		result.forEach(printer => {
+      tempList.push(printer);
+		});
+    this.allPrinters = tempList;
+		})
+		.catch((error) => {
+			if(error == 'Server error'){
+				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+			}
+			else if(error == '404 - Not Found'){
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+			}
+			else{
+				this.errorMessage = error;
+			}
+		});
+  }
+  //get all endusers
+	load_OnlyEndusers(): Promise<any> {
+		let tempList = [];
+		return this.serviceBlueprintCopy.getAllEndusers()
+		.toPromise()
+		.then((result) => {
+				this.errorMessage = null;
+		result.forEach(enduser => {
+      tempList.push(enduser);
+		});
+		this.allEndusers = tempList;
+		})
+		.catch((error) => {
+			if(error == 'Server error'){
+				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+			}
+			else if(error == '404 - Not Found'){
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+			}
+			else{
+				this.errorMessage = error;
+			}
+		});
+  }
+
+  //load all Designers 
+  load_OnlyDesigners(): Promise<any>  {
+    
+    //retrieve all designers
+    let designerList = [];
+    return this.serviceBlueprintCopy.getAllDesigners()
+    .toPromise()
+    .then((result) => {
+			this.errorMessage = null;
+      result.forEach(designer => {
+        designerList.push(designer);
+      });    
+      this.allDesigners = designerList;
+    })
+    .catch((error) => {
+			if(error == 'Server error'){
+				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+			}
+			else if(error == '404 - Not Found'){
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+			}
+			else{
+				this.errorMessage = error;
+			}
+		});
+
   }
 
 	/**
