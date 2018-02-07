@@ -16,6 +16,7 @@ export class FileuploadComponent {
   private txid: string;
   private imageShown: boolean = false;
   private currentProfileImage: string =  './uploadimage.png';
+  private acceptedFile;
 
   // File being dragged has moved into the drop region
   private dragFileOverStart() {
@@ -37,12 +38,19 @@ export class FileuploadComponent {
     
      this.imageShown = true;
      
-
+     this.acceptedFile = acceptedFile.file;
     // Read in the file
-    this.txid = masterAssetBigchain(acceptedFile.file);
-    console.log(this.txid);
+    // masterAssetBigchain(acceptedFile.file)
+    // .then(txid => {
+    //   console.log("[dragFileAccepted]", txid);  
+    // });
+    
   }
  
+  async post() {
+    return await masterAssetBigchain(this.acceptedFile)
+  }
+
   // File being dragged has been dropped and has been rejected
   private dragFileRejected(rejectedFile: Ng2FileDropRejectedFile) {
     console.log("File being dragged has been dropped and has been rejected");

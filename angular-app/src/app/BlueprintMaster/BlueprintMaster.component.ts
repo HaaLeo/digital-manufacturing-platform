@@ -1,7 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { BlueprintMasterService } from './BlueprintMaster.service';
 import 'rxjs/add/operator/toPromise';
+import { FileuploadComponent }  from '../fileupload/fileupload.component';
+
+
 @Component({
 	selector: 'app-BlueprintMaster',
 	templateUrl: './BlueprintMaster.component.html',
@@ -9,6 +12,9 @@ import 'rxjs/add/operator/toPromise';
   providers: [BlueprintMasterService]
 })
 export class BlueprintMasterComponent implements OnInit {
+
+  @ViewChild(FileuploadComponent)
+  private fileUploadComponent: FileuploadComponent;
 
   myForm: FormGroup;
 
@@ -230,15 +236,21 @@ export class BlueprintMasterComponent implements OnInit {
     return this[name].value.indexOf(value) !== -1;
   }
 
-  addAsset(form: any): Promise<any> {
+  addAsset(form: any) {
 
+    this.fileUploadComponent.post()
+    .then(txId => {
+      console.log("[RETURNED txID]", txId);  
+    
+    
     this.current_db_id++;
 
     this.asset = {
       $class: "org.usecase.printer.BlueprintMaster",
       
           "blueprintMasterID":"B_" + this.current_db_id,
-          "assetHash":this.assetHash.value,
+          // "assetHash":this.assetHash.value,
+          "assetHash":txId,
           "price":this.price.value,
           "metadata":this.metadata.value,
           "owner":this.owner.value
@@ -276,6 +288,7 @@ export class BlueprintMasterComponent implements OnInit {
         else{
             this.errorMessage = error;
         }
+    })
     });
   }
 

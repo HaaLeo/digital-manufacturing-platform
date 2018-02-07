@@ -1,7 +1,7 @@
 import encryptor from './encryptor';
 
 
-export default function postToDB(dataPayload) {
+export default async function postToDB(dataPayload) {
 
 const driver = require('bigchaindb-driver')
 
@@ -51,24 +51,31 @@ const txCreateAliceSimpleSigned = driver.Transaction.signTransaction(txCreateAli
 const conn = new driver.Connection(API_PATH)
 
 
-
-var txid = conn.postTransaction(txCreateAliceSimpleSigned)
-        // Check status of transaction every 0.5 seconds until fulfilled
-        .then(() => conn.pollStatusAndFetchTransaction(txCreateAliceSimpleSigned.id))
-        .then(retrievedTx => {
-                console.log('Transaction', retrievedTx.id, 'successfully posted.')
-                return retrievedTx.id})
+var txid = await conn.postTransaction(txCreateAliceSimpleSigned);
+var retrievedTx = await conn.pollStatusAndFetchTransaction(txCreateAliceSimpleSigned.id);
+console.log('Transaction', retrievedTx.id, 'successfully posted.');
+var status = await conn.getStatus(txCreateAliceSimpleSigned.id);
+console.log('Retrieved status method 2: ', status);
+var assets = await conn.searchAssets(txCreateAliceSimpleSigned.id);
+console.log('Found assets creaed by Dian Balta: ', assets);
+return retrievedTx.id;
+// var txid = conn.postTransaction(txCreateAliceSimpleSigned)
+//         // Check status of transaction every 0.5 seconds until fulfilled
+//         .then(() => conn.pollStatusAndFetchTransaction(txCreateAliceSimpleSigned.id))
+//         .then(retrievedTx => {
+//                 console.log('Transaction', retrievedTx.id, 'successfully posted.')
+//                 return retrievedTx.id})
 
 
         
-        .then((txid) => {conn.getStatus(txCreateAliceSimpleSigned.id)
-                return txid})
-        .then((status, txid) => {console.log('Retrieved status method 2: ', status)
-                return txid})
-        .then((txid) => {conn.searchAssets(txCreateAliceSimpleSigned.id)
-                return txid})
-        .then((assets,txid) => {console.log('Found assets creaed by Dian Balta: ', assets)
-                return txid})
+//         .then((txid) => {conn.getStatus(txCreateAliceSimpleSigned.id)
+//                 return txid})
+//         .then((status, txid) => {console.log('Retrieved status method 2: ', status)
+//                 return txid})
+//         .then((txid) => {conn.searchAssets(txCreateAliceSimpleSigned.id)
+//                 return txid})
+//         .then((assets,txid) => {console.log('Found assets creaed by Dian Balta: ', assets)
+//                 return txid})
 
         
         //Add flag for transferring asset to printer if true
@@ -104,5 +111,5 @@ var txid = conn.postTransaction(txCreateAliceSimpleSigned)
         .then(() => conn.searchAssets('Bicycle Inc.'))
         .then(assets => console.log('Found assets with serial number Bicycle Inc.:', assets))
         */
-return txid;
+// return txid;
 }
