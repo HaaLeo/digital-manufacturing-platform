@@ -88,7 +88,11 @@ transaction RequestBlueprint {
     --> BlueprintMaster blueprintMaster
 }
 
+// NOT USED
 transaction AddNewBlueprintMaster {
     o String blueprintMasterID
+    o String assetHash
+    o Double price
+    o String metadata
     --> Designer owner
 }
