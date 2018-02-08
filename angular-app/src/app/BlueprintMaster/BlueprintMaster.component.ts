@@ -268,6 +268,7 @@ export class BlueprintMasterComponent implements OnInit {
     this.myForm.setValue({
           "blueprintMasterID":null,
           "txID":null,
+          "checksum":null,
           "price":null,
           "metadata":null,
           "owner":null,
@@ -282,6 +283,7 @@ export class BlueprintMasterComponent implements OnInit {
       this.myForm.setValue({
           "blueprintMasterID":null,
           "txID":null,
+          "checksum":null,
           "price":null,
           "metadata":null,
           "owner":null,
@@ -502,6 +504,7 @@ export class BlueprintMasterComponent implements OnInit {
     this.myForm.setValue({
           "blueprintMasterID":null,
           "txID":null,
+          "checksum":null,
           "price":null,
           "metadata":null,
           "owner":null,
