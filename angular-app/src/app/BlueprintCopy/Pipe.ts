@@ -12,7 +12,7 @@ import { NgModule }      from '@angular/core';
 })
 export class UsersPipe implements PipeTransform {
   transform(bpcs: any [], searchTerm: string) {
-      if (bpcs === undefined || bpcs.length == 0 || searchTerm === undefined || searchTerm === "all") {
+      if (searchTerm === undefined || searchTerm === "all" || bpcs === undefined || bpcs.length == 0) {
         return bpcs;
       } else {
             if (searchTerm.charAt(0) === "D"){

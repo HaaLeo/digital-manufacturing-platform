@@ -27,6 +27,7 @@ export class BlueprintCopyComponent implements OnInit {
   private currentId;
   private errorMessage;
   private filterID;
+  private selectedElement;
 
 
           blueprintCopyID = new FormControl("", Validators.required);
@@ -61,15 +62,16 @@ export class BlueprintCopyComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.loadAll().then(() => {                     
+    this.loadAllx().then(() => {                     
       this.load_OnlyDesigners();
     }).then(() => {                     
       this.load_OnlyEndusers();
     }).then(() => {                     
       this.load_OnlyPrinters();
+    }).then(() => {                     
+      this.load_allStakeholder();
     });    
-    //this.allStakeholders = [].concat(this.allDesigners).concat(this.allEndusers).concat(this.allPrinters);
-    //console.log(this.allStakeholders);
+    this.selectedElement = "all"
   }
 
   filter(asset: string): boolean {
@@ -108,9 +110,9 @@ export class BlueprintCopyComponent implements OnInit {
         
           "printed":asset.printed,
         
-          "OTPencryptedWithDesignerPubKey": asset.otpEncryptedWithDesignerPubKey,
+          "otpEncryptedWithDesignerPubKey": asset.otpEncryptedWithDesignerPubKey,
         
-          "OTPencryptedWithPrinterPubKey": asset.otpEncryptedWithPrinterPubKey,
+          "otpEncryptedWithPrinterPubKey": asset.otpEncryptedWithPrinterPubKey,
         
           "printer":this.serviceBlueprintCopy.getID(asset.printer),
         
@@ -151,21 +153,23 @@ export class BlueprintCopyComponent implements OnInit {
     .then((result) => {
 			this.errorMessage = null;
       result.forEach(bpc => {
+        bpc.buyer = this.serviceBlueprintCopy.getID(bpc.buyer)
+        bpc.printer = this.serviceBlueprintCopy.getID(bpc.printer)
+        bpc.blueprintMaster = this.serviceBlueprintCopy.getID(bpc.blueprintMaster)
+        bpc.owner = this.serviceBlueprintCopy.getID(bpc.owner)
         bpcList.push(bpc);
       });     
     })
     .then(() => {
 
       for (let bpc of bpcList) {
-        console.log(bpc.blueprintMaster.stakeholderID);
         this.serviceBlueprintCopy.getBlueprintMaster(bpc.blueprintMaster)
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
           if(result.owner){
-            bpc.designer = result.owner;
+            bpc.designer = this.serviceBlueprintCopy.getID(result.owner);
           }
-          
         });
       }
 
@@ -174,9 +178,41 @@ export class BlueprintCopyComponent implements OnInit {
 
   }
 
-
-
-  
+  //get all printers
+	load_allStakeholder(): Promise<any> {
+		let tempList = [];
+		return this.serviceBlueprintCopy.getAllDesigners()
+		.toPromise()
+		.then((result) => {
+				this.errorMessage = null;
+		result.forEach(designer => {
+      tempList.push(designer);
+		});
+    })
+    .then(() => {
+      this.serviceBlueprintCopy.getAllPrinters()
+      .toPromise()
+      .then((result) => {
+          this.errorMessage = null;
+      result.forEach(printer => {
+        tempList.push(printer);
+      });
+      })
+    })
+    .then(() => {
+      this.serviceBlueprintCopy.getAllEndusers()
+      .toPromise()
+      .then((result) => {
+          this.errorMessage = null;
+      result.forEach(enduser => {
+        tempList.push(enduser);
+      });
+      this.allStakeholders = tempList;
+      })
+    })
+    
+		;
+  }
 
   //get all printers
 	load_OnlyPrinters(): Promise<any> {
