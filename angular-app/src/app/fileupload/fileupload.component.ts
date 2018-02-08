@@ -47,8 +47,8 @@ export class FileuploadComponent {
     
   }
  
-  async post() {
-    return await masterAssetBigchain(this.acceptedFile)
+  async postBCDB(price, description, ownerID) {
+    return await masterAssetBigchain(this.acceptedFile,price, description, ownerID)
   }
 
   // File being dragged has been dropped and has been rejected

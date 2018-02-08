@@ -237,8 +237,11 @@ export class BlueprintMasterComponent implements OnInit {
   }
 
   addAsset(form: any) {
+    let inputPrice = this.price.value;
+    let inputMetadata = this.metadata.value;
+    let owner = this.owner.value;
 
-    this.fileUploadComponent.post()
+    this.fileUploadComponent.postBCDB(inputPrice, inputMetadata, owner)
     .then(txId => {
       console.log("[RETURNED txID]", txId);  
     

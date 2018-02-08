@@ -1,7 +1,7 @@
 import encryptor from './encryptor';
 
 
-export default async function postToDB(dataPayload) {
+export default async function postToDB(dataPayload, price, description, ownerID) {
 
 const driver = require('bigchaindb-driver')
 
@@ -28,9 +28,13 @@ assetdata.model.encrypted_model = encryptedFile; //Possibly need to change the i
 
 //assetdata.model.printed_model = dataPayload;
 
-const metadata = {'model_description': 'chair',
-                'price': '25.99',
-                'designer': 'Tasos'}
+// const metadata = {'model_description': 'chair',
+//                 'price': '25.99',
+//                 'designer': 'Tasos'}
+const metadata = {'model_description': description,
+                'price': price,
+                'designer': ownerID}
+
 
 // Construct a transaction payload
 const txCreateAliceSimple = driver.Transaction.makeCreateTransaction(

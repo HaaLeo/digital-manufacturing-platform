@@ -8,18 +8,6 @@
       <form [formGroup]="myForm">
         <div class="modal-body">
 
-          <!--
-              <div class="form-group text-left">
-                <label for="blueprintMasterID">blueprintMasterID</label>
-                  <input formControlName="blueprintMasterID" type="text" class="form-control">
-              </div>
-            -->
-            
-              <div class="form-group text-left">
-                <label for="assetHash">assetHash</label>
-                
-                  <input formControlName="assetHash" type="text" class="form-control">
-              </div>
 
               <div class="form-group text-left">
                 <label for="price">price</label>
@@ -29,9 +17,10 @@
               </div>
             
               <div class="form-group text-left">
-                <label for="metadata">metadata</label>
+                <label for="metadata">Description</label>
                 
-                  <input formControlName="metadata" type="text" class="form-control">
+                  <textarea formControlName="metadata" type="text" class="form-control">
+                    </textarea>
                 
               </div>
             
@@ -40,8 +29,7 @@
                 <select name="designers" formControlName="owner" >
                   <option *ngFor="let designer of allDesigners" value="{{designer.stakeholderID}}">{{designer.firstName + " " + designer.lastName}}</option>
                 </select>
-                  <!-- <textarea formControlName="owner" class="form-control" rows="3"></textarea> -->
-                
+
               </div>
               <fileupload></fileupload>
             
@@ -64,30 +52,16 @@
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
-          <!--
-            <div class="form-group text-left">
-              <label for="blueprintMasterID">blueprintMasterID</label>
-                <input [ngModel]="blueprintMasterID"formControlName="blueprintMasterID" type="text" class="form-control">
-            </div>
-          -->
-            <div class="form-group text-left">
-              <label for="assetHash">assetHash</label>
-                <input [ngModel]="assetHash" formControlName="assetHash" type="text" class="form-control">
-            </div>
+
             <div class="form-group text-left">
               <label for="price">price</label>
                 <input [ngModel]="price" formControlName="price" type="number" step='any' class="form-control">
             </div>
             <div class="form-group text-left">
-              <label for="metadata">metadata</label>
-                <input [ngModel]="metadata" formControlName="metadata" type="text" class="form-control">
+              <label for="metadata">Description</label>
+                <textarea [ngModel]="metadata" formControlName="metadata" type="text" class="form-control">
+                </textarea>
             </div>
-            <!--
-            <div class="form-group text-left">
-              <label for="owner">owner</label>
-                  <textarea [ngModel]="owner" formControlName="owner" class="form-control" rows="3"></textarea>
-            </div>
-          -->
         </div>
         <div class="modal-footer">
           <button (click)="updateAsset(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
@@ -166,15 +140,15 @@
         <thead class="thead">
           <tr class="thead-cols">
             
-                <th class="info">blueprintMasterID</th>
+                <th class="info">BlueprintMasterID</th>
             
                 <th class="info">TxID</th>
             
-                <th class="info">price</th>
+                <th class="info">Price</th>
             
-                <th class="info">metadata</th>
+                <th class="info">Description</th>
             
-                <th class="info">owner</th>
+                <th class="info">Owner</th>
             
               <th class="info">Actions</th>
           </tr>
