@@ -46,7 +46,8 @@ asset Cash identified by cashID {
 //This class represents a Master-Blueprint stored on BCDB
 asset BlueprintMaster identified by blueprintMasterID {
     o String blueprintMasterID
-    o String assetHash
+    o String txID
+    o String checksum
     o Double price
     o String metadata
     --> Designer owner
@@ -55,6 +56,8 @@ asset BlueprintMaster identified by blueprintMasterID {
 //This class represents a copy of a Master-Blueprint 
 asset BlueprintCopy identified by blueprintCopyID {
     o String blueprintCopyID
+    o String txID
+    o String checksum
     o Boolean printed
     o String otpEncryptedWithDesignerPubKey
     o String otpEncryptedWithPrinterPubKey
@@ -73,6 +76,12 @@ transaction CancelRequest {
     --> BlueprintCopy blueprintCopy
 }
 
+transaction UploadBlueprintCopy {
+    o String txID
+    o String checksum
+    --> BlueprintCopy blueprintCopy
+}
+
 transaction RequestBlueprint {
     --> Enduser buyer
     --> Printer printer
@@ -81,8 +90,5 @@ transaction RequestBlueprint {
 
 transaction AddNewBlueprintMaster {
     o String blueprintMasterID
-    o String assetHash
-    o Double price
-    o String metadata
     --> Designer owner
 }

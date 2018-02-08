@@ -35,13 +35,16 @@ import {Event} from './org.hyperledger.composer.system';
    }
    export class BlueprintMaster extends Asset {
       blueprintMasterID: string;
-      assetHash: string;
+      txID: string;
+      checksum: string;
       price: number;
       metadata: string;
       owner: Designer;
    }
    export class BlueprintCopy extends Asset {
       blueprintCopyID: string;
+      txID: string;
+      checksum: string;
       printed: boolean;
       otpEncryptedWithDesignerPubKey: string;
       otpEncryptedWithPrinterPubKey: string;
@@ -60,5 +63,10 @@ import {Event} from './org.hyperledger.composer.system';
     }
     export class ConfirmTransaction extends Transaction {
         blueprintCopy: BlueprintCopy;
+    }
+    export class UploadBlueprintCopy extends Transaction {
+        txID: string;
+        checksum: string;
+        blueprintCopy: BlueprintCopy;   
     }
 // }
