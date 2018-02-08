@@ -35,7 +35,7 @@ export class BlueprintMasterComponent implements OnInit {
   private current_db_id;
 
   blueprintMasterID = new FormControl("", Validators.required);
-  assetHash = new FormControl("", Validators.required);
+  txID = new FormControl("", Validators.required);
   price = new FormControl("", Validators.required);
   metadata = new FormControl("", Validators.required);
   owner = new FormControl("", Validators.required);
@@ -46,7 +46,7 @@ export class BlueprintMasterComponent implements OnInit {
     this.myForm = fb.group({
     
           blueprintMasterID:this.blueprintMasterID,
-          assetHash:this.assetHash,
+          txID:this.txID,
           price:this.price,
           metadata:this.metadata,
           owner:this.owner,
@@ -252,8 +252,8 @@ export class BlueprintMasterComponent implements OnInit {
       $class: "org.usecase.printer.BlueprintMaster",
       
           "blueprintMasterID":"B_" + this.current_db_id,
-          // "assetHash":this.assetHash.value,
-          "assetHash":txId,
+          // "txID":this.txID.value,
+          "txID":txId,
           "price":this.price.value,
           "metadata":this.metadata.value,
           "owner":this.owner.value
@@ -261,7 +261,7 @@ export class BlueprintMasterComponent implements OnInit {
 
     this.myForm.setValue({
           "blueprintMasterID":null,
-          "assetHash":null,
+          "txID":null,
           "price":null,
           "metadata":null,
           "owner":null,
@@ -275,7 +275,7 @@ export class BlueprintMasterComponent implements OnInit {
 			this.errorMessage = null;
       this.myForm.setValue({
           "blueprintMasterID":null,
-          "assetHash":null,
+          "txID":null,
           "price":null,
           "metadata":null,
           "owner":null,
@@ -299,7 +299,7 @@ export class BlueprintMasterComponent implements OnInit {
    updateAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.usecase.printer.BlueprintMaster",
-            "assetHash":this.assetHash.value,
+            "txID":this.txID.value,
             "price":this.price.value,
             "metadata":this.metadata.value,
             "owner":this.owner.value
@@ -418,7 +418,7 @@ export class BlueprintMasterComponent implements OnInit {
 			this.errorMessage = null;
       let formObject = {
             "blueprintMasterID":null,
-            "assetHash":null,
+            "txID":null,
             "price":null,
             "metadata":null,
             "printerID":null,
@@ -434,12 +434,12 @@ export class BlueprintMasterComponent implements OnInit {
           formObject.blueprintMasterID = null;
         }
       
-        if(result.assetHash){
+        if(result.txID){
           
-            formObject.assetHash = result.assetHash;
+            formObject.txID = result.txID;
           
         }else{
-          formObject.assetHash = null;
+          formObject.txID = null;
         }
       
         if(result.price){
@@ -487,7 +487,7 @@ export class BlueprintMasterComponent implements OnInit {
   resetForm(): void{
     this.myForm.setValue({
           "blueprintMasterID":null,
-          "assetHash":null,
+          "txID":null,
           "price":null,
           "metadata":null,
           "owner":null,
