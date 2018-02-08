@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile }  from 'ng2-file-drop';
 import masterAssetBigchain from './bigchain-post/masterAssetBigchain.js';
+import * as sha1 from 'js-sha1';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class FileuploadComponent {
   private imageShown: boolean = false;
   private currentProfileImage: string =  './uploadimage.png';
   private acceptedFile;
+  private checksum;
 
   // File being dragged has moved into the drop region
   private dragFileOverStart() {
@@ -39,6 +41,9 @@ export class FileuploadComponent {
      this.imageShown = true;
      
      this.acceptedFile = acceptedFile.file;
+    
+     this.checksum = sha1(this.acceptedFile);
+
     // Read in the file
     // masterAssetBigchain(acceptedFile.file)
     // .then(txid => {
@@ -47,6 +52,9 @@ export class FileuploadComponent {
     
   }
  
+ getChecksum() {
+   return this.checksum;
+ }
   async postBCDB(price, description, ownerID) {
     return await masterAssetBigchain(this.acceptedFile,price, description, ownerID)
   }

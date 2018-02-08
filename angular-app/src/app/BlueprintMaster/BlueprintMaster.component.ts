@@ -36,6 +36,7 @@ export class BlueprintMasterComponent implements OnInit {
 
   blueprintMasterID = new FormControl("", Validators.required);
   txID = new FormControl("", Validators.required);
+  checksum = new FormControl("", Validators.required);
   price = new FormControl("", Validators.required);
   metadata = new FormControl("", Validators.required);
   owner = new FormControl("", Validators.required);
@@ -47,6 +48,7 @@ export class BlueprintMasterComponent implements OnInit {
     
           blueprintMasterID:this.blueprintMasterID,
           txID:this.txID,
+          checksum: this.checksum,
           price:this.price,
           metadata:this.metadata,
           owner:this.owner,
@@ -248,12 +250,16 @@ export class BlueprintMasterComponent implements OnInit {
     
     this.current_db_id++;
 
+
+    let currentChecksum = this.fileUploadComponent.getChecksum();
+
     this.asset = {
       $class: "org.usecase.printer.BlueprintMaster",
       
           "blueprintMasterID":"B_" + this.current_db_id,
           // "txID":this.txID.value,
           "txID":txId,
+          "checksum": currentChecksum,
           "price":this.price.value,
           "metadata":this.metadata.value,
           "owner":this.owner.value
@@ -299,10 +305,11 @@ export class BlueprintMasterComponent implements OnInit {
    updateAsset(form: any): Promise<any> {
     this.asset = {
       $class: "org.usecase.printer.BlueprintMaster",
-            "txID":this.txID.value,
+            "txID": this.txID.value,
+            "checksum": this.checksum.value,
             "price":this.price.value,
             "metadata":this.metadata.value,
-            "owner":this.owner.value
+            "owner":this.owner.value,
     };
 
     return this.serviceBlueprintMaster.updateAsset(form.get("blueprintMasterID").value,this.asset)
@@ -419,6 +426,7 @@ export class BlueprintMasterComponent implements OnInit {
       let formObject = {
             "blueprintMasterID":null,
             "txID":null,
+            "checksum":null,
             "price":null,
             "metadata":null,
             "printerID":null,
@@ -442,6 +450,12 @@ export class BlueprintMasterComponent implements OnInit {
           formObject.txID = null;
         }
       
+        if(result.checksum) {
+          formObject.checksum = result.checksum;
+        } else {
+          formObject.checksum = null;
+        }
+
         if(result.price){
           
             formObject.price = result.price;
