@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { BlueprintCopy, CancelRequest } from '../org.usecase.printer';
+import { BlueprintCopy, Designer, Printer, Enduser, BlueprintMaster, CancelRequest} from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -9,14 +9,14 @@ import 'rxjs/Rx';
 export class BlueprintCopyService {
 
 	
-		private NAMESPACE: string = 'org.usecase.printer.BlueprintCopy';
-	  private CANCELREQUEST: string = 'org.usecase.printer.CancelRequest';
-    private BLUEPRINTCOPY: string = 'org.usecase.printer.BlueprintCopy'
+    private NAMESPACE: string = 'org.usecase.printer.BlueprintCopy';
+    private DESIGNER: string = 'org.usecase.printer.Designer';
+    private PRINTER: string = 'org.usecase.printer.Printer';
+    private ENDUSER: string = 'org.usecase.printer.Enduser';
+    private BLUEPRINTMASTER: string = 'org.usecase.printer.BlueprintMaster';
+    private CANCELREQUEST: string = 'org.usecase.printer.CancelRequest';
 
-
-
-    constructor(private dataService: DataService<BlueprintCopy>,
-                private cancelRequestService: DataService<CancelRequest>) {
+    constructor(private dataService: DataService<BlueprintCopy>, private designerService: DataService<Designer>, private cancelRequestService: DataService<CancelRequest>,  private blueprintMasterService: DataService<BlueprintMaster>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
     };
 
     public getAll(): Observable<BlueprintCopy[]> {
@@ -44,11 +44,31 @@ export class BlueprintCopyService {
     }
 
     public getAllBlueprintCopies(): Observable<BlueprintCopy[]> {
-      return this.dataService.getAll(this.BLUEPRINTCOPY);
+      return this.dataService.getAll(this.NAMESPACE);
     }
 
 
     public getID(str) {
       return str.split('#')[1];
+    }
+
+    public getAllEndusers(): Observable<Enduser[]> {
+      return this.enduserService.getAll(this.ENDUSER);
+   }
+  
+    public getAllPrinters(): Observable<Printer[]> {
+      return this.printerService.getAll(this.PRINTER);
+    }
+
+    public getAllDesigners(): Observable<Designer[]> {
+      return this.designerService.getAll(this.DESIGNER);
+    }
+
+    public getAllBlueprintMasters(): Observable<BlueprintMaster[]> {
+      return this.blueprintMasterService.getAll(this.BLUEPRINTMASTER);
+    }
+
+    public getBlueprintMaster(id: any): Observable<BlueprintMaster> {
+      return this.blueprintMasterService.getSingle(this.BLUEPRINTMASTER, id);
     }
 }

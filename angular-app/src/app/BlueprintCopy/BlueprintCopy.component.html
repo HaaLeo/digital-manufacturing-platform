@@ -23,6 +23,16 @@
 		<strong>Error:</strong> {{errorMessage}}
 	</div>
   <h1 id='assetName'>Transaction History (BlueprintCopy)</h1>
+
+  <div class="container">
+      <label for="stakeholder">stakeholder</label>
+      <select name="stakeholders" [(ngModel)]="selectedElement" >
+          <option value="all">All</option>
+        <option *ngFor="let stakeholder of allStakeholders" value="{{stakeholder.stakeholderID}}">{{stakeholder.stakeholderID}}</option>
+      </select>
+  </div>
+
+
   <div class="row">
     <div class="col-md-12">
       <table class="table table-bordered table-responsive table-striped">
@@ -33,9 +43,9 @@
             
                 <th class="info">printed</th>
             
-                <th class="info">OTPencryptedWithDesignerPubKey</th>
+                <th class="info">otpEncryptedWithDesignerPubKey</th>
             
-                <th class="info">OTPencryptedWithPrinterPubKey</th>
+                <th class="info">otpEncryptedWithDesignerPubKey</th>
             
                 <th class="info">printer</th>
             
@@ -45,19 +55,22 @@
             
                 <th class="info">owner</th>
 
+                <th class="info">designer</th>
+
                 <th class="info">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let asset of allBlueprintCopyAssets">
-            <td>{{asset.blueprintCopyID}}</td>
-            
+          <tr *ngFor="let asset of allBlueprintCopyAssets | usersPipe: selectedElement">
+
+            <td>{{asset.blueprintCopyID}}</td>            
+
             <td>{{asset.printed}}</td>
             
-            <td>{{asset.OTPencryptedWithDesignerPubKey}}</td>
-            
-            <td>{{asset.OTPencryptedWithPrinterPubKey}}</td>
-            
+            <td>{{asset.otpEncryptedWithDesignerPubKey}}</td>
+        
+            <td>{{asset.otpEncryptedWithPrinterPubKey}}</td>
+
             <td>{{asset.printer}}</td>
             
             <td>{{asset.buyer}}</td>
@@ -65,6 +78,8 @@
             <td>{{asset.blueprintMaster}}</td>
             
             <td>{{asset.owner}}</td>
+
+            <td>{{asset.designer}}</td>
 
             <td>
               <button *ngIf="!asset.printed;" (click)="setId(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelRequestModal">Cancel Request</button>
