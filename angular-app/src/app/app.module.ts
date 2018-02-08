@@ -15,6 +15,8 @@ import { EnduserComponent } from 'app/Enduser/Enduser.component';
 import { DesignerComponent } from 'app/Designer/Designer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
 import { UsersPipe} from 'app/BluePrintCopy/Pipe';
+import { FileuploadComponent } from './fileupload/fileupload.component';
+import { Ng2FileDropModule }  from 'ng2-file-drop';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -29,8 +31,8 @@ import { UsersPipe} from 'app/BluePrintCopy/Pipe';
     DesignerComponent,
     PrinterComponent,
     BlueprintCopyComponent,
-    UsersPipe
-    
+    UsersPipe,
+    FileuploadComponent
 		
   ],
   imports: [
@@ -38,7 +40,8 @@ import { UsersPipe} from 'app/BluePrintCopy/Pipe';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    Ng2FileDropModule
   ],
   providers: [
     Configuration,
