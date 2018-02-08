@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, NgModule } from '@angular/core';
+import { Component, OnInit, Input, NgModule, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { BlueprintCopyService } from './BlueprintCopy.service';
 import 'rxjs/add/operator/toPromise';
 import { UsersPipe} from './Pipe';
+import {FileuploadComponent} from "../fileupload/fileupload.component"
 
 
 @Component({
@@ -13,6 +14,9 @@ import { UsersPipe} from './Pipe';
 })
 
 export class BlueprintCopyComponent implements OnInit {
+
+  @ViewChild(FileuploadComponent)
+  private fileUploadComponent: FileuploadComponent;
 
   myForm: FormGroup;
 
@@ -36,9 +40,9 @@ export class BlueprintCopyComponent implements OnInit {
 
   printed = new FormControl("", Validators.required);
 
-  OTPencryptedWithDesignerPubKey = new FormControl("", Validators.required);
+  otpEncryptedWithDesignerPubKey = new FormControl("", Validators.required);
 
-  OTPencryptedWithPrinterPubKey = new FormControl("", Validators.required);
+  otpEncryptedWithPrinterPubKey = new FormControl("", Validators.required);
 
   printer = new FormControl("", Validators.required);
 
@@ -54,8 +58,8 @@ export class BlueprintCopyComponent implements OnInit {
     
           blueprintCopyID:this.blueprintCopyID,
           printed:this.printed,
-          OTPencryptedWithDesignerPubKey:this.OTPencryptedWithDesignerPubKey,
-          OTPencryptedWithPrinterPubKey:this.OTPencryptedWithPrinterPubKey,
+          otpEncryptedWithDesignerPubKey:this.otpEncryptedWithDesignerPubKey,
+          otpEncryptedWithPrinterPubKey:this.otpEncryptedWithPrinterPubKey,
           printer:this.printer,
           buyer:this.buyer,
           blueprintMaster:this.blueprintMaster,
@@ -355,9 +359,9 @@ export class BlueprintCopyComponent implements OnInit {
         
           "printed":this.printed.value,
         
-          "OTPencryptedWithDesignerPubKey":this.OTPencryptedWithDesignerPubKey.value,
+          "otpEncryptedWithDesignerPubKey":this.otpEncryptedWithDesignerPubKey.value,
         
-          "OTPencryptedWithPrinterPubKey":this.OTPencryptedWithPrinterPubKey.value,
+          "otpEncryptedWithPrinterPubKey":this.otpEncryptedWithPrinterPubKey.value,
         
           "printer":this.printer.value,
         
@@ -373,9 +377,9 @@ export class BlueprintCopyComponent implements OnInit {
         
           "printed":null,
         
-          "OTPencryptedWithDesignerPubKey":null,
+          "otpEncryptedWithDesignerPubKey":null,
         
-          "OTPencryptedWithPrinterPubKey":null,
+          "otpEncryptedWithPrinterPubKey":null,
         
           "printer":null,
         
@@ -401,11 +405,11 @@ export class BlueprintCopyComponent implements OnInit {
         
       
         
-          "OTPencryptedWithDesignerPubKey":null,
+          "otpEncryptedWithDesignerPubKey":null,
         
       
         
-          "OTPencryptedWithPrinterPubKey":null,
+          "otpEncryptedWithPrinterPubKey":null,
         
       
         
@@ -444,9 +448,9 @@ export class BlueprintCopyComponent implements OnInit {
       
             "printed":this.printed.value,
           
-            "OTPencryptedWithDesignerPubKey":this.OTPencryptedWithDesignerPubKey.value,
+            "otpEncryptedWithDesignerPubKey":this.otpEncryptedWithDesignerPubKey.value,
           
-            "OTPencryptedWithPrinterPubKey":this.OTPencryptedWithPrinterPubKey.value,
+            "otpEncryptedWithPrinterPubKey":this.otpEncryptedWithPrinterPubKey.value,
           
             "printer":this.printer.value,
           
@@ -555,9 +559,9 @@ export class BlueprintCopyComponent implements OnInit {
           
             "printed":null,
           
-            "OTPencryptedWithDesignerPubKey":null,
+            "otpEncryptedWithDesignerPubKey":null,
           
-            "OTPencryptedWithPrinterPubKey":null,
+            "otpEncryptedWithPrinterPubKey":null,
           
             "printer":null,
           
@@ -577,7 +581,7 @@ export class BlueprintCopyComponent implements OnInit {
         }
       
         if(result.printed){
-          
+          console.log(result)
             formObject.printed = result.printed;
           
         }else{
@@ -586,18 +590,18 @@ export class BlueprintCopyComponent implements OnInit {
       
         if(result.otpEncryptedWithDesignerPubKey){
           
-            formObject.OTPencryptedWithDesignerPubKey = result.otpEncryptedWithDesignerPubKey;
+            formObject.otpEncryptedWithDesignerPubKey = result.otpEncryptedWithDesignerPubKey;
           
         }else{
-          formObject.OTPencryptedWithDesignerPubKey = null;
+          formObject.otpEncryptedWithDesignerPubKey = null;
         }
       
         if(result.otpEncryptedWithPrinterPubKey){
           
-            formObject.OTPencryptedWithPrinterPubKey = result.otpEncryptedWithPrinterPubKey;
+            formObject.otpEncryptedWithPrinterPubKey = result.otpEncryptedWithPrinterPubKey;
           
         }else{
-          formObject.OTPencryptedWithPrinterPubKey = null;
+          formObject.otpEncryptedWithPrinterPubKey = null;
         }
       
         if(result.printer){
@@ -650,6 +654,89 @@ export class BlueprintCopyComponent implements OnInit {
 
   }
 
+  uploadCopyAsset(form: any) {
+
+    this.fileUploadComponent.postBCDB("","","")
+    .then(txId => {
+      console.log("[RETURNED txID]", txId);  
+    
+    let currentChecksum = this.fileUploadComponent.getChecksum();
+
+    this.asset = {
+      $class: "org.usecase.printer.BlueprintCopy",
+      
+          "blueprintCopyID":this.blueprintCopyID.value,
+          "txID":txId,
+          "checksum": currentChecksum,
+          "printed":this.printed.value,
+          
+          "otpEncryptedWithDesignerPubKey":this.otpEncryptedWithDesignerPubKey.value,
+        
+          "otpEncryptedWithPrinterPubKey":this.otpEncryptedWithPrinterPubKey.value,
+        
+          "printer":this.printer.value,
+        
+          "buyer":this.buyer.value,
+        
+          "blueprintMaster":this.blueprintMaster.value,
+        
+          "owner":this.owner.value
+    };
+
+    console.log(this.printed.value)
+
+    this.myForm.setValue({
+        "blueprintCopyID":null,
+      
+        "printed":null,
+      
+        "otpEncryptedWithDesignerPubKey":null,
+      
+        "otpEncryptedWithPrinterPubKey":null,
+      
+        "printer":null,
+      
+        "buyer":null,
+      
+        "blueprintMaster":null,
+      
+        "owner":null 
+    });
+
+    return this.serviceBlueprintCopy.addAsset(this.asset)
+    .toPromise()
+    .then(() => {
+			this.errorMessage = null;
+      this.myForm.setValue({
+          "blueprintCopyID":null,
+        
+          "printed":null,
+        
+          "otpEncryptedWithDesignerPubKey":null,
+        
+          "otpEncryptedWithPrinterPubKey":null,
+        
+          "printer":null,
+        
+          "buyer":null,
+        
+          "blueprintMaster":null,
+        
+          "owner":null 
+      });
+      location.reload();
+    })
+    .catch((error) => {
+        if(error == 'Server error'){
+            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+        }
+        else{
+            this.errorMessage = error;
+        }
+    })
+    });
+  }
+
 
   resetForm(): void{
     this.myForm.setValue({
@@ -658,9 +745,9 @@ export class BlueprintCopyComponent implements OnInit {
         
           "printed":null,
         
-          "OTPencryptedWithDesignerPubKey":null,
+          "otpEncryptedWithDesignerPubKey":null,
         
-          "OTPencryptedWithPrinterPubKey":null,
+          "otpEncryptedWithPrinterPubKey":null,
         
           "printer":null,
         

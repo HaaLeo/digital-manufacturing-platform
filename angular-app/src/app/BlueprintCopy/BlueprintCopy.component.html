@@ -32,6 +32,28 @@
       </select>
   </div>
 
+  <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="addAssetModalLabel">Add Asset</h4>
+        </div>
+        <form [formGroup]="myForm">
+          <div class="modal-body">
+  
+                <fileupload></fileupload>
+              
+          </div>
+          <div class="modal-footer">
+            <button (click)="uploadCopyAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 
   <div class="row">
     <div class="col-md-12">
@@ -83,6 +105,7 @@
 
             <td>
               <button *ngIf="!asset.printed;" (click)="setId(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelRequestModal">Cancel Request</button>
+              <button (click)="getForm(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
             </td>
           </tr>
         </tbody>
