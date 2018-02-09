@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile }  from 'ng2-file-drop';
 import masterAssetBigchain from './bigchain-post/masterAssetBigchain.js';
 import generateCS from './bigchain-post/ChecksumGenerator.js';
-import * as sha1 from 'js-sha1';
-
-import * as CryptoJS from 'crypto-js';
 
 
 @Component({
@@ -44,14 +41,11 @@ export class FileuploadComponent {
      this.imageShown = true;
      
      this.acceptedFile = acceptedFile.file;
-    
 
-
-
-    generateCS(this.acceptedFile)
-    .then(hs => {
-       this.checksum = hs;
-    });
+      generateCS(this.acceptedFile)
+      .then(hs => {
+         this.checksum = hs;
+      });
      
 
     // Read in the file
@@ -62,21 +56,6 @@ export class FileuploadComponent {
     
   }
  
-// generateChecksum(dataPayload, callback) {
-//     var reader = new FileReader();
-
-//     var hash;
-    
-//     reader.onload = function(event) {
-//       var binary = event.target.result;
-//       var sha256Hash = CryptoJS.SHA256(binary).toString();
-//       console.log(sha256Hash);
-//       callback(sha256Hash);
-//       reader.readAsBinaryString(dataPayload);
-//     }
-// }
-
-
  getChecksum() {
    return this.checksum;
  }
