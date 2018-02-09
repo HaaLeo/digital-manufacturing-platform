@@ -551,7 +551,7 @@ export class BlueprintCopyComponent implements OnInit {
     return this.serviceBlueprintCopy.getAsset(id)
     .toPromise()
     .then((result) => {
-			this.errorMessage = null;
+      this.errorMessage = null;
       let formObject = {
         
           
@@ -580,8 +580,8 @@ export class BlueprintCopyComponent implements OnInit {
           formObject.blueprintCopyID = null;
         }
       
-        if(result.printed){
-          console.log(result)
+        if(result.printed != null){
+          
             formObject.printed = result.printed;
           
         }else{
@@ -683,8 +683,6 @@ export class BlueprintCopyComponent implements OnInit {
           "owner":this.owner.value
     };
 
-    console.log(this.printed.value)
-
     this.myForm.setValue({
         "blueprintCopyID":null,
       
@@ -703,7 +701,7 @@ export class BlueprintCopyComponent implements OnInit {
         "owner":null 
     });
 
-    return this.serviceBlueprintCopy.addAsset(this.asset)
+    return this.serviceBlueprintCopy.updateAsset(this.asset.blueprintCopyID, this.asset)
     .toPromise()
     .then(() => {
 			this.errorMessage = null;

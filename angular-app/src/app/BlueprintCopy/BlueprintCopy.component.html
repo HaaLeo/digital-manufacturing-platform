@@ -65,9 +65,15 @@
             
                 <th class="info">printed</th>
             
+                <!--
                 <th class="info">otpEncryptedWithDesignerPubKey</th>
             
                 <th class="info">otpEncryptedWithDesignerPubKey</th>
+                -->
+
+                <th class="info">BCDB ID</th>
+                
+                <th class="info">Checksum</th>
             
                 <th class="info">printer</th>
             
@@ -89,9 +95,16 @@
 
             <td>{{asset.printed}}</td>
             
+            <!--
             <td>{{asset.otpEncryptedWithDesignerPubKey}}</td>
         
             <td>{{asset.otpEncryptedWithPrinterPubKey}}</td>
+
+            -->
+
+            <td>{{asset.txID}}</td>
+            
+            <td>{{asset.checksum}}</td>
 
             <td>{{asset.printer}}</td>
             
