@@ -32,6 +32,7 @@
     "core-js": "^2.4.1",
     "crypto-js": "^3.1.9-1",
     "file-encryptor": "^0.1.1",
+    "filereader": "^0.10.3",
     "jquery": "^3.2.1",
     "js-sha1": "^0.6.0",
     "ng2-file-drop": "^1.1.0",
