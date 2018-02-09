@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { BlueprintCopy, Designer, Printer, Enduser, BlueprintMaster, CancelRequest} from '../org.usecase.printer';
+import { BlueprintCopy, Designer, Printer, Enduser, BlueprintMaster, CancelRequest, UploadBlueprintCopy} from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -15,8 +15,9 @@ export class BlueprintCopyService {
     private ENDUSER: string = 'org.usecase.printer.Enduser';
     private BLUEPRINTMASTER: string = 'org.usecase.printer.BlueprintMaster';
     private CANCELREQUEST: string = 'org.usecase.printer.CancelRequest';
+    private UPDATEREQUEST: string = 'org.usecase.printer.UploadBlueprintCopy';
 
-    constructor(private dataService: DataService<BlueprintCopy>, private designerService: DataService<Designer>, private cancelRequestService: DataService<CancelRequest>,  private blueprintMasterService: DataService<BlueprintMaster>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
+    constructor(private dataService: DataService<BlueprintCopy>, private designerService: DataService<Designer>, private uploadBlueprintCopyService: DataService<UploadBlueprintCopy>, private cancelRequestService: DataService<CancelRequest>,  private blueprintMasterService: DataService<BlueprintMaster>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
     };
 
     public getAll(): Observable<BlueprintCopy[]> {
@@ -41,6 +42,10 @@ export class BlueprintCopyService {
 
     public cancel(itemToCancel: any): Observable<CancelRequest> {
       return this.cancelRequestService.add(this.CANCELREQUEST,itemToCancel);
+    }
+
+    public upload(itemToUpload: any): Observable<UploadBlueprintCopy> {
+      return this.uploadBlueprintCopyService.add(this.UPDATEREQUEST,itemToUpload);
     }
 
     public getAllBlueprintCopies(): Observable<BlueprintCopy[]> {

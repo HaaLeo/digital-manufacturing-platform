@@ -35,6 +35,7 @@ export class BlueprintCopyComponent implements OnInit {
   private blueprintCopyCurrent;
   private filterID;
   private selectedElement;
+
   
   blueprintCopyID = new FormControl("", Validators.required);
 
@@ -661,6 +662,7 @@ export class BlueprintCopyComponent implements OnInit {
       console.log("[RETURNED txID]", txId);  
     
     let currentChecksum = this.fileUploadComponent.getChecksum();
+    console.log("Test: " + currentChecksum)
 
     this.asset = {
       $class: "org.usecase.printer.BlueprintCopy",
@@ -701,7 +703,16 @@ export class BlueprintCopyComponent implements OnInit {
         "owner":null 
     });
 
-    return this.serviceBlueprintCopy.updateAsset(this.asset.blueprintCopyID, this.asset)
+    var uploadAsset = {
+      $class: "org.usecase.printer.UploadBlueprintCopy",
+      
+          "txID":txId,
+          "checksum": currentChecksum,
+          "blueprintCopy":this.asset.blueprintCopyID
+          
+    };
+
+    return this.serviceBlueprintCopy.upload(uploadAsset)
     .toPromise()
     .then(() => {
 			this.errorMessage = null;
