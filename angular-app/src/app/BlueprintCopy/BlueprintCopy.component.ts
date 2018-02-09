@@ -738,6 +738,8 @@ export class BlueprintCopyComponent implements OnInit {
     .catch((error) => {
         if(error == 'Server error'){
             this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+        } else if(error == '500 - Internal Server Error') {
+          this.errorMessage = 'Content of uploaded file doesn\'t match the content of the master asset.';
         }
         else{
             this.errorMessage = error;
