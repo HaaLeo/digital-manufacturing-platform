@@ -24,9 +24,7 @@ export class UsersPipe implements PipeTransform {
             } else {
                 return [];
             }
-
       }
-
   }
 
   static forRoot() {

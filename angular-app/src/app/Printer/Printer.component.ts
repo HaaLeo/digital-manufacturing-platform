@@ -10,7 +10,6 @@ import 'rxjs/add/operator/toPromise';
   	providers: [PrinterService]
 })
 export class PrinterComponent {
-
   myForm: FormGroup;
 
   private allPrinters;
@@ -19,27 +18,22 @@ export class PrinterComponent {
   private errorMessage;
 
   private current_db_id;
-
   
-    stakeholderID = new FormControl("", Validators.required);
-    pubKey = new FormControl("", Validators.required);
-    name = new FormControl("", Validators.required);
-  
+  stakeholderID = new FormControl("", Validators.required);
+  pubKey = new FormControl("", Validators.required);
+  name = new FormControl("", Validators.required);
 
   constructor(private servicePrinter:PrinterService, fb: FormBuilder) {
     this.myForm = fb.group({
-         
           stakeholderID:this.stakeholderID,
           pubKey:this.pubKey,
           name:this.name
-          
     });
   };
 
   ngOnInit(): void {
     this.loadAll();
   }
-
 
   resetForm(): void{
     this.myForm.setValue({           
@@ -51,14 +45,11 @@ export class PrinterComponent {
 
   //allow update name of Printer
   updatePrinter(form: any): Promise<any> {
-    
-    console.log("update check");
     this.printer = {
       $class: "org.usecase.printer.Printer",  
             "pubKey":this.pubKey.value,        
             "name":this.name.value
     };
-
     return this.servicePrinter.updatePrinter(form.get("stakeholderID").value,this.printer)
 		.toPromise()
 		.then(() => {
@@ -84,7 +75,6 @@ export class PrinterComponent {
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
-      console.log("Deleted")
       location.reload();
 		})
 		.catch((error) => {
@@ -105,7 +95,6 @@ export class PrinterComponent {
   }
 
   getForm(id: any): Promise<any>{
-
     return this.servicePrinter.getPrinter(id)
     .toPromise()
     .then((result) => {
@@ -114,9 +103,7 @@ export class PrinterComponent {
             "stakeholderID":null,          
             "pubKey":null,  
             "name":null
-                      
       };
-
         if(result.stakeholderID){
           formObject.stakeholderID = result.stakeholderID;
         }else{
@@ -134,35 +121,7 @@ export class PrinterComponent {
         }else{
           formObject.name = null;
         }
-      
       this.myForm.setValue(formObject);
-
-    })
-    .catch((error) => {
-        if(error == 'Server error'){
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-        }
-        else if(error == '404 - Not Found'){
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
-        }
-        else{
-            this.errorMessage = error;
-        }
-    });
-
-  }
-
-
-  loadAll_OnlyPrinters(): Promise<any> {
-    let tempList = [];
-    return this.servicePrinter.getAllPrinters()
-    .toPromise()
-    .then((result) => {
-			this.errorMessage = null;
-      result.forEach(printer => {
-        tempList.push(printer);
-      });
-      this.allPrinters = tempList;
     })
     .catch((error) => {
         if(error == 'Server error'){
@@ -179,7 +138,6 @@ export class PrinterComponent {
 
   //load all Printers and the cash assets associated to them 
   loadAll(): Promise<any>  {
-    
     //retrieve all printers
     let printerList = [];
     return this.servicePrinter.getAllPrinters()
@@ -187,7 +145,6 @@ export class PrinterComponent {
     .then((result) => {
 			this.errorMessage = null;
       result.forEach(printer => {
-          console.log(printer);
         printerList.push(printer);
       });     
       this.allPrinters = printerList;
@@ -201,7 +158,6 @@ export class PrinterComponent {
 
   //add Printer participant
   addPrinter(form: any): Promise<any> {
-
     return this.createAssetsPrinter()
       .then(() => {           
         this.errorMessage = null;
@@ -226,21 +182,16 @@ export class PrinterComponent {
 
   //create cash asset associated with the Printer, followed by the Printer
   createAssetsPrinter(): Promise<any> {
-
     this.current_db_id++;
-
     this.printer = {
       $class: "org.usecase.printer.Printer",
           "stakeholderID":"P_" + this.current_db_id,
           "pubKey":this.pubKey.value,
           "name":this.name.value
-
       };    
-
     return this.servicePrinter.addPrinter(this.printer)
             .toPromise()
             .then(() => {
-                console.log("created asset");
                 location.reload();
             });     
   }

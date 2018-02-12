@@ -8,39 +8,28 @@
         </div>
         <form [formGroup]="myForm">
           <div class="modal-body">
-            <!--
-              <div class="form-group text-left">
-                <label for="stakeholderID">Enduser ID</label>
-                  <input formControlName="stakeholderID" type="text" class="form-control">
-              </div>  
-            -->
               <div class="form-group text-left">
                 <label for="pubKey">Public Key</label>  
                   <input formControlName="pubKey" type="text" class="form-control">          
               </div>
-
               <div class="form-group text-left">
                 <label for="firstName">First Name</label>  
                   <input formControlName="firstName" type="text" class="form-control">          
               </div>
-            
               <div class="form-group text-left">
                 <label for="lastName">Last Name</label>  
                   <input formControlName="lastName" type="text" class="form-control">          
               </div>
-
               <div class="form-group text-left">
                 <label for="contactInformation">Contact Info</label>  
                   <input formControlName="contactInformation" type="text" class="form-control">          
               </div>
-  
               <div class="form-group text-left">
                 <label for="cashValue">Cash Value</label>  
                   <input formControlName="cashValue" type="text" class="form-control">          
               </div>
               <div class="form-group text-left">
                 <label for="cashCurrency">Cash Currency</label>  
-                
                 <div>
                 <select name="cashCurrency" formControlName="cashCurrency">
                   <option value="USD">USD</option>
@@ -50,9 +39,7 @@
                 </select>
                 </div>        
               </div>
-     
           </div>
-  
           <div class="modal-footer">
             <button (click)="addEnduser(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -61,7 +48,6 @@
       </div>
     </div>
   </div>
-  
   
   <div class="modal fade" id="updateEnduserModal" tabindex="-1" role="dialog" aria-labelledby="updateEnduserModalLabel">
     <div class="modal-dialog" role="document">
@@ -92,7 +78,6 @@
                 <label for="contactInformation">Contact Info</label>
                     <textarea [ngModel]="contactInformation" formControlName="contactInformation" class="form-control" rows="3"></textarea>
               </div>
-                
           </div>
           <div class="modal-footer">
             <button (click)="updateEnduser(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
@@ -102,8 +87,6 @@
       </div>
     </div>
   </div>
-  
-  
   
   <div class="modal fade" id="deleteEnduserModal" tabindex="-1" role="dialog" aria-labelledby="deleteEnduserModalLabel">
     <div class="modal-dialog" role="document">
@@ -124,18 +107,14 @@
       </div>
     </div>
   </div>
-  
-
 
   <div class="container">
     <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
           <strong>Error:</strong> {{errorMessage}}
       </div>
     <div class="row">
-     
         <h1 class="heading">Endusers </h1>
     </div>
-  
    <div class="row">
       <div class="col-md-12 text-right">
         <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEnduserModal">Add Enduser</button>
@@ -147,52 +126,32 @@
         <table class="table table-bordered table-responsive table-hover">
           <thead class="thead">
             <tr class="thead-cols">
-              
                   <th class="bc">ID</th>
-
                   <th class="bc">Pubkey</th> 
-              
                   <th class="bc">First Name</th>
-              
                   <th class="bc">Last Name</th> 
-                  
                   <th class="bc">Contact Info</th>
-  
                   <th class="bc">Cash Balance</th> 
-
                   <th class="bc">Cash Currency</th>
-  
                   <th class="bc">Actions</th>       
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let enduser of allEndusers">
-            
                   <td>{{enduser.stakeholderID}}</td>
-                  
                   <td>{{enduser.pubKey}}</td>
-              
                   <td>{{enduser.firstName}}</td>
-              
                   <td>{{enduser.lastName}}</td>
-                  
                   <td>{{enduser.contactInformation}}</td>
-  
                   <td>{{enduser.cashValue}}</td>
-
                   <td>{{enduser.cashCurrency}}</td>
-             
               <td>
-  
                 <button (click)="getForm(enduser.stakeholderID);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateEnduserModal">Update</button>
-  
                 <button (click)="setId(enduser.stakeholderID);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteEnduserModal">Delete</button>
-  
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-  
   </div>

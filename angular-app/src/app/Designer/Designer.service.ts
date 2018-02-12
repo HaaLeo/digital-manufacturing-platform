@@ -61,7 +61,6 @@ export class DesignerService {
     }
 
     public deleteCash(id: any): Observable<Cash> {
-      console.log(id)
       return this.cashService.delete(this.CASH, id);
     }
 

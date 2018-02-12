@@ -8,14 +8,9 @@ import { EnduserComponent } from 'app/Enduser/Enduser.component';
 // Can be injected into a constructor
 @Injectable()
 export class CashService {
-
-	
     private CASH: string = 'org.usecase.printer.Cash';
     private DESIGNER: string = 'org.usecase.printer.Designer';
     private ENDUSER: string = 'org.usecase.printer.Enduser';
-	
-
-
 
     constructor(private dataService: DataService<Cash>, private designerService: DataService<Designer>, private enduserService: DataService<Enduser>) {
     };
@@ -39,16 +34,4 @@ export class CashService {
     public deleteAsset(id: any): Observable<Cash> {
       return this.dataService.delete(this.CASH, id);
     }
-
-    /* //TODO do we need them??
-    public deleteDesigner(id: any): Observable<Designer> {
-      console.log("Deleting designer with id: ",id);
-      return this.designerService.delete(this.DESIGNER, id);
-    }
-
-    public deleteEnduser(id: any): Observable<Enduser> {
-      console.log("Deleting enduser with id: ",id);
-      return this.enduserService.delete(this.DESIGNER, id);
-    }
-    */
 }

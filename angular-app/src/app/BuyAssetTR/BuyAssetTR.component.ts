@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { BuyAssetTRService } from './BuyAssetTR.service';
 
-
-
 @Component({
 	selector: 'app-BuyAssetTR',
 	templateUrl: './BuyAssetTR.component.html',
@@ -12,14 +10,9 @@ import { BuyAssetTRService } from './BuyAssetTR.service';
 })
 
 export class BuyAssetTRComponent {
-
-	// printerID = new FormControl("", Validators.required);
-	// cashIncID = new FormControl("", Validators.required); 
-	
-	// cashDecID = new FormControl("", Validators.required);
-	blueprintCopyID = new FormControl("", Validators.required);
-	
 	myForm: FormGroup;
+	blueprintCopyID = new FormControl("", Validators.required);
+
 	private transactionFrom;
 	private errorMessage;
 	private allBlueprintCopies;
@@ -30,11 +23,6 @@ export class BuyAssetTRComponent {
 
 	constructor(private serviceTransaction:BuyAssetTRService, fb: FormBuilder) {
 		this.myForm = fb.group({
-		  
-			// printerID:this.printerID,
-			// cashIncID:this.cashIncID,
-  
-			// cashDecID:this.cashDecID,
 			blueprintCopyID:this.blueprintCopyID,
 	  });
 	}
@@ -48,7 +36,7 @@ export class BuyAssetTRComponent {
 		
 	  }
 
-	//get all blueprintCopies
+	//Get all BlueprintCopies
 	loadAllBlueprintCopies(): Promise<any> {
 		let tempList = [];
 		return this.serviceTransaction.getAllBlueprintCopies()
@@ -75,32 +63,17 @@ export class BuyAssetTRComponent {
 		});
   	}
 
-  	// execute(form: any): Promise<any> {
   	execute(form: any){
   		console.log(this.allBlueprintCopies);
 		for (let blueprintCopy of this.allBlueprintCopies) {
-			console.log(blueprintCopy); 
 			if(blueprintCopy.blueprintCopyID == this.blueprintCopyID.value) {
 				this.blueprintCopyCurrent = blueprintCopy;
 			}
 		}
-		
-		console.log("SELECTED BlueprintCopy:");
-		console.log(this.blueprintCopyCurrent.blueprintCopyID);
-		console.log(this.blueprintCopyCurrent.printed);
-		console.log(this.blueprintCopyCurrent.otpEncryptedWithDesignerPubKey);
-		console.log(this.blueprintCopyCurrent.otpEncryptedWithPrinterPubKey);
-		console.log(this.blueprintCopyCurrent.printer);
-		console.log(this.blueprintCopyCurrent.buyer);
-		console.log(this.blueprintCopyCurrent.blueprintMaster);
-		console.log(this.blueprintCopyCurrent.owner);
-
-		//transaction object
     	this.confirmTransactionObj = {
 	      "$class": "org.usecase.printer.ConfirmTransaction",
 	      "blueprintCopy": "resource:org.usecase.printer.BlueprintCopy#"+this.blueprintCopyCurrent.blueprintCopyID
 	    };
-
 	    return this.serviceTransaction.printBlueprint(this.confirmTransactionObj)
 	    .toPromise()
 	    .then((result) => {

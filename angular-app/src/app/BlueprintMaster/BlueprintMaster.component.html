@@ -7,85 +7,26 @@
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
-
-
               <div class="form-group text-left">
                 <label for="price">price</label>
-                
                   <input formControlName="price" type="number" step='any' class="form-control">
-                
               </div>
-            
               <div class="form-group text-left">
                 <label for="metadata">Description</label>
-                
                   <textarea formControlName="metadata" type="text" class="form-control">
                     </textarea>
-                
               </div>
-            
               <div class="form-group text-left">
                 <label for="owner">owner</label>
                 <select name="designers" formControlName="owner" >
                   <option *ngFor="let designer of allDesigners" value="{{designer.stakeholderID}}">{{designer.firstName + " " + designer.lastName}}</option>
                 </select>
-
               </div>
               <fileupload></fileupload>
-            
         </div>
         <div class="modal-footer">
           <button (click)="addAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="updateAssetModal" tabindex="-1" role="dialog" aria-labelledby="updateAssetModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="updateAssetModalLabel">Update Asset</h4>
-      </div>
-      <form [formGroup]="myForm">
-        <div class="modal-body">
-
-            <div class="form-group text-left">
-              <label for="price">price</label>
-                <input [ngModel]="price" formControlName="price" type="number" step='any' class="form-control">
-            </div>
-            <div class="form-group text-left">
-              <label for="metadata">Description</label>
-                <textarea [ngModel]="metadata" formControlName="metadata" type="text" class="form-control">
-                </textarea>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button (click)="updateAsset(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="deleteAssetModal" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="deleteAssetModalLabel">Delete Asset</h4>
-      </div>
-      <form [formGroup]="myForm" (ngSubmit)="deleteAsset()">
-        <div class="modal-body">
-          Are you sure you want to delete this asset?
-        </div>
-        <div class="modal-footer">
-          <button (click)="deleteAsset()" type="submit" class="btn btn-danger" data-dismiss="modal">Yes</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
         </div>
       </form>
     </div>
@@ -139,39 +80,24 @@
       <table class="table table-bordered table-responsive table-striped">
         <thead class="thead">
           <tr class="thead-cols">
-            
                 <th class="info">BlueprintMasterID</th>
-            
                 <th class="info">TxID</th>
-            
+                <th class="info">Checksum</th>
                 <th class="info">Price</th>
-            
                 <th class="info">Description</th>
-            
                 <th class="info">Owner</th>
-            
-              <th class="info">Actions</th>
+                <th class="info">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let asset of allAssets">
-
-            
                 <td>{{asset.blueprintMasterID}}</td>
-            
-                <td>{{asset.txID}}</td>
-            
+                <td class="split">{{asset.txID}}</td>
+                <td class="split">{{asset.checksum}}</td>
                 <td>{{asset.price}}</td>
-            
                 <td>{{asset.metadata}}</td>
-            
                 <td>{{asset.firstName + " " + asset.lastName}}</td>
-            
             <td>
-              <button (click)="getForm(asset.blueprintMasterID);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update</button>
-
-              <button (click)="setId(asset.blueprintMasterID);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAssetModal">Delete</button>
-
               <button (click)="setId(asset.blueprintMasterID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#requestAssetModal">Buy</button>
             </td>
           </tr>

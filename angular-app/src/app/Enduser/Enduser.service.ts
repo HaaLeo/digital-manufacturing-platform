@@ -61,7 +61,6 @@ export class EnduserService {
     }
 
     public deleteCash(id: any): Observable<Cash> {
-      console.log(id)
       return this.cashService.delete(this.CASH, id);
     }
 

@@ -7,24 +7,15 @@
         </div>
         <form [formGroup]="myForm">
           <div class="modal-body">
-            <!--
-              <div class="form-group text-left">
-                <label for="stakeholderID">Printer ID</label>
-                  <input formControlName="stakeholderID" type="text" class="form-control">
-              </div>  
-            -->
               <div class="form-group text-left">
                 <label for="pubKey">Public Key</label>  
                   <input formControlName="pubKey" type="text" class="form-control">          
               </div>
-
               <div class="form-group text-left">
                 <label for="name">Name</label>  
                   <input formControlName="name" type="text" class="form-control">          
               </div>
-     
           </div>
-  
           <div class="modal-footer">
             <button (click)="addPrinter(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -75,8 +66,6 @@
                 <label for="name">Name</label>
                   <input [ngModel]="name" formControlName="name" type="text" class="form-control">              
               </div>          
-                         
-                
           </div>
           <div class="modal-footer">
             <button (click)="updatePrinter(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
@@ -93,10 +82,8 @@
           <strong>Error:</strong> {{errorMessage}}
       </div>
     <div class="row">
-     
         <h1 class="heading">Printers </h1>
     </div>
-  
    <div class="row">
       <div class="col-md-12 text-right">
         <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPrinterModal">Add Printer</button>
@@ -108,26 +95,17 @@
         <table class="table table-bordered table-responsive table-hover">
           <thead class="thead">
             <tr class="thead-cols">
-              
                   <th class="bc">ID</th>
-
                   <th class="bc">Pubkey</th> 
-              
                   <th class="bc">Name</th>
-  
                   <th class="bc">Actions</th>       
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let printer of allPrinters">
-            
                   <td>{{printer.stakeholderID}}</td>
-                  
                   <td>{{printer.pubKey}}</td>
-              
                   <td>{{printer.name}}</td>
-                  
-                          
               <td>
                 <button (click)="getForm(printer.stakeholderID);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updatePrinterModal">Update</button>
                 <button (click)="setId(printer.stakeholderID);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePrinterModal">Delete</button>
@@ -137,5 +115,4 @@
         </table>
       </div>
     </div>
-  
   </div>

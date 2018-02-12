@@ -52,7 +52,6 @@ export class BlueprintCopyService {
       return this.dataService.getAll(this.NAMESPACE);
     }
 
-
     public getID(str) {
       return str.split('#')[1];
     }

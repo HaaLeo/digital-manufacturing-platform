@@ -10,7 +10,6 @@ import 'rxjs/add/operator/toPromise';
   	providers: [EnduserService]
 })
 export class EnduserComponent {
-
   myForm: FormGroup;
 
   private allEndusers;
@@ -21,18 +20,16 @@ export class EnduserComponent {
   private cash;
   private current_db_id;
   
-      stakeholderID = new FormControl("", Validators.required);
-      pubKey = new FormControl("", Validators.required);
-      firstName = new FormControl("", Validators.required);
-      lastName = new FormControl("", Validators.required);
-      contactInformation = new FormControl("", Validators.required);
-      cashValue = new FormControl("", Validators.required);
-      cashCurrency = new FormControl("", Validators.required);
-  
+  stakeholderID = new FormControl("", Validators.required);
+  pubKey = new FormControl("", Validators.required);
+  firstName = new FormControl("", Validators.required);
+  lastName = new FormControl("", Validators.required);
+  contactInformation = new FormControl("", Validators.required);
+  cashValue = new FormControl("", Validators.required);
+  cashCurrency = new FormControl("", Validators.required);
 
   constructor(private serviceEnduser:EnduserService, fb: FormBuilder) {
     this.myForm = fb.group({
-         
           stakeholderID:this.stakeholderID,
           pubKey:this.pubKey,
           firstName:this.firstName,      
@@ -40,14 +37,12 @@ export class EnduserComponent {
           contactInformation:this.contactInformation,
           cashValue:this.cashValue,
           cashCurrency:this.cashCurrency
-          
     });
   };
 
   ngOnInit(): void {
     this.loadAll();
   }
-
 
   resetForm(): void{
     this.myForm.setValue({           
@@ -63,18 +58,14 @@ export class EnduserComponent {
 
   //allow update name of Enduser
   updateEnduser(form: any): Promise<any> {
-    
-    console.log("update check");
     this.enduser = {
       $class: "org.usecase.printer.Enduser",  
             "pubKey":this.pubKey.value,        
             "firstName":this.firstName.value,          
             "lastName":this.lastName.value,
             "contactInformation":this.contactInformation.value,
-
             "cash": "resource:org.usecase.printer.Cash#CA_" + form.get("stakeholderID").value,
     };
-    console.log(this.enduser);
     return this.serviceEnduser.updateEnduser(form.get("stakeholderID").value,this.enduser)
 		.toPromise()
 		.then(() => {
@@ -96,7 +87,6 @@ export class EnduserComponent {
 
   //delete Endusers and the cash assets associated to it
   deleteEnduser(): Promise<any> {
-
     return this.serviceEnduser.deleteEnduser(this.currentId)
 		.toPromise()
 		.then(() => {
@@ -104,7 +94,6 @@ export class EnduserComponent {
       this.serviceEnduser.deleteCash("CA_"+this.currentId)
               .toPromise()
               .then(() => {
-                  console.log("Deleted")
                   location.reload();
               });            
 		})
@@ -126,7 +115,6 @@ export class EnduserComponent {
   }
 
   getForm(id: any): Promise<any>{
-
     return this.serviceEnduser.getEnduser(id)
     .toPromise()
     .then((result) => {
@@ -139,9 +127,7 @@ export class EnduserComponent {
             "contactInformation":null,               
             "cashValue":null, 
             "cashCurrency":null      
-                      
       };
-
         if(result.stakeholderID){
           formObject.stakeholderID = result.stakeholderID;
         }else{
@@ -171,9 +157,7 @@ export class EnduserComponent {
           }else{
             formObject.contactInformation = null;
           }  
-
       this.myForm.setValue(formObject);
-
     })
     .catch((error) => {
         if(error == 'Server error'){
@@ -187,36 +171,10 @@ export class EnduserComponent {
         }
     });
 
-  }
-
-
-  loadAll_OnlyEndusers(): Promise<any> {
-    let tempList = [];
-    return this.serviceEnduser.getAllEndusers()
-    .toPromise()
-    .then((result) => {
-			this.errorMessage = null;
-      result.forEach(enduser => {
-        tempList.push(enduser);
-      });
-      this.allEndusers = tempList;
-    })
-    .catch((error) => {
-        if(error == 'Server error'){
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-        }
-        else if(error == '404 - Not Found'){
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
-        }
-        else{
-            this.errorMessage = error;
-        }
-    });
   }
 
   //load all Endusers and the cash assets associated to them 
   loadAll(): Promise<any>  {
-    
     //retrieve all endusers
     let enduserList = [];
     return this.serviceEnduser.getAllEndusers()
@@ -228,28 +186,17 @@ export class EnduserComponent {
       });     
     })
     .then(() => {
-
       for (let enduser of enduserList) {
-        console.log("in for loop")
-
         var splitted_cashID = enduser.cash.split("#", 2); 
         var cashID = String(splitted_cashID[1]);
-        console.log(cashID);
         this.serviceEnduser.getCash(cashID)
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
-          console.log(result.value);
-          //ALLOW 0 values to be displayed
-          // if(result.value){
-            enduser.cashValue = result.value;
-          // }
-          // if(result.currency){
-            enduser.cashCurrency = result.currency;
-          // }
+          enduser.cashValue = result.value;
+          enduser.cashCurrency = result.currency;
         });
       }
-
       this.allEndusers = enduserList;
       if (0 < enduserList.length) {
         this.current_db_id = enduserList[enduserList.length - 1].stakeholderID.substr(3)
@@ -262,7 +209,6 @@ export class EnduserComponent {
 
   //add Enduser participant
   addEnduser(form: any): Promise<any> {
-
     return this.createAssetsEnduser()
       .then(() => {           
         this.errorMessage = null;
@@ -291,9 +237,7 @@ export class EnduserComponent {
 
   //create cash asset associated with the Enduser, followed by the Enduser
   createAssetsEnduser(): Promise<any> {
-
     this.current_db_id++;
-
     this.cash = {
       $class: "org.usecase.printer.Cash",
           "cashID":"CA_EU_" + this.current_db_id,
@@ -302,7 +246,6 @@ export class EnduserComponent {
           "ownerID":"EU_" + this.current_db_id,
           "ownerEntity":'Enduser'        
     };    
-    
     this.enduser = {
       $class: "org.usecase.printer.Enduser",
           "stakeholderID":"EU_" + this.current_db_id,
@@ -311,17 +254,13 @@ export class EnduserComponent {
           "lastName":this.lastName.value,
           "contactInformation":this.contactInformation.value,
           "cash":"CA_EU_" + this.current_db_id
-
       };    
-
     return this.serviceEnduser.addCash(this.cash)
         .toPromise()
         .then(() => {
-            console.log("create enduser");
             this.serviceEnduser.addEnduser(this.enduser)
             .toPromise()
             .then(() => {
-                console.log("created asset");
                 location.reload();
             });         
 		});

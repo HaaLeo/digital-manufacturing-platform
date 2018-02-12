@@ -15,23 +15,14 @@ import { PrinterComponent } from 'app/Printer/Printer.component';
 const routes: Routes = [
     // { path: 'transaction', component: TransactionComponent },
     {path: '', component: HomeComponent},
-		
 		{ path: 'Cash', component: CashComponent},
-		
 		{ path: 'BlueprintMaster', component: BlueprintMasterComponent},
-		
 		{ path: 'BlueprintCopy', component: BlueprintCopyComponent},
-    
     { path: 'BuyAssetTR', component: BuyAssetTRComponent },
-    
     { path: 'Enduser', component: EnduserComponent},
-
     { path: 'Designer', component: DesignerComponent},
-
     { path: 'Printer', component: PrinterComponent},
-
 		{path: '**', redirectTo:''}
-
 ];
 
 @NgModule({

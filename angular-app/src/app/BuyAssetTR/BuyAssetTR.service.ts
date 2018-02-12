@@ -17,11 +17,6 @@ export class BuyAssetTRService {
     constructor(private blueprintCopyService: DataService<BlueprintCopy>, private confirmTransactionService: DataService<ConfirmTransaction>) {
     };
 
-    // //get all Printers
-    // public getAllPrinters(): Observable<Printer[]> {
-    //     return this.printerService.getAll(this.PRINTER);
-    // }
-
     public getAllBlueprintCopies(): Observable<BlueprintCopy[]> {
         return this.blueprintCopyService.getAll(this.BLUEPRINTCOPY)
     }

@@ -25,35 +25,29 @@ export class FileuploadComponent {
     console.log("File being dragged has moved into the drop region");
   }
  
- 
   // File being dragged has moved out of the drop region
   private dragFileOverEnd() {
     console.log("File being dragged has moved out of the drop region");
   }
- 
  
   // File being dragged has been dropped and is valid
   private dragFileAccepted(acceptedFile: Ng2FileDropAcceptedFile) {
     console.log("File being dragged has been dropped and is valid");
     
     // Load the image in
-    
      this.imageShown = true;
-     
      this.acceptedFile = acceptedFile.file;
 
       generateCS(this.acceptedFile)
       .then(hs => {
          this.checksum = hs;
       });
-     
 
-    // Read in the file
+      // Read in the file
     // masterAssetBigchain(acceptedFile.file)
     // .then(txid => {
     //   console.log("[dragFileAccepted]", txid);  
     // });
-    
   }
  
  getChecksum() {

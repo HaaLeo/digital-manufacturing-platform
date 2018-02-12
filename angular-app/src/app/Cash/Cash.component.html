@@ -7,81 +7,46 @@
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
-
-
-          
             <div class="form-group text-left">
               <label for="cashID">cashID</label>
-
-              
                 <input [ngModel]="cashID"formControlName="cashID" type="text" class="form-control">
-              
-
             </div>
-          
             <div class="form-group text-left">
               <label for="currency">currency</label>
-
-              
                 <input [ngModel]="currency"formControlName="currency" type="text" class="form-control">
-              
-
             </div>
-          
             <div class="form-group text-left">
               <label for="value">value</label>
-
-              
                 <input [ngModel]="value" formControlName="value" type="number" step='any' class="form-control">
-              
-
             </div>
-          
             <div class="form-group text-left">
               <label for="ownerID">ownerID</label>
-
-              
                 <input [ngModel]="ownerID"formControlName="ownerID" type="text" class="form-control">
-              
-
             </div>
-          
             <div class="form-group text-left">
               <label for="ownerEntity">ownerEntity</label>
-
-              
-                
                   <div class="row">
                     <div class="col-xs-12 checkbox">
-                    
                       <label>
                         <input
-                          
                             formControlName="ownerEntity"
                             [ngModel]="ownerEntity"
-                          
-                          name="ownerEntity"
-                          value="Enduser"
-                          type="radio"
-                          
+                            name="ownerEntity"
+                            value="Enduser"
+                            type="radio"
                         />
                         Enduser
                       </label>
-                    
                       <label>
                         <input
-                          
                             formControlName="ownerEntity"
                             [ngModel]="ownerEntity"
-                          
-                          name="ownerEntity"
-                          value="Designer"
-                          type="radio"
-                          
+                            name="ownerEntity"
+                            value="Designer"
+                            type="radio"
                         />
                         Designer
                       </label>
-                    
                     </div>
                   </div>
             </div>
@@ -95,49 +60,31 @@
   </div>
 </div>
 
-
-
-
-
 <div class="container">
 	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
 		<strong>Error:</strong> {{errorMessage}}
 	</div>
   <h1 id='assetName'>Cash</h1>
-  
   <div class="row">
     <div class="col-md-12">
       <table class="table table-bordered table-responsive table-striped">
         <thead class="thead">
           <tr class="thead-cols">
-            
                 <th class="info">cashID</th>
-            
                 <th class="info">currency</th>
-            
                 <th class="info">value</th>
-            
                 <th class="info">ownerID</th>
-            
                 <th class="info">ownerEntity</th>
-            
               <th class="info">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let asset of allAssets">
-
-            
                 <td>{{asset.cashID}}</td>
-            
                 <td>{{asset.currency}}</td>
-            
                 <td>{{asset.value}}</td>
-            
                 <td>{{asset.ownerID}}</td>
-            
                 <td>{{asset.ownerEntity}}</td>
-            
             <td>
               <button (click)="getForm(asset.cashID);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateAssetModal">Update Asset</button>
             </td>
