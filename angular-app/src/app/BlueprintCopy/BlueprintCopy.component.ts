@@ -56,8 +56,8 @@ export class BlueprintCopyComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.loadAll().then(() => {                     
-      this.load_allStakeholders();
+    this.load_allStakeholders().then(() => {                     
+      this.loadAll();
     });    
     this.selectedElement = "all"
   }
@@ -70,10 +70,10 @@ export class BlueprintCopyComponent implements OnInit {
     .then((result) => {
 			this.errorMessage = null;
       result.forEach(bpc => {
-        bpc.buyer = this.serviceBlueprintCopy.getID(bpc.buyer)
-        bpc.printer = this.serviceBlueprintCopy.getID(bpc.printer)
-        bpc.blueprintMaster = this.serviceBlueprintCopy.getID(bpc.blueprintMaster)
-        bpc.owner = this.serviceBlueprintCopy.getID(bpc.owner)
+        bpc.buyer = this.serviceBlueprintCopy.getID(bpc.buyer);
+        bpc.printer = this.serviceBlueprintCopy.getID(bpc.printer);
+        bpc.blueprintMaster = this.serviceBlueprintCopy.getID(bpc.blueprintMaster);
+        bpc.owner = this.serviceBlueprintCopy.getID(bpc.owner);
         bpcList.push(bpc);
       });     
     })
@@ -85,6 +85,20 @@ export class BlueprintCopyComponent implements OnInit {
           this.errorMessage = null;
           if(result.owner){
             bpc.designer = this.serviceBlueprintCopy.getID(result.owner);
+            for (let stakeholder of this.allStakeholders) {
+              if(stakeholder.stakeholderID == bpc.designer) {
+                bpc.designerName = stakeholder.firstName + " " + stakeholder.lastName;
+              }
+              if(stakeholder.stakeholderID == bpc.buyer) {
+                bpc.buyerName = stakeholder.firstName + " " + stakeholder.lastName;
+              }
+              if(stakeholder.stakeholderID == bpc.owner) {
+                bpc.ownerName = stakeholder.firstName + " " + stakeholder.lastName;
+              }
+              if(stakeholder.stakeholderID == bpc.printer) {
+                bpc.printerName = stakeholder.name;
+              }
+            }
           }
         });
       }
