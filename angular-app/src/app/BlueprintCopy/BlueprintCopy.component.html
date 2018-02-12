@@ -28,7 +28,7 @@
       <label for="stakeholder">stakeholder</label>
       <select name="stakeholders" [(ngModel)]="selectedElement" >
           <option value="all">All</option>
-        <option *ngFor="let stakeholder of allStakeholders" value="{{stakeholder.stakeholderID}}">{{stakeholder.stakeholderID}}</option>
+        <option *ngFor="let stakeholder of allStakeholders" value="{{stakeholder.stakeholderID}}">{{stakeholder.stakeholderID.charAt(0) === "P" ? stakeholder.name : stakeholder.firstName + " " + stakeholder.lastName}}</option>
       </select>
   </div>
 
@@ -41,9 +41,7 @@
         </div>
         <form [formGroup]="myForm">
           <div class="modal-body">
-  
                 <fileupload></fileupload>
-              
           </div>
           <div class="modal-footer">
             <button (click)="uploadCopyAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
@@ -54,7 +52,6 @@
     </div>
   </div>
 
-
   <div class="row">
     <div class="col-md-12">
       <table class="table table-bordered table-responsive table-striped">
@@ -64,9 +61,9 @@
                 <th class="info">printed</th>
                 <th class="info">BCDB ID</th>
                 <th class="info">Checksum</th>
+                <th class="info">blueprintMaster</th>
                 <th class="info">printer</th>
                 <th class="info">buyer</th>
-                <th class="info">blueprintMaster</th>
                 <th class="info">owner</th>
                 <th class="info">designer</th>
                 <th class="info">Actions</th>
@@ -78,14 +75,14 @@
             <td>{{asset.printed}}</td>
             <td class="split">{{asset.txID}}</td>
             <td class="split">{{asset.checksum}}</td>
-            <td>{{asset.printer}}</td>
-            <td>{{asset.buyer}}</td>
             <td>{{asset.blueprintMaster}}</td>
-            <td>{{asset.owner}}</td>
-            <td>{{asset.designer}}</td>
+            <td>{{asset.printerName}}</td>
+            <td>{{asset.buyerName}}</td>
+            <td>{{asset.ownerName}}</td>
+            <td>{{asset.designerName}}</td>
             <td>
               <button *ngIf="!asset.printed;" (click)="setId(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelRequestModal">Cancel Request</button>
-              <button (click)="getForm(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadCopyModal">Upload Copy</button>
+              <button *ngIf="!asset.printed;" (click)="getForm(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadCopyModal">Upload Copy</button>
             </td>
           </tr>
         </tbody>
