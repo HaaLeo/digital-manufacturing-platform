@@ -24,7 +24,7 @@ Follow these steps to setup and run the application:
 
 ### 1. Clone the repo
 
-Clone the `3DPrinter-Composer` code locally. In a terminal, run:
+Clone the ```3DPrinter-Composer``` code locally. In a terminal, run:
 
 
 `git clone https://git.fortiss.org/nieves/3DPrinter-Composer.git`
