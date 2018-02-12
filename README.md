@@ -1,1 +1,145 @@
-# org.usecase.printer
+# 3DPrinter using Hyperledger Composer
+
+Follow these steps to setup and run the application:
+
+### Prerequisites
+
+* Docker
+*	npm 
+*	Node 
+* Hyperledger Composer
+	* to install composer cli `npm install -g composer-cli`
+	*	to install composer-rest-server `npm install -g composer-rest-server`
+
+
+### Steps
+
+1. [Clone the repo](#1-clone-the-repo)
+2.	[Setup Fabric](#2-setup-fabric)
+3.	[Generate the Business Network Archive](#3-generate-the-business-network-archive)
+4.	[Deploy to Fabric](#4-deploy-to-fabric)
+5.	[Run the Application](#5-run-the-application)
+6.	[Generate a REST Server](#6-generate-a-rest-server)
+
+### 1. Clone the repo
+
+Clone the `3DPrinter-Composer` code locally. In a terminal, run:
+
+
+`git clone https://git.fortiss.org/nieves/3DPrinter-Composer.git`
+
+
+
+### 2.	Setup Fabric
+
+Remove all previously created Hyperledger Fabric chaincode images:
+
+`docker rmi $(docker images dev-* -q)`
+
+
+Set Hyperledger Fabric version to v1.0:
+
+`export FABRIC_VERSION=hlfv1`
+
+All the necessary scripts are in the directory `/fabric-tools`. Start fabric and create peer admin card:
+
+```
+cd fabric-tools/
+./downloadFabric.sh
+./startFabric.sh
+./createPeerAdminCard.sh
+```
+
+### 3.	Generate the Business Network Archive
+
+Generate the Business Network Archive (BNA) file from the **root** directory:
+
+```
+cd ../
+mkdir dist
+composer archive create -a dist/printer-use-case.bna --sourceType dir --sourceName .
+```
+
+The `composer archive create` command will created a file called `printer-use-case.bna` in the `dist` folder.
+
+
+### 4.	Deploy to Fabric
+
+
+First, install the composer runtime on the peer:
+
+```
+cd dist/
+composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName printer-use-case
+```
+
+Deploy the business network on the peer and create a new participant, identity and an associated card for the network adminstrator:
+```
+composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile printer-use-case.bna --file networkadmin.card
+```
+
+NOTE: To update an already deployed business network archive to Hyperledger Fabric runtime:
+```
+composer network update -a printer-use-case.bna -c admin@printer-use-case
+```
+
+
+Import the network administrator identity card:
+```
+composer card import --file networkadmin.card
+```
+
+Ping the network to check that the business network has been deployed successfully:
+
+```
+composer network ping --card admin@printer-use-case
+```
+
+
+### 5.	Run the Application
+
+First go to `angular-app` directory and install the dependencies:
+
+```
+cd ../angular-app
+npm install
+```
+
+
+To start the application run:
+```
+npm start
+```
+
+The application is now running at: `http://localhost:4200`
+
+
+### 6. Generate a REST server
+
+The application needs a REST server in order to communicate with the network. The generated API is connected to the blockchain and the business network.
+
+1.	To start the REST server run:
+```
+composer-rest-server
+```
+
+2.	Enter `admin@printer-use-case` as the card name.
+
+3.	Select **Always use namespaces** when asked whether to use namespaces in the generated API.
+
+4.	Select **No** when asked whether to secure the generated API.
+
+5.	Select **Yes** when asked whether to enable event publication.
+
+6.	Select **No** when asked whether to enable TLS security.
+
+The REST server is available at: `http://localhost:3000/explorer/`
+
+
+
+
+
+
+
+
+
