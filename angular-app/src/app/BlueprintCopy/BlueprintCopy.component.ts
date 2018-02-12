@@ -97,6 +97,7 @@ export class BlueprintCopyComponent implements OnInit {
               }
               if(stakeholder.stakeholderID == bpc.printer) {
                 bpc.printerName = stakeholder.name;
+                bpc.printerPubKey = stakeholder.pubKey;
               }
             }
           }

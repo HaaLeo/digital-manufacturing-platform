@@ -1,6 +1,11 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, Component, OnInit } from '@angular/core';
 import { BlueprintCopy, Designer, Printer, Enduser } from '../org.usecase.printer';
 import { NgModule }      from '@angular/core';
+
+
+@Component({
+	selector: 'pipe'
+})
 
 @NgModule({
     imports:[]
