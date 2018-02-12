@@ -1,13 +1,17 @@
 # 3DPrinter using Hyperledger Composer
 
+A Blockchain application using Hyperledger Composer for buying and printing 3D Printer models.
+
+## Running the Application
+
 Follow these steps to setup and run the application:
 
-### Prerequisites
+### Prerequisite
 
-* Docker
-*	npm 
-*	Node 
-* Hyperledger Composer
+* [Docker](https://www.docker.com/)
+*	[npm](https://www.npmjs.com/)
+*	[Node](https://nodejs.org/en/)
+* [Hyperledger Composer](https://hyperledger.github.io/composer/installing/development-tools.html)
 	* to install composer cli `npm install -g composer-cli`
 	*	to install composer-rest-server `npm install -g composer-rest-server`
 
@@ -20,6 +24,8 @@ Follow these steps to setup and run the application:
 4.	[Deploy to Fabric](#4-deploy-to-fabric)
 5.	[Run the Application](#5-run-the-application)
 6.	[Generate a REST Server](#6-generate-a-rest-server)
+7.	[Stop Fabric](#7-stop-fabric)
+8.	[Additional Resources](#8-additional-resources)
 
 ### 1. Clone the repo
 
@@ -136,9 +142,19 @@ composer-rest-server
 The REST server is available at: `http://localhost:3000/explorer/`
 
 
+### 7.	Stop Fabric
+
+To stop the fabric, run the following commands inside the `fabric-tools` directory:
+
+```
+./stopFabric.sh
+./teardownFabric.sh
+```
 
 
+### 8.	Additional resources
 
+*	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
 
 
 
