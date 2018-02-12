@@ -14,7 +14,7 @@ import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
 import { DesignerComponent } from 'app/Designer/Designer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
-import { UsersPipe} from './BluePrintCopy/Pipe';
+import { UsersPipe} from './BlueprintCopy/Pipe';
 import { FileuploadComponent } from './fileupload/fileupload.component';
 import { Ng2FileDropModule }  from 'ng2-file-drop';
 
