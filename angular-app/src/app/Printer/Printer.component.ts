@@ -63,12 +63,15 @@ export class PrinterComponent {
 		})
 		.catch((error) => {
             if(error == 'Server error'){
+              this.progressMessage = null;
 				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
 			}
-            else if(error == '404 - Not Found'){
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+      else if(error == '404 - Not Found'){
+        this.progressMessage = null;
+  			this.errorMessage = "404 - Could not find API route. Please check your available APIs."
 			}
 			else{
+        this.progressMessage = null;
 				this.errorMessage = error;
 			}
     });
@@ -86,13 +89,16 @@ export class PrinterComponent {
       location.reload();
 		})
 		.catch((error) => {
-            if(error == 'Server error'){
+    if(error == 'Server error'){
+        this.progressMessage = null;
 				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
 			}
 			else if(error == '404 - Not Found'){
+        this.progressMessage = null;
 				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
 			}
 			else{
+        this.progressMessage = null;
 				this.errorMessage = error;
 			}
     });
@@ -133,12 +139,15 @@ export class PrinterComponent {
     })
     .catch((error) => {
         if(error == 'Server error'){
+          this.progressMessage = null;
             this.errorMessage = "Could not connect to REST server. Please check your configuration details";
         }
         else if(error == '404 - Not Found'){
+          this.progressMessage = null;
 				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
         }
         else{
+          this.progressMessage = null;
             this.errorMessage = error;
         }
     });
@@ -180,12 +189,15 @@ export class PrinterComponent {
       })
     .catch((error) => {
         if(error == 'Server error'){
+          this.progressMessage = null;
             this.errorMessage = "Could not connect to REST server. Please check your configuration details";
         }
         else if (error == '500 - Internal Server Error') {
+          this.progressMessage = null;
           this.errorMessage = "Input error";
         }
         else{
+          this.progressMessage = null;
             this.errorMessage = error;
         }
     });
