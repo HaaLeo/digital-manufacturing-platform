@@ -11,6 +11,7 @@ import { CashComponent } from './Cash/Cash.component';
 import { BlueprintMasterComponent } from './BlueprintMaster/BlueprintMaster.component';
 import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component';
 import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
+import { CancelRequestTRComponent } from 'app/CancelRequestTR/CancelRequestTR.component';
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
 import { DesignerComponent } from 'app/Designer/Designer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
@@ -25,6 +26,7 @@ import { Ng2FileDropModule }  from 'ng2-file-drop';
     AppComponent,
 		HomeComponent,
     BuyAssetTRComponent,
+    CancelRequestTRComponent,
     CashComponent,
 		BlueprintMasterComponent,
     EnduserComponent,

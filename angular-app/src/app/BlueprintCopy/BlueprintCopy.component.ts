@@ -27,7 +27,6 @@ export class BlueprintCopyComponent implements OnInit {
   private currentId;
 	private errorMessage;
   private cancelRequestObj;
-  private allBlueprintCopies;
   private blueprintCopyCurrent;
   private filterID;
   private selectedElement;
@@ -146,7 +145,9 @@ export class BlueprintCopyComponent implements OnInit {
   // Method called when Enduser wants to cancel his purchase
   cancelRequest(): Promise<any> {
     this.blueprintCopyID = this.currentId;
-    for (let blueprintCopy of this.allBlueprintCopies) {
+    console.log("test: " + this.currentId);
+    for (let blueprintCopy of this.allBlueprintCopyAssets) {
+      console.log("test: " + blueprintCopy.blueprintCopyID);
       if(blueprintCopy.blueprintCopyID == this.blueprintCopyID) {
         this.blueprintCopyCurrent = blueprintCopy;
       }
