@@ -1,6 +1,8 @@
 # 3DPrinter using Hyperledger Composer
 
-A Blockchain application using Hyperledger Composer for buying and printing 3D Printer models.
+A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models. 
+
+The idea is that designers can upload their original design models and set a price each model. These models are avaliable to the end-users for 3D printing. The end-users can select which models they want to print and then the designer must upload a copy of the already bought models. Finally, the printer will print the 3D object and transfer the money to the corresponding designer.
 
 ## Running the Application
 
@@ -18,7 +20,7 @@ Follow these steps to setup and run the application:
 
 ### Steps
 
-1. [Clone the repo](#1-clone-the-repo)
+1. 	[Clone the repo](#1-clone-the-repo)
 2.	[Setup Fabric](#2-setup-fabric)
 3.	[Generate the Business Network Archive](#3-generate-the-business-network-archive)
 4.	[Deploy to Fabric](#4-deploy-to-fabric)
@@ -34,7 +36,24 @@ Clone the `3DPrinter-Composer` code locally. In a terminal, run:
 
 `git clone https://git.fortiss.org/nieves/3DPrinter-Composer.git`
 
+#### Quick Run
 
+There is a bash script `startApp.sh` that executes all the necessary steps in order to run the application.
+
+From the **root** directory run:
+```
+./startApp.sh
+```
+
+To stop the fabric run:
+```
+./stop.sh
+```
+
+These steps are described in detail below.
+
+
+NOTE: The application is using the single BigchainDB node running at the fortiss network at the following IP and port: http://78.47.44.213:8209
 
 ### 2.	Setup Fabric
 
@@ -104,7 +123,7 @@ composer network ping --card admin@printer-use-case
 
 ### 5.	Run the Application
 
-First go to `angular-app` directory and install the dependencies:
+First, inside the `angular-app` directory install the dependencies:
 
 ```
 cd ../angular-app
@@ -117,8 +136,8 @@ To start the application run:
 npm start
 ```
 
-The application is now running at: `http://localhost:4200`
-
+NOTE: The application is now running at: http://localhost:4200 
+We are using the single BigchainDB node running at the fortiss network at the following IP and port: http://78.47.44.213:8209
 
 ### 6. Generate a REST server
 
