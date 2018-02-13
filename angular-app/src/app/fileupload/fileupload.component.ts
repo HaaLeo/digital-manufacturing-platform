@@ -19,6 +19,7 @@ export class FileuploadComponent {
   private currentProfileImage: string =  './uploadimage.png';
   private acceptedFile;
   private checksum;
+  private currentFileName;
 
   // File being dragged has moved into the drop region
   private dragFileOverStart() {
@@ -35,8 +36,11 @@ export class FileuploadComponent {
     console.log("File being dragged has been dropped and is valid");
     
     // Load the image in
-     this.imageShown = true;
+     
      this.acceptedFile = acceptedFile.file;
+     console.log("test: " + acceptedFile.file.name)
+     this.currentFileName = acceptedFile.file.name;
+     this.imageShown = true;
 
       generateCS(this.acceptedFile)
       .then(hs => {
