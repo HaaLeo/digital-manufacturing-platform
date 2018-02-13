@@ -47,7 +47,7 @@ export class BuyAssetTRComponent {
 				this.errorMessage = null;
 		result.forEach(blueprintCopy => {
 			//DISPLAY ONLY BLUEPRINT COPIES THAT HAVEN'T PRINTED YET
-			if(blueprintCopy.printed == false)
+			if(blueprintCopy.txID != "")
 				tempList.push(blueprintCopy);
 		});
 		this.allBlueprintCopies = tempList;
