@@ -15,6 +15,8 @@ export class BuyAssetTRComponent {
 
 	private transactionFrom;
 	private errorMessage;
+	private progressMessage;
+  private successMessage;
 	private allBlueprintCopies;
 	
 	private blueprintCopyCurrent;
@@ -64,7 +66,8 @@ export class BuyAssetTRComponent {
   	}
 
   	execute(form: any){
-  		console.log(this.allBlueprintCopies);
+		this.progressMessage = 'Please wait... ';
+  	console.log(this.allBlueprintCopies);
 		for (let blueprintCopy of this.allBlueprintCopies) {
 			if(blueprintCopy.blueprintCopyID == this.blueprintCopyID.value) {
 				this.blueprintCopyCurrent = blueprintCopy;
@@ -78,6 +81,8 @@ export class BuyAssetTRComponent {
 	    .toPromise()
 	    .then((result) => {
 	    	this.errorMessage = null;
+	    	this.progressMessage = null;
+        this.successMessage = 'Blueprint ' + this.blueprintCopyID.value + ' printed successfully.'
               this.transactionID = result.transactionId;
         })
 	    .catch((error) => {

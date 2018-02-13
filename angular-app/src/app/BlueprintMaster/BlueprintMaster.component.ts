@@ -22,6 +22,9 @@ export class BlueprintMasterComponent implements OnInit {
   private asset;
   private currentId;
   private errorMessage;
+  private progressMessage;
+  private successMessage;
+
   private allDesigners;
 
   private allEndusers;
@@ -181,6 +184,7 @@ export class BlueprintMasterComponent implements OnInit {
 
   // Method called when a Designer wants to upload a new BlueprintMaster Asset
   addAsset(form: any) {
+    this.progressMessage = 'Please wait... ';
     let inputPrice = this.price.value;
     let inputMetadata = this.metadata.value;
     let owner = this.owner.value;
@@ -211,6 +215,8 @@ export class BlueprintMasterComponent implements OnInit {
     .toPromise()
     .then(() => {
 			this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'Blueprint added successfully. Refreshing page...';
       this.myForm.setValue({
           "blueprintMasterID":null,
           "txID":null,
@@ -236,6 +242,7 @@ export class BlueprintMasterComponent implements OnInit {
 
   // Method called when a Enduser wants to Buy a Copy of the BlueprintMaster Asset
   requestAsset(form: any): Promise<any> {
+    this.progressMessage = 'Please wait... ';
      //Get selected Printer
      for (let printer of this.allPrinters) {    
       if(printer.stakeholderID == this.printerID.value){
@@ -265,6 +272,8 @@ export class BlueprintMasterComponent implements OnInit {
     .toPromise()
     .then((result) => {
       this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'Request was sent to the designer. Refreshing page...';
       location.reload();
     })
     .catch((error) => {

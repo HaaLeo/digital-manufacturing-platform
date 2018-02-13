@@ -16,6 +16,8 @@ export class PrinterComponent {
   private printer;
   private currentId;
   private errorMessage;
+  private progressMessage;
+  private successMessage;
 
   private current_db_id;
   
@@ -45,6 +47,7 @@ export class PrinterComponent {
 
   //allow update name of Printer
   updatePrinter(form: any): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     this.printer = {
       $class: "org.usecase.printer.Printer",  
             "pubKey":this.pubKey.value,        
@@ -54,6 +57,8 @@ export class PrinterComponent {
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'Printer updated successfully. Refreshing page...'
       location.reload();
 		})
 		.catch((error) => {
@@ -71,10 +76,13 @@ export class PrinterComponent {
 
   //delete Printers and the cash assets associated to it
   deletePrinter(): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     return this.servicePrinter.deletePrinter(this.currentId)
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'Printer deleted successfully. Refreshing page...'
       location.reload();
 		})
 		.catch((error) => {
@@ -158,9 +166,12 @@ export class PrinterComponent {
 
   //add Printer participant
   addPrinter(form: any): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     return this.createAssetsPrinter()
       .then(() => {           
         this.errorMessage = null;
+        this.progressMessage = null;
+        this.successMessage = 'Printer added successfully. Refreshing page...';
         this.myForm.setValue({
             "stakeholderID":null,
             "pubKey":null,

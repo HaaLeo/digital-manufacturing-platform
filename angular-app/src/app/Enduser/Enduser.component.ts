@@ -16,6 +16,8 @@ export class EnduserComponent {
   private enduser;
   private currentId;
   private errorMessage;
+  private progressMessage;
+  private successMessage;
 
   private cash;
   private current_db_id;
@@ -58,6 +60,7 @@ export class EnduserComponent {
 
   //allow update name of Enduser
   updateEnduser(form: any): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     this.enduser = {
       $class: "org.usecase.printer.Enduser",  
             "pubKey":this.pubKey.value,        
@@ -70,6 +73,8 @@ export class EnduserComponent {
 		.toPromise()
 		.then(() => {
             this.errorMessage = null;
+            this.progressMessage = null;
+            this.successMessage = 'User updated successfully. Refreshing page...'
             location.reload();
 		})
 		.catch((error) => {
@@ -87,10 +92,13 @@ export class EnduserComponent {
 
   //delete Endusers and the cash assets associated to it
   deleteEnduser(): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     return this.serviceEnduser.deleteEnduser(this.currentId)
 		.toPromise()
 		.then(() => {
 			this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'User deleted successfully. Refreshing page...'
       this.serviceEnduser.deleteCash("CA_"+this.currentId)
               .toPromise()
               .then(() => {
@@ -209,9 +217,12 @@ export class EnduserComponent {
 
   //add Enduser participant
   addEnduser(form: any): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     return this.createAssetsEnduser()
       .then(() => {           
         this.errorMessage = null;
+        this.progressMessage = null;
+        this.successMessage = 'User added successfully. Refreshing page...';
         this.myForm.setValue({
             "stakeholderID":null,
             "pubKey":null,

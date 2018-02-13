@@ -61,6 +61,12 @@
 </div>
 
 <div class="container">
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          <strong>Success:</strong> {{successMessage}}
+    </div>
+    <div *ngIf="progressMessage" class="alert alert-info" role="alert">
+          <strong>Status:</strong> {{progressMessage}}
+    </div>
 	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
 		<strong>Error:</strong> {{errorMessage}}
 	</div>

@@ -15,6 +15,8 @@ export class CashComponent implements OnInit {
   private asset;
   private currentId;
 	private errorMessage;
+  private progressMessage;
+  private successMessage;
       
   cashID = new FormControl("", Validators.required);
   currency = new FormControl("", Validators.required);
@@ -63,6 +65,7 @@ export class CashComponent implements OnInit {
 
   // Update the value of a given Wallet
   updateAsset(form: any): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     this.asset = {
       $class: "org.usecase.printer.Cash",
             "currency":this.currency.value,
@@ -74,6 +77,8 @@ export class CashComponent implements OnInit {
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'Cash updated successfully. Refreshing page...'
       location.reload();
 		})
 		.catch((error) => {
