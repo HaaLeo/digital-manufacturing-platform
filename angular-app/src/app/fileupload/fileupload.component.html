@@ -13,8 +13,9 @@
          <p class="instructions">Drag and Drop your blueprint.</p>
     </div>
     
-    <div *ngIf="imageShown" class=image-container>
-        <p class="instructions">Thank you for your design!</p>
+    <div *ngIf="imageShown" class=image-container id="fileAcceptedBox">
+        <p class="instructions-accepted">Thank you for your design!</p>
+        <p class="instructions-accepted" >{{currentFileName}}</p>
     </div>
     
   </div>
