@@ -22,6 +22,7 @@ export class BuyAssetTRComponent {
 	private blueprintCopyCurrent;
 	private confirmTransactionObj;
 	private transactionID;
+	private selectedCopy;
 
 	constructor(private serviceTransaction:BuyAssetTRService, fb: FormBuilder) {
 		this.myForm = fb.group({
@@ -47,7 +48,7 @@ export class BuyAssetTRComponent {
 				this.errorMessage = null;
 		result.forEach(blueprintCopy => {
 			//DISPLAY ONLY BLUEPRINT COPIES THAT HAVEN'T PRINTED YET
-			if(blueprintCopy.txID != "")
+			if(blueprintCopy.txID != "" && !blueprintCopy.printed )
 				tempList.push(blueprintCopy);
 		});
 		this.allBlueprintCopies = tempList;
@@ -80,9 +81,10 @@ export class BuyAssetTRComponent {
 	    return this.serviceTransaction.printBlueprint(this.confirmTransactionObj)
 	    .toPromise()
 	    .then((result) => {
+	    	this.selectedCopy = null;
 	    	this.errorMessage = null;
 	    	this.progressMessage = null;
-        this.successMessage = 'Blueprint ' + this.blueprintCopyID.value + ' printed successfully.'
+        this.successMessage = 'Transaction executed successfully.'
               this.transactionID = result.transactionId;
         })
 	    .catch((error) => {

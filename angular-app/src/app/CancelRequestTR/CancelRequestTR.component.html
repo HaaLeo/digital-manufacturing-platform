@@ -1,6 +1,12 @@
 
 
 <div class="container">
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          <strong>Success:</strong> {{successMessage}}
+    </div>
+    <div *ngIf="progressMessage" class="alert alert-info" role="alert">
+          <strong>Status:</strong> {{progressMessage}}
+    </div>
     <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
           <strong>Error:</strong> {{errorMessage}}
       </div>
@@ -17,7 +23,7 @@
           <div class="panel-body">
           <form [formGroup]="myForm">
               <p>BlueprintCopyID:
-                <select name="blueprintCopy" formControlName="blueprintCopyID" >
+                <select [(ngModel)]="selectedCopy" name="blueprintCopy" formControlName="blueprintCopyID" >
                   <option *ngFor="let blueprintCopy of allBlueprintCopies" value="{{blueprintCopy.blueprintCopyID}}">{{blueprintCopy.blueprintCopyID}}</option>
                 </select>
               </p>
@@ -39,7 +45,7 @@
       </div>
     </div>
     <div class="row">  
-      <div *ngIf="transactionFrom" class="col-md-offset-4 col-md-4">
+      <div *ngIf="selectedCopy" class="col-md-offset-4 col-md-4">
         <button (click)="execute(form);" type="button" class="btn btn-success" data-toggle="modal" >Cancel Request</button>	  
       </div>
     </div>

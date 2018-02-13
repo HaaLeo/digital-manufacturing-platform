@@ -15,11 +15,14 @@ export class CancelRequestTRComponent {
 
 	private transactionFrom;
 	private errorMessage;
+	private progressMessage;
+  private successMessage;
 	private allBlueprintCopies;
 	
 	private blueprintCopyCurrent;
 	private cancelRequestObj;
 	private transactionID;
+	private selectedCopy;
 
 	constructor(private serviceTransaction:CancelRequestTRService, fb: FormBuilder) {
 		this.myForm = fb.group({
@@ -64,7 +67,8 @@ export class CancelRequestTRComponent {
   	}
 
   	execute(form: any){
-  		console.log(this.allBlueprintCopies);
+  	this.progressMessage = 'Please wait... ';
+  	
 		for (let blueprintCopy of this.allBlueprintCopies) {
 			if(blueprintCopy.blueprintCopyID == this.blueprintCopyID.value) {
 				this.blueprintCopyCurrent = blueprintCopy;
@@ -77,8 +81,13 @@ export class CancelRequestTRComponent {
 	    return this.serviceTransaction.cancelRequest(this.cancelRequestObj)
 	    .toPromise()
 	    .then((result) => {
+	    	this.selectedCopy = null;
+	    	
 	    	this.errorMessage = null;
-              this.transactionID = result.transactionId;
+	    	this.progressMessage = null;
+        this.successMessage = 'Request was cancelled successfully.';
+        
+        this.transactionID = result.transactionId;
         })
 	    .catch((error) => {
                 if(error == 'Server error'){
