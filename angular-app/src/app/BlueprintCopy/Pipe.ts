@@ -3,9 +3,9 @@ import { BlueprintCopy, Designer, Printer, Enduser } from '../org.usecase.printe
 import { NgModule }      from '@angular/core';
 
 
-@Component({
-	selector: 'pipe'
-})
+// @Component({
+// 	selector: 'pipe'
+// })
 
 @NgModule({
     imports:[]
