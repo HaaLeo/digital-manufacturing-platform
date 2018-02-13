@@ -2,7 +2,7 @@
 
 A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models. 
 
-The idea is that designers can upload their original design models and set a price each model. These models are avaliable to the end-users for 3D printing. The end-users can select which models they want to print and then the designer must upload a copy of the already bought models. Finally, the printer will print the 3D object and transfer the money to the corresponding designer.
+The idea is that designers upload their original models and set the price for each model. These models are avaliable to the end-users for 3D printing. The end-users select which models they want to print and pay the cost. The designers upload a copy of the already bought models and the printers print the 3D objects and transfer the money to the corresponding model creators.
 
 ## Running the Application
 
