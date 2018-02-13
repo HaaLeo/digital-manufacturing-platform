@@ -21,6 +21,7 @@ Follow these steps to setup and run the application:
 ### Steps
 
 1. 	[Clone the repo](#1-clone-the-repo)
+	* [Quick Run](#quick-run)
 2.	[Setup Fabric](#2-setup-fabric)
 3.	[Generate the Business Network Archive](#3-generate-the-business-network-archive)
 4.	[Deploy to Fabric](#4-deploy-to-fabric)
@@ -40,7 +41,7 @@ Clone the `3DPrinter-Composer` code locally. In a terminal, run:
 
 There is a bash script `startApp.sh` that executes all the necessary steps in order to run the application.
 
-From the **root** directory run:
+Inside the `root` directory run:
 ```
 ./startApp.sh
 ```
@@ -77,7 +78,7 @@ cd fabric-tools/
 
 ### 3.	Generate the Business Network Archive
 
-Generate the Business Network Archive (BNA) file from the **root** directory:
+Generate the Business Network Archive (BNA) file from the `root` directory:
 
 ```
 cd ../
