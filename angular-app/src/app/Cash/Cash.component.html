@@ -8,47 +8,8 @@
       <form [formGroup]="myForm">
         <div class="modal-body">
             <div class="form-group text-left">
-              <label for="cashID">cashID</label>
-                <input [ngModel]="cashID"formControlName="cashID" type="text" class="form-control">
-            </div>
-            <div class="form-group text-left">
-              <label for="currency">currency</label>
-                <input [ngModel]="currency"formControlName="currency" type="text" class="form-control">
-            </div>
-            <div class="form-group text-left">
               <label for="value">value</label>
                 <input [ngModel]="value" formControlName="value" type="number" step='any' class="form-control">
-            </div>
-            <div class="form-group text-left">
-              <label for="ownerID">ownerID</label>
-                <input [ngModel]="ownerID"formControlName="ownerID" type="text" class="form-control">
-            </div>
-            <div class="form-group text-left">
-              <label for="ownerEntity">ownerEntity</label>
-                  <div class="row">
-                    <div class="col-xs-12 checkbox">
-                      <label>
-                        <input
-                            formControlName="ownerEntity"
-                            [ngModel]="ownerEntity"
-                            name="ownerEntity"
-                            value="Enduser"
-                            type="radio"
-                        />
-                        Enduser
-                      </label>
-                      <label>
-                        <input
-                            formControlName="ownerEntity"
-                            [ngModel]="ownerEntity"
-                            name="ownerEntity"
-                            value="Designer"
-                            type="radio"
-                        />
-                        Designer
-                      </label>
-                    </div>
-                  </div>
             </div>
         </div>
         <div class="modal-footer">
