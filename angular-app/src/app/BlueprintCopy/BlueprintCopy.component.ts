@@ -26,6 +26,8 @@ export class BlueprintCopyComponent implements OnInit {
   private asset;
   private currentId;
 	private errorMessage;
+  private progressMessage;
+  private successMessage;
   private cancelRequestObj;
   private blueprintCopyCurrent;
   private filterID;
@@ -144,6 +146,7 @@ export class BlueprintCopyComponent implements OnInit {
 
   // Method called when Enduser wants to cancel his purchase
   cancelRequest(): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     this.blueprintCopyID = this.currentId;
     console.log("test: " + this.currentId);
     for (let blueprintCopy of this.allBlueprintCopyAssets) {
@@ -161,6 +164,8 @@ export class BlueprintCopyComponent implements OnInit {
     .toPromise()
     .then(() => {
       this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'Request was cancelled successfully. Refreshing page...'
       location.reload();
     })
     .catch((error) => {
@@ -263,6 +268,7 @@ export class BlueprintCopyComponent implements OnInit {
 
   // Method which is called when Designer uploads the Blueprint Copy File
   uploadCopyAsset(form: any) {
+    this.progressMessage = 'Please wait... ';
     this.fileUploadComponent.postBCDB("","","")
     .then(txId => {
     let currentChecksum = this.fileUploadComponent.getChecksum();
@@ -302,6 +308,8 @@ export class BlueprintCopyComponent implements OnInit {
     .toPromise()
     .then(() => {
 			this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'Blueprint uploaded successfully. Refreshing page...'
       this.myForm.setValue({
           "blueprintCopyID":null,
           "printed":null,

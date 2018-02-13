@@ -16,6 +16,8 @@ export class DesignerComponent {
   private designer;
   private currentId;
   private errorMessage;
+  private progressMessage;
+  private successMessage;
 
   private cash;
   private current_db_id;
@@ -58,6 +60,7 @@ export class DesignerComponent {
 
   //Update name of Designer
   updateDesigner(form: any): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     this.designer = {
       $class: "org.usecase.printer.Designer",  
             "pubKey":this.pubKey.value,        
@@ -70,6 +73,8 @@ export class DesignerComponent {
 		.toPromise()
 		.then(() => {
             this.errorMessage = null;
+            this.progressMessage = null;
+            this.successMessage = 'Designer updated successfully. Refreshing page...'
             location.reload();
 		})
 		.catch((error) => {
@@ -87,10 +92,13 @@ export class DesignerComponent {
 
   //delete designers and the cash assets associated to it
   deleteDesigner(): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     return this.serviceDesigner.deleteDesigner(this.currentId)
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
+      this.progressMessage = null;
+      this.successMessage = 'Designer deleted successfully. Refreshing page...'
       this.serviceDesigner.deleteCash("CA_"+this.currentId)
         .toPromise()
         .then(() => {
@@ -210,9 +218,12 @@ export class DesignerComponent {
 
   //add Designer participant
   addDesigner(form: any): Promise<any> {
+    this.progressMessage = 'Please wait... ';
     return this.createAssetsDesigner()
       .then(() => {           
         this.errorMessage = null;
+        this.progressMessage = null;
+        this.successMessage = 'Designer added successfully. Refreshing page...';
         this.myForm.setValue({
             "stakeholderID":null,
             "pubKey":null,
