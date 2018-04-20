@@ -96,19 +96,13 @@ First, install the composer runtime on the peer:
 
 ```
 cd dist/
-composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName printer-use-case
+composer network install --card PeerAdmin@hlfv1 --archiveFile printer-use-case.bna
 ```
 
 Deploy the business network on the peer and create a new participant, identity and an associated card for the network adminstrator:
 ```
-composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile printer-use-case.bna --file networkadmin.card
+composer network start --networkName printer-use-case --networkVersion 0.0.1 --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --file networkadmin.card
 ```
-
-NOTE: To update an already deployed business network archive to Hyperledger Fabric runtime:
-```
-composer network update -a printer-use-case.bna -c admin@printer-use-case
-```
-
 
 Import the network administrator identity card:
 ```
