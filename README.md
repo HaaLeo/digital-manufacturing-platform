@@ -1,7 +1,7 @@
-# BlockchainBLC4PI
+# Digital Manufacturing Platform
 This repository contains the basic folder structure for the BlockchainBLC4PI (SOSE 2018).
 
-You may clone it by using the command ** *git clone https://EENFortiss@bitbucket.org/EENFortiss/blockchainblc4pi.git* **
+It was copied from https://bitbucket.org/EENFortiss/blockchainblc4pi.git and contains a demo Dapp so far. Within the next weeks it will be adjusted to the *Digital Manufacturing Platform* use case.
 
 # Steps to run the petshop application
 1. Install truffle - `npm install -g truffle`
