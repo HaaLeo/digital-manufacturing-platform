@@ -1,0 +1,22 @@
+<div class="file-drop-container">
+  <div ng2FileDrop class="custom-component-drop-zone"
+
+   [ng2FileDropMaximumSizeBytes]="maximumFileSizeInBytes"
+   [ng2FileDropSupportedFileTypes]="supportedFileTypes"
+
+   (ng2FileDropHoverStart)="dragFileOverStart()" 
+   (ng2FileDropHoverEnd)="dragFileOverEnd()"
+   (ng2FileDropFileAccepted)="dragFileAccepted($event)" 
+   (ng2FileDropFileRejected)="dragFileRejected($event)">
+    
+    <div *ngIf="!imageShown">
+         <p class="instructions">Drag and Drop your blueprint.</p>
+    </div>
+    
+    <div *ngIf="imageShown" class=image-container id="fileAcceptedBox">
+        <p class="instructions-accepted">Thank you for your design!</p>
+        <p class="instructions-accepted" >{{currentFileName}}</p>
+    </div>
+    
+  </div>
+</div>

@@ -1,0 +1,98 @@
+/**
+ * Business Model for the 3D Printer use case
+ */
+
+namespace org.usecase.printer
+
+abstract participant Stakeholder identified by stakeholderID {
+    o String stakeholderID
+    o String pubKey
+    
+}
+
+participant Enduser extends Stakeholder {
+    o String firstName
+    o String lastName
+    o String contactInformation
+    --> Cash cash
+}
+
+participant Designer extends Stakeholder {
+    o String firstName
+    o String lastName
+    o String contactInformation
+    --> Cash cash
+}
+
+// Not sure if Printer should be participant or rather asset?
+participant Printer extends Stakeholder {
+    o String name
+}
+
+enum OwnerEntity {
+  o Enduser
+  o Designer
+}
+
+//This class represents a "wallet" of a Trader
+asset Cash identified by cashID {
+    o String cashID
+    o String currency
+    o Double value
+    o String ownerID
+    o OwnerEntity ownerEntity
+} 
+
+//This class represents a Master-Blueprint stored on BCDB
+asset BlueprintMaster identified by blueprintMasterID {
+    o String blueprintMasterID
+    o String txID
+    o String checksum
+    o Double price
+    o String metadata
+    --> Designer owner
+}
+
+//This class represents a copy of a Master-Blueprint 
+asset BlueprintCopy identified by blueprintCopyID {
+    o String blueprintCopyID
+    o String txID
+    o String checksum
+    o Boolean printed
+    o String otpEncryptedWithDesignerPubKey
+    o String otpEncryptedWithPrinterPubKey
+    --> Printer printer
+    --> Enduser buyer
+    --> BlueprintMaster blueprintMaster
+    --> Stakeholder owner
+}
+
+// Transaction after succesful printing
+transaction ConfirmTransaction {
+    --> BlueprintCopy blueprintCopy
+}
+
+transaction CancelRequest {
+    --> BlueprintCopy blueprintCopy
+}
+
+transaction UploadBlueprintCopy {
+    o String txID
+    o String checksum
+    --> BlueprintCopy blueprintCopy
+}
+
+transaction RequestBlueprint {
+    --> Enduser buyer
+    --> Printer printer
+    --> BlueprintMaster blueprintMaster
+}
+
+// NOT USED
+transaction AddNewBlueprintMaster {
+    o String blueprintMasterID
+    o String assetHash
+    o Double price
+    o String metadata
+    --> Designer owner
+}

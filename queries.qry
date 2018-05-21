@@ -1,0 +1,36 @@
+
+query selectEndusers {
+  description: "Select all endusers"
+  statement:
+      SELECT org.usecase.printer.Enduser
+}
+
+query selectDesigner {
+  description: "Select all designers"
+  statement:
+      SELECT org.usecase.printer.Designer
+}
+
+query selectUtilityPrinter {
+  description: "Select all utility printer"
+  statement:
+      SELECT org.usecase.printer.Printer
+}
+
+query selectBlueprintMaster {
+  description: "Select all BlueprintMaster assets"
+  statement:
+      SELECT org.usecase.printer.BlueprintMaster
+}
+
+query selectBlueprintCopy {
+  description: "Select all BlueprintCopy assets"
+  statement:
+      SELECT org.usecase.printer.BlueprintCopy
+}
+
+query selectCash {
+  description: "Select all cash assets"
+  statement:
+      SELECT org.usecase.printer.Cash
+}

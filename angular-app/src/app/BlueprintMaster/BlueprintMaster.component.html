@@ -1,0 +1,114 @@
+<div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addAssetModalLabel">Add Asset</h4>
+      </div>
+      <form [formGroup]="myForm">
+        <div class="modal-body">
+              <div class="form-group text-left">
+                <label for="price">price</label>
+                  <input formControlName="price" type="number" step='any' class="form-control">
+              </div>
+              <div class="form-group text-left">
+                <label for="metadata">Description</label>
+                  <textarea formControlName="metadata" type="text" class="form-control">
+                    </textarea>
+              </div>
+              <div class="form-group text-left">
+                <label for="owner">owner</label>
+                <select name="designers" formControlName="owner" >
+                  <option *ngFor="let designer of allDesigners" value="{{designer.stakeholderID}}">{{designer.firstName + " " + designer.lastName}}</option>
+                </select>
+              </div>
+              <fileupload></fileupload>
+        </div>
+        <div class="modal-footer">
+          <button (click)="addAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="requestAssetModal" tabindex="-1" role="dialog" aria-labelledby="requestAssetModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="requestAssetModalLabel">Buy Blueprint</h4>
+      </div>
+      <form [formGroup]="myForm">
+        <div class="modal-body">
+            <div class="form-group text-left">
+                <label for="printer">Printer</label>
+                <select name="printers" formControlName="printerID" >
+                  <option *ngFor="let printer of allPrinters" value="{{printer.stakeholderID}}">{{printer.name}}</option>
+                </select>
+            </div>
+            <div class="form-group text-left">
+                <label for="buyer">Buyer</label>
+                <select name="buyers" formControlName="buyerID" >
+                  <option *ngFor="let buyer of allEndusers" value="{{buyer.stakeholderID}}">{{buyer.firstName + " " + buyer.lastName}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="requestAsset(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          <strong>Success:</strong> {{successMessage}}
+    </div>
+    <div *ngIf="progressMessage" class="alert alert-info" role="alert">
+          <strong>Status:</strong> {{progressMessage}}
+    </div>
+	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+		<strong>Error:</strong> {{errorMessage}}
+	</div>
+  <h1 id='assetName'>BlueprintMaster</h1>
+  <div class="row">
+    <div class="col-md-12 text-right">
+      <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-bordered table-responsive table-striped">
+        <thead class="thead">
+          <tr class="thead-cols">
+                <th class="info">BlueprintMasterID</th>
+                <th class="info">TxID</th>
+                <th class="info">Checksum</th>
+                <th class="info">Price</th>
+                <th class="info">Description</th>
+                <th class="info">Owner</th>
+                <th class="info">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let asset of allAssets">
+                <td>{{asset.blueprintMasterID}}</td>
+                <td class="split">{{asset.txID}}</td>
+                <td class="split">{{asset.checksum}}</td>
+                <td>{{asset.price}}</td>
+                <td>{{asset.metadata}}</td>
+                <td>{{asset.firstName + " " + asset.lastName}}</td>
+            <td>
+              <button (click)="setId(asset.blueprintMasterID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#requestAssetModal">Buy</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

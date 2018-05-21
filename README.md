@@ -1,36 +1,176 @@
-# BlockchainBLC4PI
-This repository contains the basic folder structure for the BlockchainBLC4PI (SOSE 2018).
+# Digital Manufacturing Platform
 
-You may clone it by using the command ** *git clone https://EENFortiss@bitbucket.org/EENFortiss/blockchainblc4pi.git* **
+>This repository was forked from the [3D Printer use case](https://git.fortiss.org/Blockchain/Demonstrator/3DPrinter-Composer/commit/4eb1629f36305f2c7a3e3bea744fa90b123151d1) and will be the base for further development.
+A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models. 
 
-# Steps to run the petshop application
-1. Install truffle - `npm install -g truffle`
-2. Install rimraf - `npm install -g rimraf`
-3. Navigate to the project folder and run - `npm install` - this installs all the dependency modules
-4. Open another console in same folder and run - `truffle develop` - this starts the truffle testrpc, which is a ethereum blockchain test network
-5. In truffle console, run - `compile` - this compiles the smart contract
-6. In truffle console, run - `migrate` - this migrates the smart contracts to the test network
-7. Open another console and run - `npm run build:contracts` - this script copies the contracts from **./.build** folder to **/src/public/contracts**  
-8. In the first console, run - `npm run start`
-9. Go to **localhost:3001/petshop** and you should be able to see the UI of the petshop application
+The idea is that designers upload their original models and set the price for each model. These models are avaliable to the end-users for 3D printing. The end-users select which models they want to print and pay the cost. The designers upload a copy of the already bought models and the printers print the 3D objects and transfer the money to the corresponding model creators.
 
-# Steps to interact with the petshop
-1. To interact with the appliaction, you would need a wallet which facilitates communication between UI and test network
-2. Install Metamask for your browser using this [link](https://metamask.io/) (We would suggest chrome) 
-3. Configure Metamask by following this [link](http://truffleframework.com/tutorials/pet-shop#installing-and-configuring-metamask)
-4. There are two differences while configuring metamask. One is, this project is not using ganache. You can find the seed in the truffle console if you scroll up and look for mnemonic
-5. Another one is, truffle develop starts the test network on http://127.0.0.1:9545. So in private network, use this url
-6. Once metamask is successfully integrated, you can click on **adopt** for any pet, and a pop-up from meta mask would appear asking you to verify the transaction
-7. Once verified, the status of pet would change
+## Running the Application
 
-**You have successfully installed and interacted with your first Dapp**
+Follow these steps to setup and run the application:
 
-# Project structure and How to use this project to develop a new Dapp
-1. ./contracts/yourProject - Store your smart contracts in this folder
-2. ./migrations - Contains the migration script - edit `./migrations/2_deploy_contracts.js` to add your own contact. It migrates the contract to the blockchain
-3. ./src/public/petshop - Contains the Dapp code for Petshop application - you can choose to create a separate folder inside ./src/public/yourProject for your project
-4. ./src/server/index.js - Contains the server code. For petshop, it just handles redirecting the call `localhost:3001/petshop` to `../public/petshop/index.html`
-5. You can create your own application's js file in the server folder and do the server side things when and as required
-6. Every time you make a change in the contract, you need to `compile` and `migrate --reset` in **truffle develop console**
-7. After compiling and migrating the contracts, you must also run `npm run build:contracts` script in another console
-8. Now the contract would be updated in the application
+### Prerequisite
+
+* [Docker](https://www.docker.com/)
+*	[npm](https://www.npmjs.com/)
+*	[Node](https://nodejs.org/en/)
+* [Hyperledger Composer](https://hyperledger.github.io/composer/installing/development-tools.html)
+	* to install composer cli `npm install -g composer-cli`
+	*	to install composer-rest-server `npm install -g composer-rest-server`
+
+
+### Steps
+
+1. 	[Clone the repo](#1-clone-the-repo)
+	* [Quick Run](#quick-run)
+2.	[Setup Fabric](#2-setup-fabric)
+3.	[Generate the Business Network Archive](#3-generate-the-business-network-archive)
+4.	[Deploy to Fabric](#4-deploy-to-fabric)
+5.	[Run the Application](#5-run-the-application)
+6.	[Generate a REST Server](#6-generate-a-rest-server)
+7.	[Stop Fabric](#7-stop-fabric)
+8.	[Additional Resources](#8-additional-resources)
+
+### 1. Clone the repo
+
+Clone the `3DPrinter-Composer` code locally. In a terminal, run:
+
+
+`git clone https://git.fortiss.org/nieves/3DPrinter-Composer.git`
+
+#### Quick Run
+
+There is a bash script `startApp.sh` that executes all the necessary steps in order to run the application.
+
+Inside the `root` directory run:
+```
+./startApp.sh
+```
+
+To stop the fabric run:
+```
+./stop.sh
+```
+
+These steps are described in detail below.
+
+
+NOTE: The application is using the single BigchainDB node running at the fortiss network at the following IP and port: http://78.47.44.213:8209
+
+### 2.	Setup Fabric
+
+Remove all previously created Hyperledger Fabric chaincode images:
+
+`docker rmi $(docker images dev-* -q)`
+
+
+Set Hyperledger Fabric version to v1.0:
+
+`export FABRIC_VERSION=hlfv1`
+
+All the necessary scripts are in the directory `/fabric-tools`. Start fabric and create peer admin card:
+
+```
+cd fabric-tools/
+./downloadFabric.sh
+./startFabric.sh
+./createPeerAdminCard.sh
+```
+
+### 3.	Generate the Business Network Archive
+
+Generate the Business Network Archive (BNA) file from the `root` directory:
+
+```
+cd ../
+mkdir dist
+composer archive create -a dist/printer-use-case.bna --sourceType dir --sourceName .
+```
+
+The `composer archive create` command will created a file called `printer-use-case.bna` in the `dist` folder.
+
+
+### 4.	Deploy to Fabric
+
+
+First, install the composer runtime on the peer:
+
+```
+cd dist/
+composer network install --card PeerAdmin@hlfv1 --archiveFile printer-use-case.bna
+```
+
+Deploy the business network on the peer and create a new participant, identity and an associated card for the network adminstrator:
+```
+composer network start --networkName printer-use-case --networkVersion 0.0.1 --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --file networkadmin.card
+```
+
+Import the network administrator identity card:
+```
+composer card import --file networkadmin.card
+```
+
+Ping the network to check that the business network has been deployed successfully:
+
+```
+composer network ping --card admin@printer-use-case
+```
+
+
+### 5.	Run the Application
+
+First, inside the `angular-app` directory install the dependencies:
+
+```
+cd ../angular-app
+npm install
+```
+
+
+To start the application run:
+```
+npm start
+```
+
+NOTE: The application is now running at: http://localhost:4200 
+We are using the single BigchainDB node running at the fortiss network at the following IP and port: http://78.47.44.213:8209
+
+### 6. Generate a REST server
+
+The application needs a REST server in order to communicate with the network. The generated API is connected to the blockchain and the business network.
+
+1.	To start the REST server run:
+```
+composer-rest-server
+```
+
+2.	Enter `admin@printer-use-case` as the card name.
+
+3.	Select **Always use namespaces** when asked whether to use namespaces in the generated API.
+
+4.	Select **No** when asked whether to secure the generated API.
+
+5.	Select **Yes** when asked whether to enable event publication.
+
+6.	Select **No** when asked whether to enable TLS security.
+
+The REST server is available at: `http://localhost:3000/explorer/`
+
+
+### 7.	Stop Fabric
+
+To stop the fabric, run the following commands inside the `fabric-tools` directory:
+
+```
+./stopFabric.sh
+./teardownFabric.sh
+```
+
+
+### 8.	Additional resources
+
+*	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
+
+
+
+

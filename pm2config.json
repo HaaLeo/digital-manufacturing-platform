@@ -1,9 +1,0 @@
-{
-    "apps": [{
-      "script" : "./src/server/index.js",
-      "env": {
-        "NODE_ENV": "production",
-        "PORT": "3001"
-      }
-    }]
-  }
