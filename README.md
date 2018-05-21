@@ -1,4 +1,5 @@
 # Digital Manufacturing Platform
+This repository contains the basic folder structure for the BlockchainBLC4PI (SOSE 2018).
 
 >This repository was forked from the [3D Printer use case](https://git.fortiss.org/Blockchain/Demonstrator/3DPrinter-Composer/commit/4eb1629f36305f2c7a3e3bea744fa90b123151d1) and will be the base for further development.
 A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models. 
