@@ -40,12 +40,12 @@ rule EnduserReadAccessPrinters {
     action: ALLOW
 }
 
-//Endusers to have read access to all BlueprintMaster assets
-rule EnduserAccessBlueprintMasterRecord {
-    description: "Allow Endusers read access to all BlueprintMaster assets"
+//Endusers to have read access to all QualityRequirement assets
+rule EnduserAccessQualityRequirementRecord {
+    description: "Allow Endusers read access to all QualityRequirement assets"
     participant: "org.usecase.printer.Enduser"
     operation: READ
-    resource: "org.usecase.printer.BlueprintMaster"
+    resource: "org.usecase.printer.QualityRequirement"
     action: ALLOW
 }
 
@@ -98,21 +98,21 @@ rule DesignerReadAccessEndusers {
 }
 
 
-//Designers to have read access to all BlueprintMaster assets
-rule DesignerAccessBlueprintMasterRecord {
-    description: "Allow Designer all access to all BlueprintMaster assets"
+//Designers to have read access to all QualityRequirement assets
+rule DesignerAccessQualityRequirementRecord {
+    description: "Allow Designer all access to all QualityRequirement assets"
     participant: "org.usecase.printer.Designer"
     operation: READ, UPDATE, DELETE
-    resource: "org.usecase.printer.BlueprintMaster"
+    resource: "org.usecase.printer.QualityRequirement"
     action: ALLOW
 }
 
-//Designers to have access to their own BlueprintMaster Assets
-rule DesignerAccessOwnBlueprintMaster {
-    description: "Allow Designers to access only their own BlueprintMaster assets"
+//Designers to have access to their own QualityRequirement Assets
+rule DesignerAccessOwnQualityRequirement {
+    description: "Allow Designers to access only their own QualityRequirement assets"
     participant(p): "org.usecase.printer.Designer"
     operation: UPDATE, DELETE
-    resource(r): "org.usecase.printer.BlueprintMaster"
+    resource(r): "org.usecase.printer.QualityRequirement"
     // TODO: check if r.owner accessible here
     condition: (r.owner.getIdentifier() === p.getIdentifier())
     action: ALLOW
@@ -165,12 +165,12 @@ rule PrinterReadAccessDesigners {
 }
 
 
-//Printers to have read access to all BlueprintMaster assets
-rule PrinterAccessBlueprintMasterRecord {
-    description: "Allow Printers read access to all BlueprintMaster assets"
+//Printers to have read access to all QualityRequirement assets
+rule PrinterAccessQualityRequirementRecord {
+    description: "Allow Printers read access to all QualityRequirement assets"
     participant: "org.usecase.printer.Printer"
     operation: READ
-    resource: "org.usecase.printer.BlueprintMaster"
+    resource: "org.usecase.printer.QualityRequirement"
     action: ALLOW
 }
 
@@ -191,12 +191,12 @@ rule PrinterAccessCashRecord {
     action: ALLOW
 }
 
-//Designers to have read access to all AddNewBlueprintMaster 
-rule DesignerAccessAddNewBlueprintMaster {
-    description: "Allow Designer all access to all AddNewBlueprintMaster"
+//Designers to have read access to all AddNewQualityRequirement
+rule DesignerAccessAddNewQualityRequirement {
+    description: "Allow Designer all access to all AddNewQualityRequirement"
     participant: "org.usecase.printer.Designer"
     operation: ALL
-    resource: "org.usecase.printer.AddNewBlueprintMaster"
+    resource: "org.usecase.printer.AddNewQualityRequirement"
     action: ALLOW
 }
 

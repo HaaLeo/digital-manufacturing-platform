@@ -39,7 +39,7 @@ export class BlueprintCopyComponent implements OnInit {
   otpEncryptedWithPrinterPubKey = new FormControl("", Validators.required);
   printer = new FormControl("", Validators.required);
   buyer = new FormControl("", Validators.required);
-  blueprintMaster = new FormControl("", Validators.required);
+  qualityRequirement = new FormControl("", Validators.required);
   owner = new FormControl("", Validators.required);
         
   
@@ -51,7 +51,7 @@ export class BlueprintCopyComponent implements OnInit {
           otpEncryptedWithPrinterPubKey:this.otpEncryptedWithPrinterPubKey,
           printer:this.printer,
           buyer:this.buyer,
-          blueprintMaster:this.blueprintMaster,
+          qualityRequirement:this.qualityRequirement,
           owner:this.owner
     });
   };
@@ -73,14 +73,14 @@ export class BlueprintCopyComponent implements OnInit {
       result.forEach(bpc => {
         bpc.buyer = this.serviceBlueprintCopy.getID(bpc.buyer);
         bpc.printer = this.serviceBlueprintCopy.getID(bpc.printer);
-        bpc.blueprintMaster = this.serviceBlueprintCopy.getID(bpc.blueprintMaster);
+        bpc.qualityRequirement = this.serviceBlueprintCopy.getID(bpc.qualityRequirement);
         bpc.owner = this.serviceBlueprintCopy.getID(bpc.owner);
         bpcList.push(bpc);
       });     
     })
     .then(() => {
       for (let bpc of bpcList) {
-        this.serviceBlueprintCopy.getBlueprintMaster(bpc.blueprintMaster)
+        this.serviceBlueprintCopy.getQualityRequirement(bpc.qualityRequirement)
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
@@ -201,7 +201,7 @@ export class BlueprintCopyComponent implements OnInit {
             "otpEncryptedWithPrinterPubKey":null,
             "printer":null,
             "buyer":null,
-            "blueprintMaster":null,
+            "qualityRequirement":null,
             "owner":null 
       };
 
@@ -241,10 +241,10 @@ export class BlueprintCopyComponent implements OnInit {
           formObject.buyer = null;
         }
       
-        if(result.blueprintMaster){
-            formObject.blueprintMaster = result.blueprintMaster;
+        if(result.qualityRequirement){
+            formObject.qualityRequirement = result.qualityRequirement;
         }else{
-          formObject.blueprintMaster = null;
+          formObject.qualityRequirement = null;
         }
       
         if(result.owner){
@@ -288,7 +288,7 @@ export class BlueprintCopyComponent implements OnInit {
           "otpEncryptedWithPrinterPubKey":this.otpEncryptedWithPrinterPubKey.value,
           "printer":this.printer.value,
           "buyer":this.buyer.value,
-          "blueprintMaster":this.blueprintMaster.value,
+          "qualityRequirement":this.qualityRequirement.value,
           "owner":this.owner.value
     };
 
@@ -299,7 +299,7 @@ export class BlueprintCopyComponent implements OnInit {
         "otpEncryptedWithPrinterPubKey":null,
         "printer":null,
         "buyer":null,
-        "blueprintMaster":null,
+        "qualityRequirement":null,
         "owner":null 
     });
 
@@ -323,7 +323,7 @@ export class BlueprintCopyComponent implements OnInit {
           "otpEncryptedWithPrinterPubKey":null,
           "printer":null,
           "buyer":null,
-          "blueprintMaster":null,
+          "qualityRequirement":null,
           "owner":null 
       });
       location.reload();
@@ -353,7 +353,7 @@ export class BlueprintCopyComponent implements OnInit {
           "otpEncryptedWithPrinterPubKey":null,
           "printer":null,
           "buyer":null,
-          "blueprintMaster":null,
+          "qualityRequirement":null,
           "owner":null 
       });
   }

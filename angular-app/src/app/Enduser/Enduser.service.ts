@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Enduser } from '../org.usecase.printer';
 
 
-import { BlueprintMaster } from '../org.usecase.printer';
+import { QualityRequirement } from '../org.usecase.printer';
 import { BlueprintCopy } from '../org.usecase.printer';
 import { Cash } from '../org.usecase.printer';
 

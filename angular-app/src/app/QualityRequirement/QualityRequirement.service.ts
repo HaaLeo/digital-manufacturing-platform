@@ -1,46 +1,46 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { BlueprintMaster } from '../org.usecase.printer';
+import { QualityRequirement } from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 import { Designer, Enduser, Printer, RequestBlueprint, CancelRequest} from 'app/org.usecase.printer';
 
 // Can be injected into a constructor
 @Injectable()
-export class BlueprintMasterService {
+export class QualityRequirementService {
 
 	
-		private NAMESPACE: string = 'org.usecase.printer.BlueprintMaster';
+		private NAMESPACE: string = 'org.usecase.printer.QualityRequirement';
     private DESIGNER: string = 'org.usecase.printer.Designer';
     private PRINTER: string = 'org.usecase.printer.Printer';
     private ENDUSER: string = 'org.usecase.printer.Enduser';
     private REQUESTBLUEPRINT: string = 'org.usecase.printer.RequestBlueprint';
 
-    constructor(private dataService: DataService<BlueprintMaster>, 
+    constructor(private dataService: DataService<QualityRequirement>,
                 private designerService: DataService<Designer>, 
                 private enduserService: DataService<Enduser>, 
                 private printerService: DataService<Printer>, 
                 private requestBlueprintService: DataService<RequestBlueprint>) {
     };
 
-    public getAll(): Observable<BlueprintMaster[]> {
+    public getAll(): Observable<QualityRequirement[]> {
         return this.dataService.getAll(this.NAMESPACE);
     }
 
-    public getAsset(id: any): Observable<BlueprintMaster> {
+    public getAsset(id: any): Observable<QualityRequirement> {
       return this.dataService.getSingle(this.NAMESPACE, id);
     }
 
-    public addAsset(itemToAdd: any): Observable<BlueprintMaster> {
+    public addAsset(itemToAdd: any): Observable<QualityRequirement> {
       return this.dataService.add(this.NAMESPACE, itemToAdd);
     }
 
-    public updateAsset(id: any, itemToUpdate: any): Observable<BlueprintMaster> {
+    public updateAsset(id: any, itemToUpdate: any): Observable<QualityRequirement> {
       return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
     }
 
-    public deleteAsset(id: any): Observable<BlueprintMaster> {
+    public deleteAsset(id: any): Observable<QualityRequirement> {
       return this.dataService.delete(this.NAMESPACE, id);
     }
 

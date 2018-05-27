@@ -33,8 +33,8 @@ import {Event} from './org.hyperledger.composer.system';
       ownerID: string;
       ownerEntity: OwnerEntity;
    }
-   export class BlueprintMaster extends Asset {
-      blueprintMasterID: string;
+   export class QualityRequirement extends Asset {
+      qualityRequirementID: string;
       txID: string;
       checksum: string;
       price: number;
@@ -50,13 +50,13 @@ import {Event} from './org.hyperledger.composer.system';
       otpEncryptedWithPrinterPubKey: string;
       printer: Printer;
       buyer: Enduser;
-      blueprintMaster: BlueprintMaster;
+      qualityRequirement: QualityRequirement;
       owner: Stakeholder;
    }
    export class RequestBlueprint extends Transaction {
         buyer: Enduser;
         printer: Printer;
-        blueprintMaster: BlueprintMaster;
+        qualityRequirement: QualityRequirement;
     }
     export class CancelRequest extends Transaction {
         blueprintCopy: BlueprintCopy;

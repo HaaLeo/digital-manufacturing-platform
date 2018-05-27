@@ -74,7 +74,7 @@
 	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
 		<strong>Error:</strong> {{errorMessage}}
 	</div>
-  <h1 id='assetName'>BlueprintMaster</h1>
+  <h1 id='assetName'>QualityRequirement</h1>
   <div class="row">
     <div class="col-md-12 text-right">
       <button (click)="resetForm()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
@@ -86,7 +86,7 @@
       <table class="table table-bordered table-responsive table-striped">
         <thead class="thead">
           <tr class="thead-cols">
-                <th class="info">BlueprintMasterID</th>
+                <th class="info">QualityRequirement</th>
                 <th class="info">TxID</th>
                 <th class="info">Checksum</th>
                 <th class="info">Price</th>
@@ -97,14 +97,14 @@
         </thead>
         <tbody>
           <tr *ngFor="let asset of allAssets">
-                <td>{{asset.blueprintMasterID}}</td>
+                <td>{{asset.qualityRequirementID}}</td>
                 <td class="split">{{asset.txID}}</td>
                 <td class="split">{{asset.checksum}}</td>
                 <td>{{asset.price}}</td>
                 <td>{{asset.metadata}}</td>
                 <td>{{asset.firstName + " " + asset.lastName}}</td>
             <td>
-              <button (click)="setId(asset.blueprintMasterID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#requestAssetModal">Buy</button>
+              <button (click)="setId(asset.qualityRequirementID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#requestAssetModal">Buy</button>
             </td>
           </tr>
         </tbody>

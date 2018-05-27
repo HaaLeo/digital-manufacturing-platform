@@ -8,7 +8,7 @@ import { DataService }     from './data.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { CashComponent } from './Cash/Cash.component';
-import { BlueprintMasterComponent } from './BlueprintMaster/BlueprintMaster.component';
+import { QualityRequirementComponent } from './QualityRequirement/QualityRequirement.component';
 import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component';
 import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
 import { CancelRequestTRComponent } from 'app/CancelRequestTR/CancelRequestTR.component';
@@ -28,7 +28,7 @@ import { Ng2FileDropModule }  from 'ng2-file-drop';
     BuyAssetTRComponent,
     CancelRequestTRComponent,
     CashComponent,
-		BlueprintMasterComponent,
+		QualityRequirementComponent,
     EnduserComponent,
     DesignerComponent,
     PrinterComponent,

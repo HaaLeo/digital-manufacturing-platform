@@ -43,9 +43,9 @@ asset Cash identified by cashID {
     o OwnerEntity ownerEntity
 } 
 
-//This class represents a Master-Blueprint stored on BCDB
-asset BlueprintMaster identified by blueprintMasterID {
-    o String blueprintMasterID
+//This class represents a QualityRequirement stored on BCDB
+asset QualityRequirement identified by qualityRequirementID {
+    o String qualityRequirementID
     o String txID
     o String checksum
     o Double price
@@ -63,7 +63,7 @@ asset BlueprintCopy identified by blueprintCopyID {
     o String otpEncryptedWithPrinterPubKey
     --> Printer printer
     --> Enduser buyer
-    --> BlueprintMaster blueprintMaster
+    --> QualityRequirement qualityRequirement
     --> Stakeholder owner
 }
 
@@ -85,12 +85,12 @@ transaction UploadBlueprintCopy {
 transaction RequestBlueprint {
     --> Enduser buyer
     --> Printer printer
-    --> BlueprintMaster blueprintMaster
+    --> QualityRequirement qualityRequirement
 }
 
 // NOT USED
-transaction AddNewBlueprintMaster {
-    o String blueprintMasterID
+transaction AddNewQualityRequirement{
+    o String qualityRequirementID
     o String assetHash
     o Double price
     o String metadata

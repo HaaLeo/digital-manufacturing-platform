@@ -17,10 +17,10 @@ query selectUtilityPrinter {
       SELECT org.usecase.printer.Printer
 }
 
-query selectBlueprintMaster {
-  description: "Select all BlueprintMaster assets"
+query selectQualityRequirement {
+  description: "Select all QualityRequirement assets"
   statement:
-      SELECT org.usecase.printer.BlueprintMaster
+      SELECT org.usecase.printer.QualityRequirement
 }
 
 query selectBlueprintCopy {

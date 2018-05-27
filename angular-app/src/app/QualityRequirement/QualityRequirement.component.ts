@@ -1,17 +1,18 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { BlueprintMasterService } from './BlueprintMaster.service';
+import { QualityRequirementService } from './QualityRequirement.service';
 import 'rxjs/add/operator/toPromise';
 import { FileuploadComponent }  from '../fileupload/fileupload.component';
+import {QualityRequirement} from "../org.usecase.printer";
 
 
 @Component({
-	selector: 'app-BlueprintMaster',
-	templateUrl: './BlueprintMaster.component.html',
-	styleUrls: ['./BlueprintMaster.component.css'],
-  providers: [BlueprintMasterService]
+	selector: 'app-QualityRequirement',
+	templateUrl: './QualityRequirement.component.html',
+	styleUrls: ['./QualityRequirement.component.css'],
+  providers: [QualityRequirementService]
 })
-export class BlueprintMasterComponent implements OnInit {
+export class QualityRequirementComponent implements OnInit {
 
   @ViewChild(FileuploadComponent)
   private fileUploadComponent: FileuploadComponent;
@@ -32,12 +33,12 @@ export class BlueprintMasterComponent implements OnInit {
 
   private printer;
   private buyer;
-  private blueprintMaster
-  private requestBlueprintMasterObj;
+  private qualityRequirement;
+  private requestQualityRequirementObj;
 
   private current_db_id;
 
-  blueprintMasterID = new FormControl("", Validators.required);
+  qualityRequirementID = new FormControl("", Validators.required);
   txID = new FormControl("", Validators.required);
   checksum = new FormControl("", Validators.required);
   price = new FormControl("", Validators.required);
@@ -46,9 +47,9 @@ export class BlueprintMasterComponent implements OnInit {
   printerID = new FormControl("");
   buyerID = new FormControl("");
         
-  constructor(private serviceBlueprintMaster:BlueprintMasterService, fb: FormBuilder) {
+  constructor(private serviceQualityRequirement:QualityRequirementService, fb: FormBuilder) {
     this.myForm = fb.group({
-          blueprintMasterID:this.blueprintMasterID,
+          qualityRequirementID:this.qualityRequirementID,
           txID:this.txID,
           checksum: this.checksum,
           price:this.price,
@@ -73,7 +74,7 @@ export class BlueprintMasterComponent implements OnInit {
 	//Get all Designers
 	load_OnlyDesigners(): Promise<any> {
 		let tempList = [];
-		return this.serviceBlueprintMaster.getAllDesigners()
+		return this.serviceQualityRequirement.getAllDesigners()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
@@ -101,7 +102,7 @@ export class BlueprintMasterComponent implements OnInit {
   //Get all Printers
 	load_OnlyPrinters(): Promise<any> {
 		let tempList = [];
-		return this.serviceBlueprintMaster.getAllPrinters()
+		return this.serviceQualityRequirement.getAllPrinters()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
@@ -129,7 +130,7 @@ export class BlueprintMasterComponent implements OnInit {
   //Get all Endusers
 	load_OnlyEndusers(): Promise<any> {
 		let tempList = [];
-		return this.serviceBlueprintMaster.getAllEndusers()
+		return this.serviceQualityRequirement.getAllEndusers()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
@@ -154,44 +155,44 @@ export class BlueprintMasterComponent implements OnInit {
 		});
   }
 
-  //Gtet all BlueprintMaster Assets and the Designers associated to them 
+  //Gtet all QualityRequirement Assets and the Designers associated to them
   loadAll(): Promise<any>  {
-    //retrieve all BlueprintMaster
+    //retrieve all QualityRequirement
     let tempList = [];
-    return this.serviceBlueprintMaster.getAll()
+    return this.serviceQualityRequirement.getAll()
     .toPromise()
     .then((result) => {
 			this.errorMessage = null;
-      result.forEach(blueprintMaster => {
-        tempList.push(blueprintMaster);
+      result.forEach(qualityRequirement => {
+        tempList.push(qualityRequirement);
       });     
     })
     .then(() => {
-      for (let blueprintMaster of tempList) {
-        var splitted_ownerID = blueprintMaster.owner.split("#", 2); 
+      for (let qualityRequirement of tempList) {
+        var splitted_ownerID = qualityRequirement.owner.split("#", 2);
         var ownerID = String(splitted_ownerID[1]);
-        this.serviceBlueprintMaster.getDesigner(ownerID)
+        this.serviceQualityRequirement.getDesigner(ownerID)
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
           if(result.firstName){
-            blueprintMaster.firstName = result.firstName;
+              qualityRequirement.firstName = result.firstName;
           }
           if(result.lastName){
-            blueprintMaster.lastName = result.lastName;
+              qualityRequirement.lastName = result.lastName;
           }
         });
       }
       this.allAssets = tempList;
       if (0 < tempList.length) {
-        this.current_db_id = tempList[tempList.length - 1].blueprintMasterID.substr(2)
+        this.current_db_id = tempList[tempList.length - 1].qualityRequirementID.substr(2)
       } else {
         this.current_db_id = 0
       }
     });
   }
 
-  // Method called when a Designer wants to upload a new BlueprintMaster Asset
+  // Method called when a Designer wants to upload a new QualityRequirement Asset
   addAsset(form: any) {
     this.progressMessage = 'Please wait... ';
     let inputPrice = this.price.value;
@@ -202,8 +203,8 @@ export class BlueprintMasterComponent implements OnInit {
     this.current_db_id++;
     let currentChecksum = this.fileUploadComponent.getChecksum();
     this.asset = {
-      $class: "org.usecase.printer.BlueprintMaster",
-          "blueprintMasterID":"B_" + this.current_db_id,
+      $class: "org.usecase.printer.QualityRequirement",
+          "qualityRequirementID":"B_" + this.current_db_id,
           "txID":txId,
           "checksum": currentChecksum,
           "price":this.price.value,
@@ -211,7 +212,7 @@ export class BlueprintMasterComponent implements OnInit {
           "owner":this.owner.value
     };
     this.myForm.setValue({
-          "blueprintMasterID":null,
+          "qualityRequirementID":null,
           "txID":null,
           "checksum":null,
           "price":null,
@@ -220,14 +221,14 @@ export class BlueprintMasterComponent implements OnInit {
           "buyerID":null,
           "printerID":null
     });
-    return this.serviceBlueprintMaster.addAsset(this.asset)
+    return this.serviceQualityRequirement.addAsset(this.asset)
     .toPromise()
     .then(() => {
 			this.errorMessage = null;
       this.progressMessage = null;
       this.successMessage = 'Blueprint added successfully. Refreshing page...';
       this.myForm.setValue({
-          "blueprintMasterID":null,
+          "qualityRequirementID":null,
           "txID":null,
           "checksum":null,
           "price":null,
@@ -251,7 +252,7 @@ export class BlueprintMasterComponent implements OnInit {
     });
   }
 
-  // Method called when a Enduser wants to Buy a Copy of the BlueprintMaster Asset
+  // Method called when a Enduser wants to Buy a Copy of the QualityRequirement Asset
   requestAsset(form: any): Promise<any> {
     this.progressMessage = 'Please wait... ';
      //Get selected Printer
@@ -266,20 +267,20 @@ export class BlueprintMasterComponent implements OnInit {
         this.buyer = buyer;
       }     
     }
-    //get selected BlueprintMaster
-    for (let blueprintMaster of this.allAssets) {
-      if(blueprintMaster.blueprintMasterID == this.currentId){
-        this.blueprintMaster = blueprintMaster;
+    //get selected QualityRequirement
+    for (let qualityRequirement of this.allAssets) {
+      if(qualityRequirement.qualityRequirementID == this.currentId){
+        this.qualityRequirement = qualityRequirement;
       }     
     }
     //transaction object
-    this.requestBlueprintMasterObj = {
+    this.requestQualityRequirementObj = {
       $class: "org.usecase.printer.RequestBlueprint",
       "buyer": this.buyerID.value,
       "printer": this.printerID.value,
-      "blueprintMaster": this.currentId
+      "qualityRequirement": this.currentId
     };
-    return this.serviceBlueprintMaster.requestBlueprint(this.requestBlueprintMasterObj)
+    return this.serviceQualityRequirement.requestBlueprint(this.requestQualityRequirementObj)
     .toPromise()
     .then((result) => {
       this.errorMessage = null;
@@ -313,12 +314,12 @@ export class BlueprintMasterComponent implements OnInit {
 
   //Retrieve a BlueprintCopy with a certain id and copy its values to the Form Object
   getForm(id: any): Promise<any>{
-    return this.serviceBlueprintMaster.getAsset(id)
+    return this.serviceQualityRequirement.getAsset(id)
     .toPromise()
     .then((result) => {
 			this.errorMessage = null;
       let formObject = {
-            "blueprintMasterID":null,
+            "qualityRequirementID":null,
             "txID":null,
             "checksum":null,
             "price":null,
@@ -327,10 +328,10 @@ export class BlueprintMasterComponent implements OnInit {
             "buyerID":null,
             "owner":null 
       };
-        if(result.blueprintMasterID){
-            formObject.blueprintMasterID = result.blueprintMasterID;
+        if(result.qualityRequirementID){
+            formObject.qualityRequirementID = result.qualityRequirementID;
         }else{
-          formObject.blueprintMasterID = null;
+          formObject.qualityRequirementID = null;
         }
       
         if(result.txID){
@@ -384,7 +385,7 @@ export class BlueprintMasterComponent implements OnInit {
   // Reset all Value incurrently saved in the Form Object
   resetForm(): void{
     this.myForm.setValue({
-          "blueprintMasterID":null,
+          "qualityRequirementID":null,
           "txID":null,
           "checksum":null,
           "price":null,

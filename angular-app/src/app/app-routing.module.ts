@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 
 import { CashComponent } from './Cash/Cash.component';
-import { BlueprintMasterComponent } from './BlueprintMaster/BlueprintMaster.component';
+import { QualityRequirementComponent } from './QualityRequirement/QualityRequirement.component';
 import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component';
 
 import { BuyAssetTRComponent } from './BuyAssetTR/BuyAssetTR.component';
@@ -17,7 +17,7 @@ const routes: Routes = [
     // { path: 'transaction', component: TransactionComponent },
     {path: '', component: HomeComponent},
 		{ path: 'Cash', component: CashComponent},
-		{ path: 'BlueprintMaster', component: BlueprintMasterComponent},
+		{ path: 'QualityRequirement', component: QualityRequirementComponent},
 		{ path: 'BlueprintCopy', component: BlueprintCopyComponent},
     { path: 'BuyAssetTR', component: BuyAssetTRComponent },
     { path: 'CancelRequestTR', component: CancelRequestTRComponent },

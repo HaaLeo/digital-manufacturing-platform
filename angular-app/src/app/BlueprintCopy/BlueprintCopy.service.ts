@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { BlueprintCopy, Designer, Printer, Enduser, BlueprintMaster, CancelRequest, UploadBlueprintCopy} from '../org.usecase.printer';
+import { BlueprintCopy, Designer, Printer, Enduser, QualityRequirement, CancelRequest, UploadBlueprintCopy} from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -13,11 +13,11 @@ export class BlueprintCopyService {
     private DESIGNER: string = 'org.usecase.printer.Designer';
     private PRINTER: string = 'org.usecase.printer.Printer';
     private ENDUSER: string = 'org.usecase.printer.Enduser';
-    private BLUEPRINTMASTER: string = 'org.usecase.printer.BlueprintMaster';
+    private QUALITYREQUIREMENT: string = 'org.usecase.printer.QualityRequirement';
     private CANCELREQUEST: string = 'org.usecase.printer.CancelRequest';
     private UPDATEREQUEST: string = 'org.usecase.printer.UploadBlueprintCopy';
 
-    constructor(private dataService: DataService<BlueprintCopy>, private designerService: DataService<Designer>, private uploadBlueprintCopyService: DataService<UploadBlueprintCopy>, private cancelRequestService: DataService<CancelRequest>,  private blueprintMasterService: DataService<BlueprintMaster>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
+    constructor(private dataService: DataService<BlueprintCopy>, private designerService: DataService<Designer>, private uploadBlueprintCopyService: DataService<UploadBlueprintCopy>, private cancelRequestService: DataService<CancelRequest>,  private qualityRequirementService: DataService<QualityRequirement>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
     };
 
     public getAll(): Observable<BlueprintCopy[]> {
@@ -68,11 +68,11 @@ export class BlueprintCopyService {
       return this.designerService.getAll(this.DESIGNER);
     }
 
-    public getAllBlueprintMasters(): Observable<BlueprintMaster[]> {
-      return this.blueprintMasterService.getAll(this.BLUEPRINTMASTER);
+    public getAllQualityRequirements(): Observable<QualityRequirement[]> {
+      return this.qualityRequirementService.getAll(this.QUALITYREQUIREMENT);
     }
 
-    public getBlueprintMaster(id: any): Observable<BlueprintMaster> {
-      return this.blueprintMasterService.getSingle(this.BLUEPRINTMASTER, id);
+    public getQualityRequirement(id: any): Observable<QualityRequirement> {
+      return this.qualityRequirementService.getSingle(this.QUALITYREQUIREMENT, id);
     }
 }

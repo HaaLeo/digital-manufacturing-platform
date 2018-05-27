@@ -7,28 +7,28 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Configuration } from '../configuration';
 import { DataService } from '../data.service';
-import { BlueprintMasterComponent } from './BlueprintMaster.component';
-import {BlueprintMasterService} from './BlueprintMaster.service';
-describe('BlueprintMasterComponent', () => {
-  let component: BlueprintMasterComponent;
-  let fixture: ComponentFixture<BlueprintMasterComponent>;
+import { QualityRequirementComponent } from './QualityRequirement.component';
+import { QualityRequirementService } from './QualityRequirement.service';
+describe('QualityRequirementComponent', () => {
+  let component: QualityRequirementComponent;
+  let fixture: ComponentFixture<QualityRequirementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BlueprintMasterComponent ],
+      declarations: [ QualityRequirementComponent ],
 imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule
   ],
-providers: [BlueprintMasterService,DataService,Configuration]
+providers: [QualityRequirementService,DataService,Configuration]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BlueprintMasterComponent);
+    fixture = TestBed.createComponent(QualityRequirementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
