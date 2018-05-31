@@ -17,6 +17,9 @@ export class PrinterService {
 	
 	private PRINTER: string = 'org.usecase.printer.Printer';  
 
+    constructor(private printerService: DataService<Printer>) {
+    };
+
     //Printer functions
     public getAllPrinters(): Observable<Printer[]> {
         return this.printerService.getAll(this.PRINTER);
