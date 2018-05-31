@@ -74,7 +74,7 @@ class eos.usecase.printer.UploadQualityReport << (T,yellow) >> {
 eos.usecase.printer.UploadQualityReport --|> eos.hyperledger.composer.system.Transaction
 class eos.usecase.printer.RequestPrintJob << (T,yellow) >> {
    + Customer buyer
-   + Printer printer
+   + BluePrint bluePrint
    + QualityRequirement qualityRequirement
 }
 eos.usecase.printer.RequestPrintJob --|> eos.hyperledger.composer.system.Transaction
