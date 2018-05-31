@@ -3,9 +3,9 @@ actor Customer
 participant "Digital Manufacturing Platform" as DMP
 database BigchainDB
 
-Customer -> DMP: RequestPrintJob(QualityRequirement, Printer)
+Customer -> DMP: RequestPrintJob()
 activate DMP
-note left: Triggered via UI
+note right: Triggered via UI
 group Chaincode
     DMP -> BigchainDB: Store Printing Job
     deactivate DMP

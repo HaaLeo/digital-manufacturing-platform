@@ -69,6 +69,7 @@ class eos.usecase.printer.UploadQualityReport << (T,yellow) >> {
    + String txID
    + String checksum
    + QualityReport qualityReport
+   + Printer owner
 }
 eos.usecase.printer.UploadQualityReport --|> eos.hyperledger.composer.system.Transaction
 class eos.usecase.printer.RequestPrintJob << (T,yellow) >> {
@@ -80,10 +81,16 @@ eos.usecase.printer.RequestPrintJob --|> eos.hyperledger.composer.system.Transac
 class eos.usecase.printer.AddNewQualityRequirement << (T,yellow) >> {
    + String qualityRequirementID
    + String assetHash
-   + Double price
    + String metadata
    + Stakeholder owner
 }
 eos.usecase.printer.AddNewQualityRequirement --|> eos.hyperledger.composer.system.Transaction
-right footer DATE
+class eos.usecase.printer.AddNewBluePrint << (T,yellow) >> {
+   + String bluePrintID
+   + String assetHash
+   + String metadata
+   + Customer owner
+}
+eos.usecase.printer.AddNewBluePrint --|> eos.hyperledger.composer.system.Transaction
+'right footer DATE
 @enduml
