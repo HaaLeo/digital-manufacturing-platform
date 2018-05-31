@@ -31,14 +31,14 @@ const security = 1;
 const tree0 = new MerkleTree(seed, start, count, security);
 const tree1 = new MerkleTree(seed, start + count, count, security);
 let index = 0;
-console.log('butter')
+console.log('butter');
 // Get the trytes of the MAM transactions
 const mam = MAM.create({
     message: iota.utils.toTrytes(message),
     merkleTree: tree0,
     index: index,
     nextRoot: tree1.root.hash.toString(),
-    channelKey: channelKey,
+    channelKey: channelKey
 });
 
 

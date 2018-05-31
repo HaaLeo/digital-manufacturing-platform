@@ -1,7 +1,7 @@
 import encryptor from './encryptor';
 
 
-export default async function postToDB(dataPayload, price, description, ownerID) {
+export default async function postToDB(dataPayload, pressure, peakTemperature, description, ownerID) {
 
 const driver = require('bigchaindb-driver')
 

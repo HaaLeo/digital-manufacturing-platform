@@ -57,8 +57,8 @@ export class FileuploadComponent {
  getChecksum() {
    return this.checksum;
  }
-  async postBCDB(price, description, ownerID) {
-    return await masterAssetBigchain(this.acceptedFile, price, description, ownerID)
+  async postBCDB(pressure, peakTemperature, description, ownerID) {
+    return await masterAssetBigchain(this.acceptedFile, pressure, peakTemperature, description, ownerID)
   }
 
   // File being dragged has been dropped and has been rejected

@@ -19,10 +19,6 @@
                 <label for="lastName">Last Name</label>  
                   <input formControlName="lastName" type="text" class="form-control">          
               </div>
-              <div class="form-group text-left">
-                <label for="contactInformation">Contact Info</label>  
-                  <input formControlName="contactInformation" type="text" class="form-control">          
-              </div>
           </div>
           <div class="modal-footer">
             <button (click)="addCustomer(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
@@ -53,10 +49,6 @@
               <div class="form-group text-left">
                 <label for="lastName">Last Name</label>
                     <textarea [ngModel]="lastName" formControlName="lastName" class="form-control" rows="3"></textarea>
-              </div>
-              <div class="form-group text-left">
-                <label for="contactInformation">Contact Info</label>
-                    <textarea [ngModel]="contactInformation" formControlName="contactInformation" class="form-control" rows="3"></textarea>
               </div>
           </div>
           <div class="modal-footer">

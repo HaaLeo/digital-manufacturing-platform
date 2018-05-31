@@ -20,7 +20,6 @@ import {Event} from './org.hyperledger.composer.system';
       qualityRequirementID: string;
       txID: string;
       checksum: string;
-      price: number;
       metadata: string;
       peakTemperature: number;
       pressure: number;

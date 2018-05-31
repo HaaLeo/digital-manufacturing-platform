@@ -8,9 +8,13 @@
       <form [formGroup]="myForm">
         <div class="modal-body">
               <div class="form-group text-left">
-                <label for="price">price</label>
-                  <input formControlName="price" type="number" step='any' class="form-control">
+                <label for="pressure">Pressure</label>
+                  <input formControlName="pressure" type="number" step='any' class="form-control">
               </div>
+	        <div class="form-group text-left">
+	        <label for="peakTemperature">Peak Temperature</label>
+	        <input formControlName="peakTemperature" type="number" step='any' class="form-control">
+        </div>
               <div class="form-group text-left">
                 <label for="metadata">Description</label>
                   <textarea formControlName="metadata" type="text" class="form-control">
@@ -22,7 +26,6 @@
                   <option *ngFor="let customer of allCustomers" value="{{customer.stakeholderID}}">{{customer.firstName + " " + customer.lastName}}</option>
                 </select>
               </div>
-              <fileupload></fileupload>
         </div>
         <div class="modal-footer">
           <button (click)="addAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
@@ -83,7 +86,6 @@
                 <th class="info">QualityRequirement</th>
                 <th class="info">TxID</th>
                 <th class="info">Checksum</th>
-                <th class="info">Price</th>
                 <th class="info">Description</th>
                 <th class="info">Owner</th>
                 <th class="info">Actions</th>
@@ -94,7 +96,6 @@
                 <td>{{asset.qualityRequirementID}}</td>
                 <td class="split">{{asset.txID}}</td>
                 <td class="split">{{asset.checksum}}</td>
-                <td>{{asset.price}}</td>
                 <td>{{asset.metadata}}</td>
                 <td>{{asset.firstName + " " + asset.lastName}}</td>
             <td>

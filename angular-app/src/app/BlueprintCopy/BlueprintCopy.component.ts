@@ -249,7 +249,7 @@ export class BlueprintCopyComponent implements OnInit {
   // Method which is called when Customer uploads the Blueprint Copy File
   uploadCopyAsset(form: any) {
     this.progressMessage = 'Please wait... ';
-    this.fileUploadComponent.postBCDB("","","")
+    this.fileUploadComponent.postBCDB("","","", "")
     .then(txId => {
     let currentChecksum = this.fileUploadComponent.getChecksum();
     this.asset = {

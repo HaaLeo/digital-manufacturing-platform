@@ -38,8 +38,9 @@ export class QualityRequirementComponent implements OnInit {
   qualityRequirementID = new FormControl("", Validators.required);
   txID = new FormControl("", Validators.required);
   checksum = new FormControl("", Validators.required);
-  price = new FormControl("", Validators.required);
-  metadata = new FormControl("", Validators.required);
+  pressure = new FormControl("", Validators.required);
+    peakTemperature = new FormControl("", Validators.required);
+    metadata = new FormControl("", Validators.required);
   owner = new FormControl("", Validators.required);
   printerID = new FormControl("");
 
@@ -48,7 +49,8 @@ export class QualityRequirementComponent implements OnInit {
           qualityRequirementID:this.qualityRequirementID,
           txID:this.txID,
           checksum: this.checksum,
-          price:this.price,
+        pressure:this.pressure,
+        peakTemperature: this.peakTemperature,
           metadata:this.metadata,
           owner:this.owner,
           printerID:this.printerID,
@@ -160,10 +162,11 @@ export class QualityRequirementComponent implements OnInit {
   // Method called when a Customer wants to upload a new QualityRequirement Asset
   addAsset(form: any) {
     this.progressMessage = 'Please wait... ';
-    let inputPrice = this.price.value;
+    let inputPressure = this.pressure.value;
+    let inputPeakTemperature = this.peakTemperature.value;
     let inputMetadata = this.metadata.value;
     let owner = this.owner.value;
-    this.fileUploadComponent.postBCDB(inputPrice, inputMetadata, owner)
+    this.fileUploadComponent.postBCDB(inputPressure, inputPeakTemperature, inputMetadata, owner)
     .then(txId => {
     this.current_db_id++;
     let currentChecksum = this.fileUploadComponent.getChecksum();
@@ -172,16 +175,18 @@ export class QualityRequirementComponent implements OnInit {
           "qualityRequirementID":"B_" + this.current_db_id,
           "txID":txId,
           "checksum": currentChecksum,
-          "price":this.price.value,
-          "metadata":this.metadata.value,
+          "pressure":this.pressure.value,
+        "peakTemperature":this.peakTemperature.value,
+        "metadata":this.metadata.value,
           "owner":this.owner.value
     };
     this.myForm.setValue({
           "qualityRequirementID":null,
           "txID":null,
           "checksum":null,
-          "price":null,
-          "metadata":null,
+          "pressure":null,
+        "peakTemperature": null,
+        "metadata":null,
           "owner":null,
           "printerID":null
     });
@@ -195,7 +200,8 @@ export class QualityRequirementComponent implements OnInit {
           "qualityRequirementID":null,
           "txID":null,
           "checksum":null,
-          "price":null,
+          "pressure":null,
+          "peakTemperature": null,
           "metadata":null,
           "owner":null,
           "printerID":null
@@ -278,7 +284,8 @@ export class QualityRequirementComponent implements OnInit {
             "qualityRequirementID":null,
             "txID":null,
             "checksum":null,
-            "price":null,
+            "pressure":null,
+            "peakTemperature": null,
             "metadata":null,
             "printerID":null,
             "owner":null
@@ -301,12 +308,18 @@ export class QualityRequirementComponent implements OnInit {
           formObject.checksum = null;
         }
 
-        if(result.price){
-            formObject.price = result.price;
+        if(result.pressure){
+            formObject.pressure = result.pressure;
         }else{
-          formObject.price = null;
+          formObject.pressure = null;
         }
-      
+
+        if(result.peakTemperature){
+            formObject.peakTemperature = result.peakTemperature;
+        }else{
+            formObject.peakTemperature = null;
+        }
+
         if(result.metadata){
             formObject.metadata = result.metadata;
         }else{
@@ -343,7 +356,8 @@ export class QualityRequirementComponent implements OnInit {
           "qualityRequirementID":null,
           "txID":null,
           "checksum":null,
-          "price":null,
+          "pressure":null,
+            "peakTemperature":null,
           "metadata":null,
           "owner":null,
           "printerID":null

@@ -25,10 +25,9 @@ asset QualityRequirement identified by qualityRequirementID {
     o String qualityRequirementID
     o String txID
     o String checksum
-    o Double price
     o String metadata
     o Double peakTemperature
-    o Double Pressure
+    o Double pressure
     --> Customer owner
 }
 
@@ -69,7 +68,6 @@ transaction RequestBlueprint {
 transaction AddNewQualityRequirement{
     o String qualityRequirementID
     o String assetHash
-    o Double price
     o String metadata
     o Double peakTemperature
     o Double pressure
