@@ -1,0 +1,89 @@
+@startuml composer
+'** Auto generated content, any changes may be lost **'
+!define DATE %date[EEE, MMM d, ''yy 'at' HH:mm]%
+skinparam class {
+  Font {
+    Color Black
+    Style Plain
+    Size 16
+  }
+}
+skinparam title {
+  BackgroundColor LightYellow
+  BorderThickness 0.5
+  BorderRoundCorner 6
+  FontColor Black
+  FontSize 18
+}
+title
+Business Network Definition
+end title
+class org.usecase.printer.Stakeholder << (P,lightblue) >> {
+   + String stakeholderID
+   + String pubKey
+}
+org.usecase.printer.Stakeholder --|> org.hyperledger.composer.system.Participant
+class org.usecase.printer.Customer << (P,lightblue) >> {
+   + String firstName
+   + String lastName
+   + String contactInformation
+   + Cash cash
+}
+org.usecase.printer.Customer --|> org.usecase.printer.Stakeholder
+class org.usecase.printer.Printer << (P,lightblue) >> {
+   + String name
+}
+org.usecase.printer.Printer --|> org.usecase.printer.Stakeholder
+class org.usecase.printer.OwnerEntity << (E,grey) >> {
+   + Customer
+   + Printer
+}
+class org.usecase.printer.Cash << (A,green) >> {
+   + String cashID
+   + String currency
+   + Double value
+   + String ownerID
+   + OwnerEntity ownerEntity
+}
+org.usecase.printer.Cash --|> org.hyperledger.composer.system.Asset
+class org.usecase.printer.QualityRequirement << (A,green) >> {
+   + String qualityRequirementID
+   + String txID
+   + String checksum
+   + String metadata
+   + Stakeholder owner
+}
+org.usecase.printer.QualityRequirement --|> org.hyperledger.composer.system.Asset
+class org.usecase.printer.QualityReport << (A,green) >> {
+   + String qualityReportCopyID
+   + String txID
+   + String checksum
+   + Boolean requirementFulfilled
+   + String otpEncryptedWithPrinterPubKey
+   + Customer buyer
+   + QualityRequirement qualityRequirement
+   + Printer owner
+}
+org.usecase.printer.QualityReport --|> org.hyperledger.composer.system.Asset
+class org.usecase.printer.UploadQualityReport << (T,yellow) >> {
+   + String txID
+   + String checksum
+   + QualityReport qualityReport
+}
+org.usecase.printer.UploadQualityReport --|> org.hyperledger.composer.system.Transaction
+class org.usecase.printer.RequestPrintJob << (T,yellow) >> {
+   + Customer buyer
+   + Printer printer
+   + QualityRequirement qualityRequirement
+}
+org.usecase.printer.RequestPrintJob --|> org.hyperledger.composer.system.Transaction
+class org.usecase.printer.AddNewQualityRequirement << (T,yellow) >> {
+   + String qualityRequirementID
+   + String assetHash
+   + Double price
+   + String metadata
+   + Designer owner
+}
+org.usecase.printer.AddNewQualityRequirement --|> org.hyperledger.composer.system.Transaction
+right footer DATE
+@enduml
