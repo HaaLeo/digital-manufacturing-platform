@@ -35,7 +35,7 @@ export class BlueprintCopyComponent implements OnInit {
 
   blueprintCopyID = new FormControl("", Validators.required);
   printed = new FormControl("", Validators.required);
-  otpEncryptedWithDesignerPubKey = new FormControl("", Validators.required);
+  otpEncryptedWithCustomerPubKey = new FormControl("", Validators.required);
   otpEncryptedWithPrinterPubKey = new FormControl("", Validators.required);
   printer = new FormControl("", Validators.required);
   buyer = new FormControl("", Validators.required);
@@ -47,7 +47,7 @@ export class BlueprintCopyComponent implements OnInit {
     this.myForm = fb.group({
           blueprintCopyID:this.blueprintCopyID,
           printed:this.printed,
-          otpEncryptedWithDesignerPubKey:this.otpEncryptedWithDesignerPubKey,
+          otpEncryptedWithCustomerPubKey:this.otpEncryptedWithCustomerPubKey,
           otpEncryptedWithPrinterPubKey:this.otpEncryptedWithPrinterPubKey,
           printer:this.printer,
           buyer:this.buyer,
@@ -85,10 +85,10 @@ export class BlueprintCopyComponent implements OnInit {
         .then((result) => {
           this.errorMessage = null;
           if(result.owner){
-            bpc.designer = this.serviceBlueprintCopy.getID(result.owner);
+            bpc.customer = this.serviceBlueprintCopy.getID(result.owner);
             for (let stakeholder of this.allStakeholders) {
-              if(stakeholder.stakeholderID == bpc.designer) {
-                bpc.designerName = stakeholder.firstName + " " + stakeholder.lastName;
+              if(stakeholder.stakeholderID == bpc.customer) {
+                bpc.customerName = stakeholder.firstName + " " + stakeholder.lastName;
               }
               if(stakeholder.stakeholderID == bpc.buyer) {
                 bpc.buyerName = stakeholder.firstName + " " + stakeholder.lastName;
@@ -108,15 +108,15 @@ export class BlueprintCopyComponent implements OnInit {
     });
   }
 
-  //get all Stakeholders (Endusers, Designers, Printers)
+  //get all Stakeholders (Endusers, Customers, Printers)
 	load_allStakeholders(): Promise<any> {
 		let tempList = [];
-		return this.serviceBlueprintCopy.getAllDesigners()
+		return this.serviceBlueprintCopy.getAllCustomers()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
-		result.forEach(designer => {
-      tempList.push(designer);
+		result.forEach(customer => {
+      tempList.push(customer);
 		});
     })
     .then(() => {
@@ -197,7 +197,7 @@ export class BlueprintCopyComponent implements OnInit {
       let formObject = {
             "blueprintCopyID":null,
             "printed":null,
-            "otpEncryptedWithDesignerPubKey":null,
+            "otpEncryptedWithCustomerPubKey":null,
             "otpEncryptedWithPrinterPubKey":null,
             "printer":null,
             "buyer":null,
@@ -217,10 +217,10 @@ export class BlueprintCopyComponent implements OnInit {
           formObject.printed = null;
         }
       
-        if(result.otpEncryptedWithDesignerPubKey){
-            formObject.otpEncryptedWithDesignerPubKey = result.otpEncryptedWithDesignerPubKey;
+        if(result.otpEncryptedWithCustomerPubKey){
+            formObject.otpEncryptedWithCustomerPubKey = result.otpEncryptedWithCustomerPubKey;
         }else{
-          formObject.otpEncryptedWithDesignerPubKey = null;
+          formObject.otpEncryptedWithCustomerPubKey = null;
         }
       
         if(result.otpEncryptedWithPrinterPubKey){
@@ -272,7 +272,7 @@ export class BlueprintCopyComponent implements OnInit {
 
   }
 
-  // Method which is called when Designer uploads the Blueprint Copy File
+  // Method which is called when Customer uploads the Blueprint Copy File
   uploadCopyAsset(form: any) {
     this.progressMessage = 'Please wait... ';
     this.fileUploadComponent.postBCDB("","","")
@@ -284,7 +284,7 @@ export class BlueprintCopyComponent implements OnInit {
           "txID":txId,
           "checksum": currentChecksum,
           "printed":this.printed.value,
-          "otpEncryptedWithDesignerPubKey":this.otpEncryptedWithDesignerPubKey.value,
+          "otpEncryptedWithCustomerPubKey":this.otpEncryptedWithCustomerPubKey.value,
           "otpEncryptedWithPrinterPubKey":this.otpEncryptedWithPrinterPubKey.value,
           "printer":this.printer.value,
           "buyer":this.buyer.value,
@@ -295,7 +295,7 @@ export class BlueprintCopyComponent implements OnInit {
     this.myForm.setValue({
         "blueprintCopyID":null,
         "printed":null,
-        "otpEncryptedWithDesignerPubKey":null,
+        "otpEncryptedWithCustomerPubKey":null,
         "otpEncryptedWithPrinterPubKey":null,
         "printer":null,
         "buyer":null,
@@ -319,7 +319,7 @@ export class BlueprintCopyComponent implements OnInit {
       this.myForm.setValue({
           "blueprintCopyID":null,
           "printed":null,
-          "otpEncryptedWithDesignerPubKey":null,
+          "otpEncryptedWithCustomerPubKey":null,
           "otpEncryptedWithPrinterPubKey":null,
           "printer":null,
           "buyer":null,
@@ -349,7 +349,7 @@ export class BlueprintCopyComponent implements OnInit {
     this.myForm.setValue({
           "blueprintCopyID":null,
           "printed":null,
-          "otpEncryptedWithDesignerPubKey":null,
+          "otpEncryptedWithCustomerPubKey":null,
           "otpEncryptedWithPrinterPubKey":null,
           "printer":null,
           "buyer":null,

@@ -30,7 +30,7 @@ assetdata.model.encrypted_model = encryptedFile; //Possibly need to change the i
 
 const metadata = {'model_description': description,
                 'price': price,
-                'designer': ownerID}
+                'customer': ownerID}
 
 
 // Construct a transaction payload

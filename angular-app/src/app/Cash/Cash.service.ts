@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { Cash, Designer, Enduser } from '../org.usecase.printer';
+import { Cash, Customer, Enduser } from '../org.usecase.printer';
 import 'rxjs/Rx';
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
 
@@ -9,10 +9,10 @@ import { EnduserComponent } from 'app/Enduser/Enduser.component';
 @Injectable()
 export class CashService {
     private CASH: string = 'org.usecase.printer.Cash';
-    private DESIGNER: string = 'org.usecase.printer.Designer';
+    private Customer: string = 'org.usecase.printer.Customer';
     private ENDUSER: string = 'org.usecase.printer.Enduser';
 
-    constructor(private dataService: DataService<Cash>, private designerService: DataService<Designer>, private enduserService: DataService<Enduser>) {
+    constructor(private dataService: DataService<Cash>, private customerService: DataService<Customer>, private enduserService: DataService<Enduser>) {
     };
 
     public getAll(): Observable<Cash[]> {

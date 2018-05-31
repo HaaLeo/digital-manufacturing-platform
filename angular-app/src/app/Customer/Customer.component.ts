@@ -1,19 +1,19 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { DesignerService } from './Designer.service';
+import { CustomerService } from './Customer.service';
 import 'rxjs/add/operator/toPromise';
 
 @Component({
-	selector: 'app-Designer',
-	templateUrl: './Designer.component.html',
-	styleUrls: ['./Designer.component.css'],
-  	providers: [DesignerService]
+	selector: 'app-Customer',
+	templateUrl: './Customer.component.html',
+	styleUrls: ['./Customer.component.css'],
+  	providers: [CustomerService]
 })
-export class DesignerComponent {
+export class CustomerComponent {
   myForm: FormGroup;
 
-  private allDesigners;
-  private designer;
+  private allCustomers;
+  private customer;
   private currentId;
   private errorMessage;
   private progressMessage;
@@ -26,19 +26,15 @@ export class DesignerComponent {
     pubKey = new FormControl("", Validators.required);
     firstName = new FormControl("", Validators.required);
     lastName = new FormControl("", Validators.required);
-    contactInformation = new FormControl("", Validators.required);
-    cashValue = new FormControl("", Validators.required);
-    cashCurrency = new FormControl("", Validators.required);
+    // TODO add QualityRequirement and Blueprint Master here
 
-  constructor(private serviceDesigner:DesignerService, fb: FormBuilder) {
+  constructor(private serviceCustomer:CustomerService, fb: FormBuilder) {
     this.myForm = fb.group({
           stakeholderID:this.stakeholderID,
           pubKey:this.pubKey,
           firstName:this.firstName,      
           lastName:this.lastName,
-          contactInformation:this.contactInformation,
-          cashValue:this.cashValue,
-          cashCurrency:this.cashCurrency
+        // TODO here as well.
     });
   };
 
@@ -51,30 +47,28 @@ export class DesignerComponent {
           "stakeholderID":null, 
           "pubKey":null,
           "firstName":null,       
-          "lastName":null,
-          "contactInformation":null,
-          "cashValue":null,
-          "cashCurrency":null
+          "lastName":null
+        // TODO here to!
       });
   }
 
-  //Update name of Designer
-  updateDesigner(form: any): Promise<any> {
+  //Update name of Customer
+  updateCustomer(form: any): Promise<any> {
     this.progressMessage = 'Please wait... ';
-    this.designer = {
-      $class: "org.usecase.printer.Designer",  
+    this.customer = {
+      $class: "org.usecase.printer.Customer",
             "pubKey":this.pubKey.value,        
             "firstName":this.firstName.value,          
             "lastName":this.lastName.value,
-            "contactInformation":this.contactInformation.value,
-            "cash": "resource:org.usecase.printer.Cash#CA_" + form.get("stakeholderID").value,
+        // TODO
+            // "cash": "resource:org.usecase.printer.Cash#CA_" + form.get("stakeholderID").value,
     };
-    return this.serviceDesigner.updateDesigner(form.get("stakeholderID").value,this.designer)
+    return this.serviceCustomer.updateCustomer(form.get("stakeholderID").value,this.customer)
 		.toPromise()
 		.then(() => {
             this.errorMessage = null;
             this.progressMessage = null;
-            this.successMessage = 'Designer updated successfully. Refreshing page...'
+            this.successMessage = 'Customer updated successfully. Refreshing page...'
             location.reload();
 		})
 		.catch((error) => {
@@ -93,20 +87,21 @@ export class DesignerComponent {
     });
   }
 
-  //delete designers and the cash assets associated to it
-  deleteDesigner(): Promise<any> {
+  //delete customers and the cash assets associated to it
+  deleteCustomer(): Promise<any> {
     this.progressMessage = 'Please wait... ';
-    return this.serviceDesigner.deleteDesigner(this.currentId)
+    return this.serviceCustomer.deleteCustomer(this.currentId)
 		.toPromise()
 		.then(() => {
       this.errorMessage = null;
       this.progressMessage = null;
-      this.successMessage = 'Designer deleted successfully. Refreshing page...'
-      this.serviceDesigner.deleteCash("CA_"+this.currentId)
-        .toPromise()
-        .then(() => {
-            location.reload();
-        });            
+      this.successMessage = 'Customer deleted successfully. Refreshing page...'
+      // TODO delete QualityRequirement and blueprint
+      // this.serviceCustomer.deleteCash("CA_"+this.currentId)
+      //  .toPromise()
+      //  .then(() => {
+      //      location.reload();
+      //  });
 		})
 		.catch((error) => {
             if(error == 'Server error'){
@@ -129,7 +124,7 @@ export class DesignerComponent {
   }
 
   getForm(id: any): Promise<any>{
-    return this.serviceDesigner.getDesigner(id)
+    return this.serviceCustomer.getCustomer(id)
     .toPromise()
     .then((result) => {
 			this.errorMessage = null;
@@ -137,10 +132,7 @@ export class DesignerComponent {
             "stakeholderID":null,          
             "pubKey":null,  
             "firstName":null,          
-            "lastName":null,
-            "contactInformation":null,               
-            "cashValue":null, 
-            "cashCurrency":null      
+            "lastName":null
       };
         if(result.stakeholderID){
           formObject.stakeholderID = result.stakeholderID;
@@ -166,12 +158,6 @@ export class DesignerComponent {
           formObject.lastName = null;
         }
 
-        if(result.contactInformation){
-            formObject.contactInformation = result.contactInformation;
-          }else{
-            formObject.contactInformation = null;
-          }  
-
       this.myForm.setValue(formObject);
 
     })
@@ -192,55 +178,41 @@ export class DesignerComponent {
 
   }
 
-  //load all Designers and the cash assets associated to them 
+  // load all Customers and the cash assets associated to them
   loadAll(): Promise<any>  {
-    //retrieve all designers
-    let designerList = [];
-    return this.serviceDesigner.getAllDesigners()
+    //retrieve all customers
+    let customerList = [];
+    return this.serviceCustomer.getAllCustomers()
     .toPromise()
     .then((result) => {
-			this.errorMessage = null;
-      result.forEach(designer => {
-        designerList.push(designer);
-      });     
+        //this.errorMessage = null;
+      result.forEach(customer => {
+        customerList.push(customer);
+      });
     })
     .then(() => {
-      for (let designer of designerList) {
-        var splitted_cashID = designer.cash.split("#", 2); 
-        var cashID = String(splitted_cashID[1]);
-        this.serviceDesigner.getCash(cashID)
-        .toPromise()
-        .then((result) => {
-          this.errorMessage = null;
-          designer.cashValue = result.value;
-          designer.cashCurrency = result.currency;
-        });
-      }
-      this.allDesigners = designerList;
-      if (0 < designerList.length) {
-        this.current_db_id = designerList[designerList.length - 1].stakeholderID.substr(2)
+      this.allCustomers = customerList;
+      if (0 < customerList.length) {
+        this.current_db_id = customerList[customerList.length - 1].stakeholderID.substr(2)
       } else {
         this.current_db_id = 0
       }
     });
   }
 
-  //add Designer participant
-  addDesigner(form: any): Promise<any> {
+  //add Customer participant
+  addCustomer(form: any): Promise<any> {
     this.progressMessage = 'Please wait... ';
-    return this.createAssetsDesigner()
+    return this.createAssetsCustomer()
       .then(() => {           
         this.errorMessage = null;
         this.progressMessage = null;
-        this.successMessage = 'Designer added successfully. Refreshing page...';
+        this.successMessage = 'Customer added successfully. Refreshing page...';
         this.myForm.setValue({
             "stakeholderID":null,
             "pubKey":null,
             "firstName":null,
             "lastName":null,
-            "contactInformation":null,
-            "cashValue":null,
-            "cashCurrency":null
         });
       })
     .catch((error) => {
@@ -259,35 +231,21 @@ export class DesignerComponent {
     });
   }
 
-  //create cash asset associated with the Designer, followed by the Designer
-  createAssetsDesigner(): Promise<any> {
+  //create cash asset associated with the Customer, followed by the Customer
+  createAssetsCustomer(): Promise<any> {
     this.current_db_id++;
-    this.cash = {
-      $class: "org.usecase.printer.Cash",
-          "cashID":"CA_D_" + this.current_db_id,
-          "currency":this.cashCurrency.value,
-          "value":this.cashValue.value,
-          "ownerID":"D_" + this.current_db_id,
-          "ownerEntity":'Designer'        
-    };    
-    this.designer = {
-      $class: "org.usecase.printer.Designer",
+    this.customer = {
+      $class: "org.usecase.printer.Customer",
           "stakeholderID":"D_" + this.current_db_id,
           "pubKey":this.pubKey.value,
           "firstName":this.firstName.value,
           "lastName":this.lastName.value,
-          "contactInformation":this.contactInformation.value,
-          "cash":"CA_D_" + this.current_db_id
       };    
-    return this.serviceDesigner.addCash(this.cash)
-        .toPromise()
-        .then(() => {
-            this.serviceDesigner.addDesigner(this.designer)
+    return this.serviceCustomer.addCustomer(this.customer)
             .toPromise()
             .then(() => {
                 location.reload();
-            });         
-        })
+            })
         .catch((error) => {
             if(error == 'Server error'){
               this.progressMessage = null;

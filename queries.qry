@@ -5,10 +5,10 @@ query selectEndusers {
       SELECT org.usecase.printer.Enduser
 }
 
-query selectDesigner {
-  description: "Select all designers"
+query selectCustomer {
+  description: "Select all customers"
   statement:
-      SELECT org.usecase.printer.Designer
+      SELECT org.usecase.printer.Customer
 }
 
 query selectUtilityPrinter {

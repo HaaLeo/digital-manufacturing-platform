@@ -18,8 +18,8 @@
               </div>
               <div class="form-group text-left">
                 <label for="owner">owner</label>
-                <select name="designers" formControlName="owner" >
-                  <option *ngFor="let designer of allDesigners" value="{{designer.stakeholderID}}">{{designer.firstName + " " + designer.lastName}}</option>
+                <select name="customers" formControlName="owner" >
+                  <option *ngFor="let customer of allCustomers" value="{{customer.stakeholderID}}">{{customer.firstName + " " + customer.lastName}}</option>
                 </select>
               </div>
               <fileupload></fileupload>

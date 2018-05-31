@@ -22,25 +22,16 @@ rule EnduserReadAccessEndusers {
     action: ALLOW
 }
 
-//Endusers to have read only access to other Designers
-rule EnduserReadAccessDesigners {
-    description: "Allow Endusers read access to other Designers"
-    participant: "org.usecase.printer.Enduser"
+//Customers to have read only access to other Printer
+rule CustomerReadAccessPrinters {
+    description: "Allow Customer read access to Printer"
+    participant: "org.usecase.printer.Customer"
     operation: READ
-    resource: "org.usecase.printer.Designer"
+    resource: "org.usecase.printer.Customer"
     action: ALLOW
 }
 
-//Endusers to have read only access to other Printer
-rule EnduserReadAccessPrinters {
-    description: "Allow Endusers read access to other Printer"
-    participant: "org.usecase.printer.Enduser"
-    operation: READ
-    resource: "org.usecase.printer.Printer"
-    action: ALLOW
-}
-
-//Endusers to have read access to all QualityRequirement assets
+//Customer to have read access to all QualityRequirement assets
 rule EnduserAccessQualityRequirementRecord {
     description: "Allow Endusers read access to all QualityRequirement assets"
     participant: "org.usecase.printer.Enduser"
@@ -49,68 +40,29 @@ rule EnduserAccessQualityRequirementRecord {
     action: ALLOW
 }
 
-//Endusers to have read access to all BlueprintCopy assets
-rule EnduserAccessBlueprintCopyRecord {
-    description: "Allow Endusers read access to all BlueprintCopy assets"
-    participant: "org.usecase.printer.Enduser"
-    operation: ALL
-    resource: "org.usecase.printer.BlueprintCopy"
-    action: ALLOW
-}
-
-//Endusers to have read access to all cash assets
-rule EnduserAccessCashRecord {
-    description: "Allow Endusers read access to all cash assets"
-    participant(p): "org.usecase.printer.Enduser"
-    operation: ALL
-    resource(r): "org.usecase.printer.Cash"
-  	condition: (r.getIdentifier() === p.cash.getIdentifier())
-    action: ALLOW
-}
-
-
-//Designers to have access to their own account
-rule DesignerAccessOwnRecord {
-    description: "Allow Designers to access only their profile"
-    participant(p): "org.usecase.printer.Designer"
+//Customer to have access to their own account
+rule CustomerAccessOwnRecord {
+    description: "Allow Customer to access only their profile"
+    participant(p): "org.usecase.printer.Customer"
     operation: READ, UPDATE, DELETE
-    resource(r): "org.usecase.printer.Designer"
+    resource(r): "org.usecase.printer.Customer"
     condition: (r.getIdentifier() === p.getIdentifier())
     action: ALLOW
 }
 
-//Designers to have read only access to other Designers
-rule DesignerReadAccessDesigners {
-    description: "Allow Designers read access to other Designers"
-    participant: "org.usecase.printer.Designer"
-    operation: READ
-    resource: "org.usecase.printer.Designer"
-    action: ALLOW
-}
-
-//Designers to have read only access to other Endusers
-rule DesignerReadAccessEndusers {
-    description: "Allow Designers read access to other Endusers"
-    participant: "org.usecase.printer.Designer"
-    operation: READ
-    resource: "org.usecase.printer.Enduser"
-    action: ALLOW
-}
-
-
-//Designers to have read access to all QualityRequirement assets
-rule DesignerAccessQualityRequirementRecord {
-    description: "Allow Designer all access to all QualityRequirement assets"
-    participant: "org.usecase.printer.Designer"
+// Customer to have read access to all QualityRequirement assets
+rule CustomerAccessQualityRequirementRecord {
+    description: "Allow Customer all access to all QualityRequirement assets"
+    participant: "org.usecase.printer.Customer"
     operation: READ, UPDATE, DELETE
     resource: "org.usecase.printer.QualityRequirement"
     action: ALLOW
 }
 
-//Designers to have access to their own QualityRequirement Assets
-rule DesignerAccessOwnQualityRequirement {
-    description: "Allow Designers to access only their own QualityRequirement assets"
-    participant(p): "org.usecase.printer.Designer"
+//Customer to have access to their own QualityRequirement Assets
+rule CustomerAccessOwnQualityRequirement {
+    description: "Allow Customer to access only their own QualityRequirement assets"
+    participant(p): "org.usecase.printer.Customer"
     operation: UPDATE, DELETE
     resource(r): "org.usecase.printer.QualityRequirement"
     // TODO: check if r.owner accessible here
@@ -118,21 +70,12 @@ rule DesignerAccessOwnQualityRequirement {
     action: ALLOW
 }
 
-//Designers to have read access to all BlueprintCopy assets
-rule DesignerAccessBlueprintCopyRecord {
-    description: "Allow Designer read access to all BlueprintCopy assets"
-    participant: "org.usecase.printer.Designer"
+//Customer to have read access to all BlueprintCopy assets
+rule CustomerAccessBlueprintCopyRecord {
+    description: "Allow Customer read access to all BlueprintCopy assets"
+    participant: "org.usecase.printer.Customer"
     operation: READ
     resource: "org.usecase.printer.BlueprintCopy"
-    action: ALLOW
-}
-
-//Designers to have read access to all cash assets
-rule DesignerAccessCashRecord {
-    description: "Allow Designer read access to all cash assets"
-    participant: "org.usecase.printer.Designer"
-    operation: READ
-    resource: "org.usecase.printer.Cash"
     action: ALLOW
 }
 
@@ -146,31 +89,13 @@ rule PrinterAccessOwnRecord {
     action: ALLOW
 }
 
-//Printers to have read only access to other Endusers
-rule PrinterReadAccessEndusers {
-    description: "Allow Printers read access to other Endusers"
+
+//Printers to have read only access to other Customers
+rule PrinterReadAccessCustomers {
+    description: "Allow Printers read access to other Customers"
     participant: "org.usecase.printer.Printer"
     operation: READ
-    resource: "org.usecase.printer.Enduser"
-    action: ALLOW
-}
-
-//Printers to have read only access to other Designers
-rule PrinterReadAccessDesigners {
-    description: "Allow Printers read access to other Designers"
-    participant: "org.usecase.printer.Printer"
-    operation: READ
-    resource: "org.usecase.printer.Designer"
-    action: ALLOW
-}
-
-
-//Printers to have read access to all QualityRequirement assets
-rule PrinterAccessQualityRequirementRecord {
-    description: "Allow Printers read access to all QualityRequirement assets"
-    participant: "org.usecase.printer.Printer"
-    operation: READ
-    resource: "org.usecase.printer.QualityRequirement"
+    resource: "org.usecase.printer.Customer"
     action: ALLOW
 }
 
@@ -191,21 +116,12 @@ rule PrinterAccessCashRecord {
     action: ALLOW
 }
 
-//Designers to have read access to all AddNewQualityRequirement
-rule DesignerAccessAddNewQualityRequirement {
-    description: "Allow Designer all access to all AddNewQualityRequirement"
-    participant: "org.usecase.printer.Designer"
+//Customer to have all access to all AddNewQualityRequirement
+rule CustomerAccessAddNewQualityRequirement {
+    description: "Allow Customer all access to all AddNewQualityRequirement"
+    participant: "org.usecase.printer.Customer"
     operation: ALL
     resource: "org.usecase.printer.AddNewQualityRequirement"
-    action: ALLOW
-}
-
-//Printers to have read access to all ConfirmTransaction 
-rule PrinterAccessConfirmTransaction {
-    description: "Allow Printer all access to all ConfirmTransaction"
-    participant: "org.usecase.printer.Printer"
-    operation: ALL
-    resource: "org.usecase.printer.ConfirmTransaction"
     action: ALLOW
 }
 

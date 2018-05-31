@@ -26,7 +26,7 @@ export class QualityRequirementComponent implements OnInit {
   private progressMessage;
   private successMessage;
 
-  private allDesigners;
+  private allCustomers;
 
   private allEndusers;
   private allPrinters;
@@ -62,7 +62,7 @@ export class QualityRequirementComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll().then(() => {                     
-      this.load_OnlyDesigners();
+      this.load_OnlyCustomers();
     }).then(() => {                     
       this.load_OnlyEndusers();
     }).then(() => {                     
@@ -71,17 +71,17 @@ export class QualityRequirementComponent implements OnInit {
 
   }
 
-	//Get all Designers
-	load_OnlyDesigners(): Promise<any> {
+	//Get all Customers
+	load_OnlyCustomers(): Promise<any> {
 		let tempList = [];
-		return this.serviceQualityRequirement.getAllDesigners()
+		return this.serviceQualityRequirement.getAllCustomers()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
-		result.forEach(designer => {
-      tempList.push(designer);
+		result.forEach(customer => {
+      tempList.push(customer);
 		});
-		this.allDesigners = tempList;
+		this.allCustomers = tempList;
 		})
 		.catch((error) => {
 			if(error == 'Server error'){
@@ -155,7 +155,7 @@ export class QualityRequirementComponent implements OnInit {
 		});
   }
 
-  //Gtet all QualityRequirement Assets and the Designers associated to them
+  //Gtet all QualityRequirement Assets and the Customers associated to them
   loadAll(): Promise<any>  {
     //retrieve all QualityRequirement
     let tempList = [];
@@ -171,7 +171,7 @@ export class QualityRequirementComponent implements OnInit {
       for (let qualityRequirement of tempList) {
         var splitted_ownerID = qualityRequirement.owner.split("#", 2);
         var ownerID = String(splitted_ownerID[1]);
-        this.serviceQualityRequirement.getDesigner(ownerID)
+        this.serviceQualityRequirement.getCustomer(ownerID)
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
@@ -192,7 +192,7 @@ export class QualityRequirementComponent implements OnInit {
     });
   }
 
-  // Method called when a Designer wants to upload a new QualityRequirement Asset
+  // Method called when a Customer wants to upload a new QualityRequirement Asset
   addAsset(form: any) {
     this.progressMessage = 'Please wait... ';
     let inputPrice = this.price.value;
@@ -285,7 +285,7 @@ export class QualityRequirementComponent implements OnInit {
     .then((result) => {
       this.errorMessage = null;
       this.progressMessage = null;
-      this.successMessage = 'Request was sent to the designer. Refreshing page...';
+      this.successMessage = 'Request was sent to the customer. Refreshing page...';
       location.reload();
     })
     .catch((error) => {

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConfirmTransaction } from '../org.usecase.printer';
 
 import 'rxjs/Rx';
-import { Designer, BlueprintCopy, Printer, Cash } from 'app/org.usecase.printer';
+import { Customer, BlueprintCopy, Printer, Cash } from 'app/org.usecase.printer';
 
 // Can be injected into a constructor
 @Injectable()

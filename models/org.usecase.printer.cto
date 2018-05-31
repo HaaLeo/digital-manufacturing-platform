@@ -17,11 +17,9 @@ participant Enduser extends Stakeholder {
     --> Cash cash
 }
 
-participant Designer extends Stakeholder {
+participant Customer extends Stakeholder {
     o String firstName
     o String lastName
-    o String contactInformation
-    --> Cash cash
 }
 
 // Not sure if Printer should be participant or rather asset?
@@ -31,7 +29,7 @@ participant Printer extends Stakeholder {
 
 enum OwnerEntity {
   o Enduser
-  o Designer
+  o Customer
 }
 
 //This class represents a "wallet" of a Trader
@@ -50,7 +48,9 @@ asset QualityRequirement identified by qualityRequirementID {
     o String checksum
     o Double price
     o String metadata
-    --> Designer owner
+    o Double peakTemperature
+    o Double Pressure
+    --> Customer owner
 }
 
 //This class represents a copy of a Master-Blueprint 
@@ -59,7 +59,7 @@ asset BlueprintCopy identified by blueprintCopyID {
     o String txID
     o String checksum
     o Boolean printed
-    o String otpEncryptedWithDesignerPubKey
+    o String otpEncryptedWithCustomerPubKey
     o String otpEncryptedWithPrinterPubKey
     --> Printer printer
     --> Enduser buyer
@@ -94,5 +94,7 @@ transaction AddNewQualityRequirement{
     o String assetHash
     o Double price
     o String metadata
-    --> Designer owner
+    o Double peakTemperature
+    o Double pressure
+    --> Customer owner
 }

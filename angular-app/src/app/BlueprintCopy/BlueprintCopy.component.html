@@ -72,7 +72,7 @@
                 <th class="info">printerPubKey</th>
                 <th class="info">buyer</th>
                 <th class="info">owner</th>
-                <th class="info">designer</th>
+                <th class="info">customer</th>
                 <th class="info">Actions</th>
           </tr>
         </thead>
@@ -87,7 +87,7 @@
             <td>{{asset.printerPubKey}}</td>
             <td>{{asset.buyerName}}</td>
             <td>{{asset.ownerName}}</td>
-            <td>{{asset.designerName}}</td>
+            <td>{{asset.customerName}}</td>
             <td>
               <button *ngIf="!asset.printed;" (click)="setId(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelRequestModal">Cancel Request</button>
               <button *ngIf="!asset.printed;" (click)="getForm(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadCopyModal">Upload Copy</button>

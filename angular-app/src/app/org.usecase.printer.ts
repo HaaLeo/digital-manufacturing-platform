@@ -13,10 +13,9 @@ import {Event} from './org.hyperledger.composer.system';
       contactInformation: string;
       cash: Cash;
    }
-   export class Designer extends Stakeholder {
+   export class Customer extends Stakeholder {
       firstName: string;
       lastName: string;
-      contactInformation: string;
       cash: Cash;
    }
    export class Printer extends Stakeholder {
@@ -24,7 +23,7 @@ import {Event} from './org.hyperledger.composer.system';
    }
    export enum OwnerEntity {
       Enduser,
-      Designer,
+      Customer,
    }
    export class Cash extends Asset {
       cashID: string;
@@ -39,14 +38,16 @@ import {Event} from './org.hyperledger.composer.system';
       checksum: string;
       price: number;
       metadata: string;
-      owner: Designer;
+      peakTemperature: number;
+      pressure: number;
+      owner: Customer;
    }
    export class BlueprintCopy extends Asset {
       blueprintCopyID: string;
       txID: string;
       checksum: string;
       printed: boolean;
-      otpEncryptedWithDesignerPubKey: string;
+      otpEncryptedWithCustomerPubKey: string;
       otpEncryptedWithPrinterPubKey: string;
       printer: Printer;
       buyer: Enduser;
@@ -67,6 +68,6 @@ import {Event} from './org.hyperledger.composer.system';
     export class UploadBlueprintCopy extends Transaction {
         txID: string;
         checksum: string;
-        blueprintCopy: BlueprintCopy;   
+        blueprintCopy: BlueprintCopy;
     }
 // }

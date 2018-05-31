@@ -10,7 +10,7 @@ import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component'
 import { BuyAssetTRComponent } from './BuyAssetTR/BuyAssetTR.component';
 import { CancelRequestTRComponent } from './CancelRequestTR/CancelRequestTR.component';
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
-import { DesignerComponent } from 'app/Designer/Designer.component';
+import { CustomerComponent } from 'app/Customer/Customer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
 
 const routes: Routes = [
@@ -22,7 +22,7 @@ const routes: Routes = [
     { path: 'BuyAssetTR', component: BuyAssetTRComponent },
     { path: 'CancelRequestTR', component: CancelRequestTRComponent },
     { path: 'Enduser', component: EnduserComponent},
-    { path: 'Designer', component: DesignerComponent},
+    { path: 'Customer', component: CustomerComponent},
     { path: 'Printer', component: PrinterComponent},
 		{path: '**', redirectTo:''}
 ];

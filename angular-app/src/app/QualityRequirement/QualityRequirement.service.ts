@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { QualityRequirement } from '../org.usecase.printer';
 import 'rxjs/Rx';
 
-import { Designer, Enduser, Printer, RequestBlueprint, CancelRequest} from 'app/org.usecase.printer';
+import { Customer, Enduser, Printer, RequestBlueprint, CancelRequest} from 'app/org.usecase.printer';
 
 // Can be injected into a constructor
 @Injectable()
@@ -12,13 +12,13 @@ export class QualityRequirementService {
 
 	
 		private NAMESPACE: string = 'org.usecase.printer.QualityRequirement';
-    private DESIGNER: string = 'org.usecase.printer.Designer';
+    private CUSTOMER: string = 'org.usecase.printer.Customer';
     private PRINTER: string = 'org.usecase.printer.Printer';
     private ENDUSER: string = 'org.usecase.printer.Enduser';
     private REQUESTBLUEPRINT: string = 'org.usecase.printer.RequestBlueprint';
 
     constructor(private dataService: DataService<QualityRequirement>,
-                private designerService: DataService<Designer>, 
+                private customerService: DataService<Customer>,
                 private enduserService: DataService<Enduser>, 
                 private printerService: DataService<Printer>, 
                 private requestBlueprintService: DataService<RequestBlueprint>) {
@@ -44,12 +44,12 @@ export class QualityRequirementService {
       return this.dataService.delete(this.NAMESPACE, id);
     }
 
-    public getAllDesigners(): Observable<Designer[]> {
-      return this.designerService.getAll(this.DESIGNER);
+    public getAllCustomers(): Observable<Customer[]> {
+      return this.customerService.getAll(this.CUSTOMER);
   }
 
-  public getDesigner(id: any): Observable<Designer> {
-    return this.designerService.getSingle(this.DESIGNER, id);
+  public getCustomer(id: any): Observable<Customer> {
+    return this.customerService.getSingle(this.CUSTOMER, id);
   }
 
   public getAllEndusers(): Observable<Enduser[]> {

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform, Component, OnInit } from '@angular/core';
-import { BlueprintCopy, Designer, Printer, Enduser } from '../org.usecase.printer';
+import { BlueprintCopy, Customer, Printer, Enduser } from '../org.usecase.printer';
 import { NgModule }      from '@angular/core';
 
 
@@ -21,7 +21,7 @@ export class UsersPipe implements PipeTransform {
         return bpcs;
       } else {
             if (searchTerm.charAt(0) === "D"){
-                return bpcs.filter(bpc => bpc.designer === searchTerm);
+                return bpcs.filter(bpc => bpc.customer === searchTerm);
             } else if (searchTerm.charAt(0) === "P"){
                 return bpcs.filter(bpc => bpc.printer === searchTerm);
             } else if (searchTerm.charAt(0) === "E"){
