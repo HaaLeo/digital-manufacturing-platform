@@ -10,13 +10,6 @@ abstract participant Stakeholder identified by stakeholderID {
     
 }
 
-participant Enduser extends Stakeholder {
-    o String firstName
-    o String lastName
-    o String contactInformation
-    --> Cash cash
-}
-
 participant Customer extends Stakeholder {
     o String firstName
     o String lastName
@@ -26,20 +19,6 @@ participant Customer extends Stakeholder {
 participant Printer extends Stakeholder {
     o String name
 }
-
-enum OwnerEntity {
-  o Enduser
-  o Customer
-}
-
-//This class represents a "wallet" of a Trader
-asset Cash identified by cashID {
-    o String cashID
-    o String currency
-    o Double value
-    o String ownerID
-    o OwnerEntity ownerEntity
-} 
 
 //This class represents a QualityRequirement stored on BCDB
 asset QualityRequirement identified by qualityRequirementID {
@@ -62,7 +41,6 @@ asset BlueprintCopy identified by blueprintCopyID {
     o String otpEncryptedWithCustomerPubKey
     o String otpEncryptedWithPrinterPubKey
     --> Printer printer
-    --> Enduser buyer
     --> QualityRequirement qualityRequirement
     --> Stakeholder owner
 }
@@ -83,7 +61,6 @@ transaction UploadBlueprintCopy {
 }
 
 transaction RequestBlueprint {
-    --> Enduser buyer
     --> Printer printer
     --> QualityRequirement qualityRequirement
 }

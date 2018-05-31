@@ -18,8 +18,6 @@ export class CustomerComponent {
   private errorMessage;
   private progressMessage;
   private successMessage;
-
-  private cash;
   private current_db_id;
   
     stakeholderID = new FormControl("", Validators.required);

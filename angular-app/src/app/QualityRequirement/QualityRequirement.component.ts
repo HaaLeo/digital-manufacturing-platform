@@ -27,12 +27,9 @@ export class QualityRequirementComponent implements OnInit {
   private successMessage;
 
   private allCustomers;
-
-  private allEndusers;
   private allPrinters;
 
   private printer;
-  private buyer;
   private qualityRequirement;
   private requestQualityRequirementObj;
 
@@ -45,8 +42,7 @@ export class QualityRequirementComponent implements OnInit {
   metadata = new FormControl("", Validators.required);
   owner = new FormControl("", Validators.required);
   printerID = new FormControl("");
-  buyerID = new FormControl("");
-        
+
   constructor(private serviceQualityRequirement:QualityRequirementService, fb: FormBuilder) {
     this.myForm = fb.group({
           qualityRequirementID:this.qualityRequirementID,
@@ -56,16 +52,13 @@ export class QualityRequirementComponent implements OnInit {
           metadata:this.metadata,
           owner:this.owner,
           printerID:this.printerID,
-          buyerID:this.buyerID
     });
   };
 
   ngOnInit(): void {
     this.loadAll().then(() => {                     
       this.load_OnlyCustomers();
-    }).then(() => {                     
-      this.load_OnlyEndusers();
-    }).then(() => {                     
+    }).then(() => {
       this.load_OnlyPrinters();
     });    
 
@@ -127,35 +120,7 @@ export class QualityRequirementComponent implements OnInit {
 		});
   }
 
-  //Get all Endusers
-	load_OnlyEndusers(): Promise<any> {
-		let tempList = [];
-		return this.serviceQualityRequirement.getAllEndusers()
-		.toPromise()
-		.then((result) => {
-				this.errorMessage = null;
-		result.forEach(enduser => {
-      tempList.push(enduser);
-		});
-		this.allEndusers = tempList;
-		})
-		.catch((error) => {
-			if(error == 'Server error'){
-        this.progressMessage = null;
-				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-			}
-			else if(error == '404 - Not Found'){
-        this.progressMessage = null;
-					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
-			}
-			else{
-        this.progressMessage = null;
-				this.errorMessage = error;
-			}
-		});
-  }
-
-  //Gtet all QualityRequirement Assets and the Customers associated to them
+  //Get all QualityRequirement Assets and the Customers associated to them
   loadAll(): Promise<any>  {
     //retrieve all QualityRequirement
     let tempList = [];
@@ -218,7 +183,6 @@ export class QualityRequirementComponent implements OnInit {
           "price":null,
           "metadata":null,
           "owner":null,
-          "buyerID":null,
           "printerID":null
     });
     return this.serviceQualityRequirement.addAsset(this.asset)
@@ -234,7 +198,6 @@ export class QualityRequirementComponent implements OnInit {
           "price":null,
           "metadata":null,
           "owner":null,
-          "buyerID":null,
           "printerID":null
       });
       location.reload();
@@ -261,12 +224,6 @@ export class QualityRequirementComponent implements OnInit {
         this.printer = printer;
       }     
     }
-    //Get selected Endusers
-    for (let buyer of this.allEndusers) {
-      if(buyer.stakeholderID == this.buyerID.value){
-        this.buyer = buyer;
-      }     
-    }
     //get selected QualityRequirement
     for (let qualityRequirement of this.allAssets) {
       if(qualityRequirement.qualityRequirementID == this.currentId){
@@ -276,7 +233,6 @@ export class QualityRequirementComponent implements OnInit {
     //transaction object
     this.requestQualityRequirementObj = {
       $class: "org.usecase.printer.RequestBlueprint",
-      "buyer": this.buyerID.value,
       "printer": this.printerID.value,
       "qualityRequirement": this.currentId
     };
@@ -325,8 +281,7 @@ export class QualityRequirementComponent implements OnInit {
             "price":null,
             "metadata":null,
             "printerID":null,
-            "buyerID":null,
-            "owner":null 
+            "owner":null
       };
         if(result.qualityRequirementID){
             formObject.qualityRequirementID = result.qualityRequirementID;
@@ -391,7 +346,6 @@ export class QualityRequirementComponent implements OnInit {
           "price":null,
           "metadata":null,
           "owner":null,
-          "buyerID":null,
           "printerID":null
       });
   }

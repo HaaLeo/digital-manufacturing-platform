@@ -2,26 +2,6 @@
  * Access control rules for decentralized-energy-network
  */
 
-
-//Residents to have access only to their own account
-rule EnduserAccessOwnRecord {
-    description: "Allow endusers to access only their profile"
-    participant(p): "org.usecase.printer.Enduser"
-    operation: READ, UPDATE, DELETE
-    resource(r): "org.usecase.printer.Enduser"
-    condition: (r.getIdentifier() === p.getIdentifier())
-    action: ALLOW
-}
-
-//Endusers to have read only access to other Endusers
-rule EnduserReadAccessEndusers {
-    description: "Allow Endusers read access to other Endusers"
-    participant: "org.usecase.printer.Enduser"
-    operation: READ
-    resource: "org.usecase.printer.Enduser"
-    action: ALLOW
-}
-
 //Customers to have read only access to other Printer
 rule CustomerReadAccessPrinters {
     description: "Allow Customer read access to Printer"
@@ -31,14 +11,14 @@ rule CustomerReadAccessPrinters {
     action: ALLOW
 }
 
-//Customer to have read access to all QualityRequirement assets
-rule EnduserAccessQualityRequirementRecord {
-    description: "Allow Endusers read access to all QualityRequirement assets"
-    participant: "org.usecase.printer.Enduser"
-    operation: READ
-    resource: "org.usecase.printer.QualityRequirement"
-    action: ALLOW
-}
+// Customer to have read access to all QualityRequirement assets
+// rule EnduserAccessQualityRequirementRecord {
+//     description: "Allow Endusers read access to all QualityRequirement assets"
+//     participant: "org.usecase.printer.Enduser"
+//     operation: READ
+//     resource: "org.usecase.printer.QualityRequirement"
+//     action: ALLOW
+// }
 
 //Customer to have access to their own account
 rule CustomerAccessOwnRecord {
@@ -107,14 +87,6 @@ rule PrinterAccessBlueprintCopyRecord {
     resource: "org.usecase.printer.BlueprintCopy"
     action: ALLOW
 }
-//Printers to have all access to all Cash assets
-rule PrinterAccessCashRecord {
-    description: "Allow Printers read access to all Cash assets"
-    participant: "org.usecase.printer.Printer"
-    operation: ALL
-    resource: "org.usecase.printer.Cash"
-    action: ALLOW
-}
 
 //Customer to have all access to all AddNewQualityRequirement
 rule CustomerAccessAddNewQualityRequirement {
@@ -124,25 +96,6 @@ rule CustomerAccessAddNewQualityRequirement {
     resource: "org.usecase.printer.AddNewQualityRequirement"
     action: ALLOW
 }
-
-//Enduser to have read access to all RequestTransaction 
-rule EnduserAccesRequestTransaction {
-    description: "Allow Enduser all access to all RequestTransaction"
-    participant: "org.usecase.printer.Enduser"
-    operation: ALL
-    resource: "org.usecase.printer.RequestBlueprint"
-    action: ALLOW
-}
-
-//Enduser to have read access to all CancelTransaction 
-rule EnduserAccesCancelTransaction {
-    description: "Allow Enduser all access to all CancelTransaction"
-    participant: "org.usecase.printer.Enduser"
-    operation: ALL
-    resource: "org.usecase.printer.CancelRequest"
-    action: ALLOW
-}
-
 
 rule SystemACL {
   description:  "System ACL to permit all access"

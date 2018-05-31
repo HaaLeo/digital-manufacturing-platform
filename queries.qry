@@ -1,10 +1,4 @@
 
-query selectEndusers {
-  description: "Select all endusers"
-  statement:
-      SELECT org.usecase.printer.Enduser
-}
-
 query selectCustomer {
   description: "Select all customers"
   statement:
@@ -27,10 +21,4 @@ query selectBlueprintCopy {
   description: "Select all BlueprintCopy assets"
   statement:
       SELECT org.usecase.printer.BlueprintCopy
-}
-
-query selectCash {
-  description: "Select all cash assets"
-  statement:
-      SELECT org.usecase.printer.Cash
 }

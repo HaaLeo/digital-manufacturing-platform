@@ -6,7 +6,6 @@ import { Printer } from '../org.usecase.printer';
 
 import { QualityRequirement } from '../org.usecase.printer';
 import { BlueprintCopy } from '../org.usecase.printer';
-import { Cash } from '../org.usecase.printer';
 
 
 import 'rxjs/Rx';
@@ -17,9 +16,6 @@ export class PrinterService {
 
 	
 	private PRINTER: string = 'org.usecase.printer.Printer';  
-	
-    constructor(private printerService: DataService<Printer>, private cashService: DataService<Cash>) {
-    };
 
     //Printer functions
     public getAllPrinters(): Observable<Printer[]> {

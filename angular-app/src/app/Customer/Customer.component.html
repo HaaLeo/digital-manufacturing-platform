@@ -23,21 +23,6 @@
                 <label for="contactInformation">Contact Info</label>  
                   <input formControlName="contactInformation" type="text" class="form-control">          
               </div>
-              <div class="form-group text-left">
-                <label for="cashValue">Cash Value</label>  
-                  <input formControlName="cashValue" type="number" class="form-control">          
-              </div>
-              <div class="form-group text-left">
-                <label for="cashCurrency">Cash Currency</label>  
-                <div>
-                <select name="cashCurrency" formControlName="cashCurrency">
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="BTC">BTC</option>  
-                  <option value="FortissCoin">FortissCoin</option>              
-                </select>
-                </div>        
-              </div>
           </div>
           <div class="modal-footer">
             <button (click)="addCustomer(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
@@ -131,10 +116,7 @@
                   <th class="bc">Pubkey</th> 
                   <th class="bc">First Name</th>
                   <th class="bc">Last Name</th> 
-                  <th class="bc">Contact Info</th>
-                  <th class="bc">Cash Balance</th> 
-                  <th class="bc">Cash Currency</th>
-                  <th class="bc">Actions</th>       
+                  <th class="bc">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -143,9 +125,6 @@
                   <td>{{customer.pubKey}}</td>
                   <td>{{customer.firstName}}</td>
                   <td>{{customer.lastName}}</td>
-                  <td>{{customer.contactInformation}}</td>
-                  <td>{{customer.cashValue}}</td>
-                  <td>{{customer.cashCurrency}}</td>
               <td>
                 <button (click)="getForm(customer.stakeholderID);" type="button" class="btn btn-success" data-toggle="modal" data-target="#updateCustomerModal">Update</button>
                 <button (click)="setId(customer.stakeholderID);" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteCustomerModal">Delete</button>

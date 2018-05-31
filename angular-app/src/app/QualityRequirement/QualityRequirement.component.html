@@ -48,12 +48,6 @@
                   <option *ngFor="let printer of allPrinters" value="{{printer.stakeholderID}}">{{printer.name}}</option>
                 </select>
             </div>
-            <div class="form-group text-left">
-                <label for="buyer">Buyer</label>
-                <select name="buyers" formControlName="buyerID" >
-                  <option *ngFor="let buyer of allEndusers" value="{{buyer.stakeholderID}}">{{buyer.firstName + " " + buyer.lastName}}</option>
-                </select>
-            </div>
         </div>
         <div class="modal-footer">
           <button (click)="requestAsset(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>

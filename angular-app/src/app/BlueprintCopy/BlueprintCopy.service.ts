@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { BlueprintCopy, Customer, Printer, Enduser, QualityRequirement, CancelRequest, UploadBlueprintCopy} from '../org.usecase.printer';
+import { BlueprintCopy, Customer, Printer, QualityRequirement, CancelRequest, UploadBlueprintCopy} from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -12,12 +12,11 @@ export class BlueprintCopyService {
     private NAMESPACE: string = 'org.usecase.printer.BlueprintCopy';
     private CUSTOMER: string = 'org.usecase.printer.Customer';
     private PRINTER: string = 'org.usecase.printer.Printer';
-    private ENDUSER: string = 'org.usecase.printer.Enduser';
     private QUALITYREQUIREMENT: string = 'org.usecase.printer.QualityRequirement';
     private CANCELREQUEST: string = 'org.usecase.printer.CancelRequest';
     private UPDATEREQUEST: string = 'org.usecase.printer.UploadBlueprintCopy';
 
-    constructor(private dataService: DataService<BlueprintCopy>, private customerService: DataService<Customer>, private uploadBlueprintCopyService: DataService<UploadBlueprintCopy>, private cancelRequestService: DataService<CancelRequest>,  private qualityRequirementService: DataService<QualityRequirement>, private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
+    constructor(private dataService: DataService<BlueprintCopy>, private customerService: DataService<Customer>, private uploadBlueprintCopyService: DataService<UploadBlueprintCopy>, private cancelRequestService: DataService<CancelRequest>,  private qualityRequirementService: DataService<QualityRequirement>, private printerService: DataService<Printer>) {
     };
 
     public getAll(): Observable<BlueprintCopy[]> {
@@ -55,11 +54,6 @@ export class BlueprintCopyService {
     public getID(str) {
       return str.split('#')[1];
     }
-
-    public getAllEndusers(): Observable<Enduser[]> {
-      return this.enduserService.getAll(this.ENDUSER);
-   }
-  
     public getAllPrinters(): Observable<Printer[]> {
       return this.printerService.getAll(this.PRINTER);
     }

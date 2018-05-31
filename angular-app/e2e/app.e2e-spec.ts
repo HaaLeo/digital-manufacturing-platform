@@ -21,20 +21,6 @@ describe('Starting tests for 3d-printer', function() {
   });
 
   
-    it('Cash component should be loadable',() => {
-      page.navigateTo('/Cash');
-      var assetName = browser.findElement(by.id('assetName'));
-      expect(assetName.getText()).toBe('Cash');
-    });
-
-    it('Cash table should have 6 columns',() => {
-      page.navigateTo('/Cash');
-      element.all(by.css('.thead-cols th')).then(function(arr) {
-        expect(arr.length).toEqual(6); // Addition of 1 for 'Action' column
-      });
-    });
-
-  
     it('QualityRequirement component should be loadable',() => {
       page.navigateTo('/QualityRequirement');
       var assetName = browser.findElement(by.id('assetName'));

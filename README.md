@@ -172,4 +172,20 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 
 
 
+### How to stay up to date with model changes:
 
+```
+cd fabric-tools/
+./stopFabric.sh
+./teardownFabric.sh
+```
+
+Delete everything in the dist folder
+
+```
+composer archive create -a dist/printer-use-case.bna --sourceType dir --sourceName . -f
+```
+
+Execute everything in step 4
+
+Start the composer-rest-server

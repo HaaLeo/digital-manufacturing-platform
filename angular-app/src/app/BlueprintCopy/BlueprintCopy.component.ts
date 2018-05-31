@@ -7,9 +7,9 @@ import {FileuploadComponent} from "../fileupload/fileupload.component"
 
 
 @Component({
-	selector: 'app-BlueprintCopy',
-	templateUrl: './BlueprintCopy.component.html',
-	styleUrls: ['./BlueprintCopy.component.css'],
+    selector: 'app-BlueprintCopy',
+    templateUrl: './BlueprintCopy.component.html',
+    styleUrls: ['./BlueprintCopy.component.css'],
   providers: [BlueprintCopyService]
 })
 
@@ -25,7 +25,7 @@ export class BlueprintCopyComponent implements OnInit {
 
   private asset;
   private currentId;
-	private errorMessage;
+  private errorMessage;
   private progressMessage;
   private successMessage;
   private cancelRequestObj;
@@ -38,7 +38,6 @@ export class BlueprintCopyComponent implements OnInit {
   otpEncryptedWithCustomerPubKey = new FormControl("", Validators.required);
   otpEncryptedWithPrinterPubKey = new FormControl("", Validators.required);
   printer = new FormControl("", Validators.required);
-  buyer = new FormControl("", Validators.required);
   qualityRequirement = new FormControl("", Validators.required);
   owner = new FormControl("", Validators.required);
         
@@ -50,16 +49,15 @@ export class BlueprintCopyComponent implements OnInit {
           otpEncryptedWithCustomerPubKey:this.otpEncryptedWithCustomerPubKey,
           otpEncryptedWithPrinterPubKey:this.otpEncryptedWithPrinterPubKey,
           printer:this.printer,
-          buyer:this.buyer,
           qualityRequirement:this.qualityRequirement,
           owner:this.owner
     });
   };
 
   ngOnInit(): void {
-    this.load_allStakeholders().then(() => {                     
-      this.loadAll();
-    });    
+    this.load_allStakeholders().then(() => {
+        this.loadAll();
+    });
     this.selectedElement = "all"
   }
 
@@ -69,9 +67,8 @@ export class BlueprintCopyComponent implements OnInit {
     return this.serviceBlueprintCopy.getAll()
     .toPromise()
     .then((result) => {
-			this.errorMessage = null;
+        this.errorMessage = null;
       result.forEach(bpc => {
-        bpc.buyer = this.serviceBlueprintCopy.getID(bpc.buyer);
         bpc.printer = this.serviceBlueprintCopy.getID(bpc.printer);
         bpc.qualityRequirement = this.serviceBlueprintCopy.getID(bpc.qualityRequirement);
         bpc.owner = this.serviceBlueprintCopy.getID(bpc.owner);
@@ -89,9 +86,6 @@ export class BlueprintCopyComponent implements OnInit {
             for (let stakeholder of this.allStakeholders) {
               if(stakeholder.stakeholderID == bpc.customer) {
                 bpc.customerName = stakeholder.firstName + " " + stakeholder.lastName;
-              }
-              if(stakeholder.stakeholderID == bpc.buyer) {
-                bpc.buyerName = stakeholder.firstName + " " + stakeholder.lastName;
               }
               if(stakeholder.stakeholderID == bpc.owner) {
                 bpc.ownerName = stakeholder.firstName + " " + stakeholder.lastName;
@@ -128,20 +122,7 @@ export class BlueprintCopyComponent implements OnInit {
         tempList.push(printer);
       });
       })
-    })
-    .then(() => {
-      this.serviceBlueprintCopy.getAllEndusers()
-      .toPromise()
-      .then((result) => {
-          this.errorMessage = null;
-      result.forEach(enduser => {
-        tempList.push(enduser);
-      });
-      this.allStakeholders = tempList;
-      })
-    })
-    
-		;
+    });
   }
 
   // Method called when Enduser wants to cancel his purchase
@@ -200,7 +181,6 @@ export class BlueprintCopyComponent implements OnInit {
             "otpEncryptedWithCustomerPubKey":null,
             "otpEncryptedWithPrinterPubKey":null,
             "printer":null,
-            "buyer":null,
             "qualityRequirement":null,
             "owner":null 
       };
@@ -233,12 +213,6 @@ export class BlueprintCopyComponent implements OnInit {
             formObject.printer = result.printer;
         }else{
           formObject.printer = null;
-        }
-      
-        if(result.buyer){
-            formObject.buyer = result.buyer;
-        }else{
-          formObject.buyer = null;
         }
       
         if(result.qualityRequirement){
@@ -287,7 +261,6 @@ export class BlueprintCopyComponent implements OnInit {
           "otpEncryptedWithCustomerPubKey":this.otpEncryptedWithCustomerPubKey.value,
           "otpEncryptedWithPrinterPubKey":this.otpEncryptedWithPrinterPubKey.value,
           "printer":this.printer.value,
-          "buyer":this.buyer.value,
           "qualityRequirement":this.qualityRequirement.value,
           "owner":this.owner.value
     };
@@ -298,7 +271,6 @@ export class BlueprintCopyComponent implements OnInit {
         "otpEncryptedWithCustomerPubKey":null,
         "otpEncryptedWithPrinterPubKey":null,
         "printer":null,
-        "buyer":null,
         "qualityRequirement":null,
         "owner":null 
     });
@@ -322,7 +294,6 @@ export class BlueprintCopyComponent implements OnInit {
           "otpEncryptedWithCustomerPubKey":null,
           "otpEncryptedWithPrinterPubKey":null,
           "printer":null,
-          "buyer":null,
           "qualityRequirement":null,
           "owner":null 
       });
@@ -352,7 +323,6 @@ export class BlueprintCopyComponent implements OnInit {
           "otpEncryptedWithCustomerPubKey":null,
           "otpEncryptedWithPrinterPubKey":null,
           "printer":null,
-          "buyer":null,
           "qualityRequirement":null,
           "owner":null 
       });
