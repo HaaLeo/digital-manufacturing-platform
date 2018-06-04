@@ -1,18 +1,37 @@
-@startuml
-Customer -> DMP: RequestPrintJob(3DData)
+@startuml Process
+actor Customer
+participant "Digital Manufacturing Platform" as DMP
 database BigchainDB
 
-note right: 3D Data, Which Evaluation Algorithm should be used
-DMP -> BigchainDB: Store Printing Job
-BigchainDB -> DMP: TransactionID to Job
-DMP -> DMP: Choose Printer
-DMP -> Printer: Send Job(TransactionID to job)
-Printer -> Printer: Execute Job
-group System boundary
-    Printer -> BigchainDB: StoreQuality report
-    Printer -> DMP: Done(KeyToReport)
-    DMP-> BigchainDB: Load Algorithm
-    DMP -> DMP: EvaluateReport(KeyToReport)
-    DMP-> Customer: Send Feedback
+Customer -> DMP: RequestPrintJob()
+activate DMP
+note right: Triggered via UI
+group Chaincode
+    DMP -> BigchainDB: Store Printing Job
+    deactivate DMP
+    activate BigchainDB
+    BigchainDB -> DMP: TransactionID to Job
+    deactivate BigchainDB
+    activate DMP
+    DMP -> Printer: Send Job(TransactionID to job)
+    deactivate DMP
+    activate Printer
+    
 end
+Printer -> Printer: Execute Job
+Printer -> DMP: UploadQualityReport
+deactivate Printer
+activate DMP
+group Chaincode
+    DMP -> BigchainDB: Store quality report
+    deactivate DMP
+    activate BigchainDB
+    BigchainDB -> DMP: TransactionID to quality report
+
+    deactivate BigchainDB
+    activate DMP
+    DMP -> DMP: EvaluateReport(KeyToReport)
+end
+    DMP-> Customer: Send Feedback
+    deactivate DMP
 @enduml
