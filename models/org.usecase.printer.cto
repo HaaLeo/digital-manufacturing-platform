@@ -31,36 +31,9 @@ asset QualityRequirement identified by qualityRequirementID {
     --> Customer owner
 }
 
-//This class represents a copy of a Master-Blueprint 
-asset BlueprintCopy identified by blueprintCopyID {
-    o String blueprintCopyID
-    o String txID
-    o String checksum
-    o Boolean printed
-    o String otpEncryptedWithCustomerPubKey
-    o String otpEncryptedWithPrinterPubKey
-    --> Printer printer
-    --> QualityRequirement qualityRequirement
-    --> Stakeholder owner
-}
-
 // Transaction after succesful printing
-transaction ConfirmTransaction {
-    --> BlueprintCopy blueprintCopy
-}
-
-transaction CancelRequest {
-    --> BlueprintCopy blueprintCopy
-}
-
-transaction UploadBlueprintCopy {
-    o String txID
-    o String checksum
-    --> BlueprintCopy blueprintCopy
-}
-
-transaction RequestBlueprint {
-    --> Printer printer
+transaction CreatePrintingJob {
+	--> Printer printer
     --> QualityRequirement qualityRequirement
 }
 

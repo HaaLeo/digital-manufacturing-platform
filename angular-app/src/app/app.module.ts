@@ -8,29 +8,18 @@ import { DataService } from './data.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { QualityRequirementComponent } from './QualityRequirement/QualityRequirement.component';
-import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component';
-import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
-import { CancelRequestTRComponent } from 'app/CancelRequestTR/CancelRequestTR.component';
 import { CustomerComponent } from 'app/Customer/Customer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
-import { UsersPipe} from './BlueprintCopy/Pipe';
-import { FileuploadComponent } from './fileupload/fileupload.component';
 import { Ng2FileDropModule } from 'ng2-file-drop';
 
-// import { TransactionComponent } from './Transaction/Transaction.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    BuyAssetTRComponent,
-    CancelRequestTRComponent,
     QualityRequirementComponent,
     CustomerComponent,
     PrinterComponent,
-    BlueprintCopyComponent,
-    UsersPipe,
-    FileuploadComponent
   ],
   imports: [
     BrowserModule,

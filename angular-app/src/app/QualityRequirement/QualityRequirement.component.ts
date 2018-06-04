@@ -2,8 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { QualityRequirementService } from './QualityRequirement.service';
 import 'rxjs/add/operator/toPromise';
-import { FileuploadComponent }  from '../fileupload/fileupload.component';
-import {QualityRequirement} from "../org.usecase.printer";
+import {QualityRequirement} from '../org.usecase.printer';
 
 
 @Component({
@@ -13,9 +12,6 @@ import {QualityRequirement} from "../org.usecase.printer";
   providers: [QualityRequirementService]
 })
 export class QualityRequirementComponent implements OnInit {
-
-  @ViewChild(FileuploadComponent)
-  private fileUploadComponent: FileuploadComponent;
 
   myForm: FormGroup;
 
@@ -35,40 +31,40 @@ export class QualityRequirementComponent implements OnInit {
 
   private current_db_id;
 
-  qualityRequirementID = new FormControl("", Validators.required);
-  txID = new FormControl("", Validators.required);
-  checksum = new FormControl("", Validators.required);
-  pressure = new FormControl("", Validators.required);
-    peakTemperature = new FormControl("", Validators.required);
-    metadata = new FormControl("", Validators.required);
-  owner = new FormControl("", Validators.required);
-  printerID = new FormControl("");
+  qualityRequirementID = new FormControl('', Validators.required);
+  txID = new FormControl('', Validators.required);
+  checksum = new FormControl('', Validators.required);
+  pressure = new FormControl('', Validators.required);
+    peakTemperature = new FormControl('', Validators.required);
+    metadata = new FormControl('', Validators.required);
+  owner = new FormControl('', Validators.required);
+  printerID = new FormControl('');
 
-  constructor(private serviceQualityRequirement:QualityRequirementService, fb: FormBuilder) {
+  constructor(private serviceQualityRequirement: QualityRequirementService, fb: FormBuilder) {
     this.myForm = fb.group({
-          qualityRequirementID:this.qualityRequirementID,
-          txID:this.txID,
+          qualityRequirementID: this.qualityRequirementID,
+          txID: this.txID,
           checksum: this.checksum,
-        pressure:this.pressure,
+        pressure: this.pressure,
         peakTemperature: this.peakTemperature,
-          metadata:this.metadata,
-          owner:this.owner,
-          printerID:this.printerID,
+          metadata: this.metadata,
+          owner: this.owner,
+          printerID: this.printerID,
     });
   };
 
   ngOnInit(): void {
-    this.loadAll().then(() => {                     
+    this.loadAll().then(() => {
       this.load_OnlyCustomers();
     }).then(() => {
       this.load_OnlyPrinters();
-    });    
+    });
 
   }
 
-	//Get all Customers
+	// Get all Customers
 	load_OnlyCustomers(): Promise<any> {
-		let tempList = [];
+		const tempList = [];
 		return this.serviceQualityRequirement.getAllCustomers()
 		.toPromise()
 		.then((result) => {
@@ -79,13 +75,13 @@ export class QualityRequirementComponent implements OnInit {
 		this.allCustomers = tempList;
 		})
 		.catch((error) => {
-			if(error == 'Server error'){
+			if (error == 'Server error'){
         this.progressMessage = null;
-				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+				this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
 			}
-			else if(error == '404 - Not Found'){
+			else if (error == '404 - Not Found'){
         this.progressMessage = null;
-					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+					this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
 			}
 			else{
         this.progressMessage = null;
@@ -96,7 +92,7 @@ export class QualityRequirementComponent implements OnInit {
 
   //Get all Printers
 	load_OnlyPrinters(): Promise<any> {
-		let tempList = [];
+		const tempList = [];
 		return this.serviceQualityRequirement.getAllPrinters()
 		.toPromise()
 		.then((result) => {
@@ -107,13 +103,13 @@ export class QualityRequirementComponent implements OnInit {
 		this.allPrinters = tempList;
 		})
 		.catch((error) => {
-			if(error == 'Server error'){
+			if (error == 'Server error'){
         this.progressMessage = null;
-				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+				this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
 			}
-			else if(error == '404 - Not Found'){
+			else if (error == '404 - Not Found'){
           this.progressMessage = null;
-					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+					this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
 			}
 			else{
         this.progressMessage = null;
@@ -125,36 +121,36 @@ export class QualityRequirementComponent implements OnInit {
   //Get all QualityRequirement Assets and the Customers associated to them
   loadAll(): Promise<any>  {
     //retrieve all QualityRequirement
-    let tempList = [];
+    const tempList = [];
     return this.serviceQualityRequirement.getAll()
     .toPromise()
     .then((result) => {
 			this.errorMessage = null;
       result.forEach(qualityRequirement => {
         tempList.push(qualityRequirement);
-      });     
+      });
     })
     .then(() => {
-      for (let qualityRequirement of tempList) {
-        var splitted_ownerID = qualityRequirement.owner.split("#", 2);
-        var ownerID = String(splitted_ownerID[1]);
+      for (const qualityRequirement of tempList) {
+        const splitted_ownerID = qualityRequirement.owner.split('#', 2);
+        const ownerID = String(splitted_ownerID[1]);
         this.serviceQualityRequirement.getCustomer(ownerID)
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
-          if(result.firstName){
+          if (result.firstName){
               qualityRequirement.firstName = result.firstName;
           }
-          if(result.lastName){
+          if (result.lastName){
               qualityRequirement.lastName = result.lastName;
           }
         });
       }
       this.allAssets = tempList;
       if (0 < tempList.length) {
-        this.current_db_id = tempList[tempList.length - 1].qualityRequirementID.substr(2)
+        this.current_db_id = tempList[tempList.length - 1].qualityRequirementID.substr(2);
       } else {
-        this.current_db_id = 0
+        this.current_db_id = 0;
       }
     });
   }
@@ -162,171 +158,69 @@ export class QualityRequirementComponent implements OnInit {
   // Method called when a Customer wants to upload a new QualityRequirement Asset
   addAsset(form: any) {
     this.progressMessage = 'Please wait... ';
-    let inputPressure = this.pressure.value;
-    let inputPeakTemperature = this.peakTemperature.value;
-    let inputMetadata = this.metadata.value;
-    let owner = this.owner.value;
-    this.fileUploadComponent.postBCDB(inputPressure, inputPeakTemperature, inputMetadata, owner)
-    .then(txId => {
-    this.current_db_id++;
-    let currentChecksum = this.fileUploadComponent.getChecksum();
-    this.asset = {
-      $class: "org.usecase.printer.QualityRequirement",
-          "qualityRequirementID":"B_" + this.current_db_id,
-          "txID":txId,
-          "checksum": currentChecksum,
-          "pressure":this.pressure.value,
-        "peakTemperature":this.peakTemperature.value,
-        "metadata":this.metadata.value,
-          "owner":this.owner.value
-    };
-    this.myForm.setValue({
-          "qualityRequirementID":null,
-          "txID":null,
-          "checksum":null,
-          "pressure":null,
-        "peakTemperature": null,
-        "metadata":null,
-          "owner":null,
-          "printerID":null
-    });
-    return this.serviceQualityRequirement.addAsset(this.asset)
-    .toPromise()
-    .then(() => {
-			this.errorMessage = null;
-      this.progressMessage = null;
-      this.successMessage = 'Blueprint added successfully. Refreshing page...';
-      this.myForm.setValue({
-          "qualityRequirementID":null,
-          "txID":null,
-          "checksum":null,
-          "pressure":null,
-          "peakTemperature": null,
-          "metadata":null,
-          "owner":null,
-          "printerID":null
-      });
-      location.reload();
-    })
-    .catch((error) => {
-        if(error == 'Server error'){
-            this.progressMessage = null;
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-        }
-        else{
-            this.progressMessage = null;
-            this.errorMessage = error;
-        }
-    })
-    });
-  }
-
-  // Method called when a Enduser wants to Buy a Copy of the QualityRequirement Asset
-  requestAsset(form: any): Promise<any> {
-    this.progressMessage = 'Please wait... ';
-     //Get selected Printer
-     for (let printer of this.allPrinters) {    
-      if(printer.stakeholderID == this.printerID.value){
-        this.printer = printer;
-      }     
-    }
-    //get selected QualityRequirement
-    for (let qualityRequirement of this.allAssets) {
-      if(qualityRequirement.qualityRequirementID == this.currentId){
-        this.qualityRequirement = qualityRequirement;
-      }     
-    }
-    //transaction object
-    this.requestQualityRequirementObj = {
-      $class: "org.usecase.printer.RequestBlueprint",
-      "printer": this.printerID.value,
-      "qualityRequirement": this.currentId
-    };
-    return this.serviceQualityRequirement.requestBlueprint(this.requestQualityRequirementObj)
-    .toPromise()
-    .then((result) => {
-      this.errorMessage = null;
-      this.progressMessage = null;
-      this.successMessage = 'Request was sent to the customer. Refreshing page...';
-      location.reload();
-    })
-    .catch((error) => {
-        if(error == 'Server error'){
-          this.progressMessage = null;
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-        }
-        else if(error == '404 - Not Found'){
-          this.progressMessage = null;
-        this.errorMessage = "404 - Could not find API route. Please check your available APIs."
-        }
-        else if(error == '500 - Internal Server Error') {
-          this.progressMessage = null;
-          this.errorMessage = 'Cannot buy asset. Not enough funds.';
-        }
-        else{
-          this.progressMessage = null;
-            this.errorMessage = error;
-        }
-    });
+    const inputPressure = this.pressure.value;
+    const inputPeakTemperature = this.peakTemperature.value;
+    const inputMetadata = this.metadata.value;
+    const owner = this.owner.value;
   }
 
   setId(id: any): void{
     this.currentId = id;
   }
 
-  //Retrieve a BlueprintCopy with a certain id and copy its values to the Form Object
+  //Retrieve a QualityRequirement with a certain id and copy its values to the Form Object
   getForm(id: any): Promise<any>{
     return this.serviceQualityRequirement.getAsset(id)
     .toPromise()
     .then((result) => {
 			this.errorMessage = null;
-      let formObject = {
-            "qualityRequirementID":null,
-            "txID":null,
-            "checksum":null,
-            "pressure":null,
-            "peakTemperature": null,
-            "metadata":null,
-            "printerID":null,
-            "owner":null
+      const formObject = {
+            'qualityRequirementID': null,
+            'txID': null,
+            'checksum': null,
+            'pressure': null,
+            'peakTemperature': null,
+            'metadata': null,
+            'printerID': null,
+            'owner': null
       };
-        if(result.qualityRequirementID){
+        if (result.qualityRequirementID){
             formObject.qualityRequirementID = result.qualityRequirementID;
         }else{
           formObject.qualityRequirementID = null;
         }
-      
-        if(result.txID){
+
+        if (result.txID){
             formObject.txID = result.txID;
         }else{
           formObject.txID = null;
         }
-      
-        if(result.checksum) {
+
+        if (result.checksum) {
           formObject.checksum = result.checksum;
         } else {
           formObject.checksum = null;
         }
 
-        if(result.pressure){
+        if (result.pressure){
             formObject.pressure = result.pressure;
         }else{
           formObject.pressure = null;
         }
 
-        if(result.peakTemperature){
+        if (result.peakTemperature){
             formObject.peakTemperature = result.peakTemperature;
         }else{
             formObject.peakTemperature = null;
         }
 
-        if(result.metadata){
+        if (result.metadata){
             formObject.metadata = result.metadata;
         }else{
           formObject.metadata = null;
         }
-      
-        if(result.owner){
+
+        if (result.owner){
             formObject.owner = result.owner;
         }else{
           formObject.owner = null;
@@ -334,13 +228,13 @@ export class QualityRequirementComponent implements OnInit {
       this.myForm.setValue(formObject);
     })
     .catch((error) => {
-        if(error == 'Server error'){
+        if (error == 'Server error'){
           this.progressMessage = null;
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+            this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
         }
-        else if(error == '404 - Not Found'){
+        else if (error == '404 - Not Found'){
           this.progressMessage = null;
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+				this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
         }
         else{
           this.progressMessage = null;
@@ -353,14 +247,14 @@ export class QualityRequirementComponent implements OnInit {
   // Reset all Value incurrently saved in the Form Object
   resetForm(): void{
     this.myForm.setValue({
-          "qualityRequirementID":null,
-          "txID":null,
-          "checksum":null,
-          "pressure":null,
-            "peakTemperature":null,
-          "metadata":null,
-          "owner":null,
-          "printerID":null
+          'qualityRequirementID': null,
+          'txID': null,
+          'checksum': null,
+          'pressure': null,
+            'peakTemperature': null,
+          'metadata': null,
+          'owner': null,
+          'printerID': null
       });
   }
 }

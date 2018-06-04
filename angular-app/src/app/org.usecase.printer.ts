@@ -25,30 +25,9 @@ import {Event} from './org.hyperledger.composer.system';
       pressure: number;
       owner: Customer;
    }
-   export class BlueprintCopy extends Asset {
-      blueprintCopyID: string;
-      txID: string;
-      checksum: string;
-      printed: boolean;
-      otpEncryptedWithCustomerPubKey: string;
-      otpEncryptedWithPrinterPubKey: string;
-      printer: Printer;
-      qualityRequirement: QualityRequirement;
-      owner: Stakeholder;
-   }
-   export class RequestBlueprint extends Transaction {
+
+   export class CreatePrintingJob extends Transaction {
         printer: Printer;
         qualityRequirement: QualityRequirement;
-    }
-    export class CancelRequest extends Transaction {
-        blueprintCopy: BlueprintCopy;
-    }
-    export class ConfirmTransaction extends Transaction {
-        blueprintCopy: BlueprintCopy;
-    }
-    export class UploadBlueprintCopy extends Transaction {
-        txID: string;
-        checksum: string;
-        blueprintCopy: BlueprintCopy;
     }
 // }

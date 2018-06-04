@@ -50,15 +50,6 @@ rule CustomerAccessOwnQualityRequirement {
     action: ALLOW
 }
 
-//Customer to have read access to all BlueprintCopy assets
-rule CustomerAccessBlueprintCopyRecord {
-    description: "Allow Customer read access to all BlueprintCopy assets"
-    participant: "org.usecase.printer.Customer"
-    operation: READ
-    resource: "org.usecase.printer.BlueprintCopy"
-    action: ALLOW
-}
-
 //Printers to have access to their own account
 rule PrinterAccessOwnRecord {
     description: "Allow Printers to access only their profile"
@@ -76,15 +67,6 @@ rule PrinterReadAccessCustomers {
     participant: "org.usecase.printer.Printer"
     operation: READ
     resource: "org.usecase.printer.Customer"
-    action: ALLOW
-}
-
-//Printers to have all access to all BlueprintCopy assets
-rule PrinterAccessBlueprintCopyRecord {
-    description: "Allow Printers read access to all BlueprintCopy assets"
-    participant: "org.usecase.printer.Printer"
-    operation: ALL
-    resource: "org.usecase.printer.BlueprintCopy"
     action: ALLOW
 }
 

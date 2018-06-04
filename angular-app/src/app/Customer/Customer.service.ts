@@ -5,7 +5,6 @@ import { Customer } from '../org.usecase.printer';
 
 
 import { QualityRequirement } from '../org.usecase.printer';
-import { BlueprintCopy } from '../org.usecase.printer';
 
 import 'rxjs/Rx';
 

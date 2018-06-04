@@ -16,9 +16,3 @@ query selectQualityRequirement {
   statement:
       SELECT org.usecase.printer.QualityRequirement
 }
-
-query selectBlueprintCopy {
-  description: "Select all BlueprintCopy assets"
-  statement:
-      SELECT org.usecase.printer.BlueprintCopy
-}
