@@ -14,11 +14,5 @@ describe('Starting tests for 3d-printer', function() {
       expect(result).toBe('3d-printer');
     });
   });
-    it('QualityRequirement table should have 6 columns', () => {
-      page.navigateTo('/QualityRequirement');
-      element.all(by.css('.thead-cols th')).then(function(arr) {
-        expect(arr.length).toEqual(6); // Addition of 1 for 'Action' column
-      });
-    });
 
 });

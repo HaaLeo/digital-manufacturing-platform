@@ -11,6 +11,7 @@ import { QualityRequirementComponent } from './QualityRequirement/QualityRequire
 import { CustomerComponent } from 'app/Customer/Customer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
 import { Ng2FileDropModule } from 'ng2-file-drop';
+import { PrintingJobComponent } from './PrintingJob/PrintingJob.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { Ng2FileDropModule } from 'ng2-file-drop';
     QualityRequirementComponent,
     CustomerComponent,
     PrinterComponent,
+    PrintingJobComponent,
   ],
   imports: [
     BrowserModule,

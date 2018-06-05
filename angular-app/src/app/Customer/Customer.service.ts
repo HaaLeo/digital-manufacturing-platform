@@ -3,9 +3,6 @@ import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
 import { Customer } from '../org.usecase.printer';
 
-
-import { QualityRequirement } from '../org.usecase.printer';
-
 import 'rxjs/Rx';
 
 // Can be injected into a constructor

@@ -1,5 +1,5 @@
 
-query selectCustomer {
+query selectCustomers {
   description: "Select all customers"
   statement:
       SELECT org.usecase.printer.Customer
@@ -11,8 +11,14 @@ query selectUtilityPrinter {
       SELECT org.usecase.printer.Printer
 }
 
-query selectQualityRequirement {
+query selectAllQualityRequirements {
   description: "Select all QualityRequirement assets"
   statement:
       SELECT org.usecase.printer.QualityRequirement
+}
+
+query selectAllPrintingJobs {
+  description: "Select all PrintingJobs assets"
+  statement:
+      SELECT org.usecase.printer.PrintingJob
 }

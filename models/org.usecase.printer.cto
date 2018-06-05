@@ -37,6 +37,16 @@ transaction CreatePrintingJob {
     --> QualityRequirement qualityRequirement
 }
 
+asset PrintingJob identified by printingJobID{
+	o String printingJobID
+    o String txID
+    o String checksum
+    o String metadata
+    o String blueprint
+    --> Printer printer
+    --> Customer customer
+}
+
 // NOT USED
 transaction AddNewQualityRequirement{
     o String qualityRequirementID

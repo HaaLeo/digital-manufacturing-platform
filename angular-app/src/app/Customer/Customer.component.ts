@@ -24,7 +24,6 @@ export class CustomerComponent {
     pubKey = new FormControl("", Validators.required);
     firstName = new FormControl("", Validators.required);
     lastName = new FormControl("", Validators.required);
-    // TODO add QualityRequirement and Blueprint Master here
 
   constructor(private serviceCustomer:CustomerService, fb: FormBuilder) {
     this.myForm = fb.group({

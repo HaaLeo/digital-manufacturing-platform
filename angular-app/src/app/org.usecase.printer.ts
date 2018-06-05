@@ -10,7 +10,6 @@ import {Event} from './org.hyperledger.composer.system';
    export class Customer extends Stakeholder {
       firstName: string;
       lastName: string;
-      // qualityRequirement: QualityRequirement
    }
    export class Printer extends Stakeholder {
       name: string;
@@ -24,6 +23,16 @@ import {Event} from './org.hyperledger.composer.system';
       peakTemperature: number;
       pressure: number;
       owner: Customer;
+   }
+
+   export class PrintingJob extends Asset {
+       printingJobID: string;
+       txID: string;
+       checksum: string;
+       metadata: string;
+       blueprint: string;
+       printer: Printer;
+       customer: Customer;
    }
 
    export class CreatePrintingJob extends Transaction {
