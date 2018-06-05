@@ -16,11 +16,6 @@
 	        <input formControlName="peakTemperature" type="number" step='any' class="form-control">
         </div>
               <div class="form-group text-left">
-                <label for="metadata">Description</label>
-                  <textarea formControlName="metadata" type="text" class="form-control">
-                    </textarea>
-              </div>
-              <div class="form-group text-left">
                 <label for="owner">owner</label>
                 <select name="customers" formControlName="owner" >
                   <option *ngFor="let customer of allCustomers" value="{{customer.stakeholderID}}">{{customer.firstName + " " + customer.lastName}}</option>

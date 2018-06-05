@@ -12,6 +12,7 @@ import { CustomerComponent } from 'app/Customer/Customer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
 import { Ng2FileDropModule } from 'ng2-file-drop';
 import { PrintingJobComponent } from './PrintingJob/PrintingJob.component';
+import { EvaluationResultComponent } from './EvaluationResult/EvaluationResult.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { PrintingJobComponent } from './PrintingJob/PrintingJob.component';
     CustomerComponent,
     PrinterComponent,
     PrintingJobComponent,
+    EvaluationResultComponent,
   ],
   imports: [
     BrowserModule,

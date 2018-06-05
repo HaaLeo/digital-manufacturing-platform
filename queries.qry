@@ -22,3 +22,9 @@ query selectAllPrintingJobs {
   statement:
       SELECT org.usecase.printer.PrintingJob
 }
+
+query selectAllEvaluationResults {
+  description: "Select all EvaluationResult assets"
+  statement:
+      SELECT org.usecase.printer.EvaluationResult
+}

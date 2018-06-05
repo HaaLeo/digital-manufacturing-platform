@@ -35,7 +35,18 @@ import {Event} from './org.hyperledger.composer.system';
        customer: Customer;
    }
 
-   export class CreatePrintingJob extends Transaction {
+    export class EvluationResult extends Asset {
+        evaluationResultID: string;
+        txID: string;
+        checksum: string;
+        metadata: string;
+        printingJobID: string;
+        has_passed: boolean;
+        customer: Customer;
+}
+
+
+export class CreatePrintingJob extends Transaction {
         printer: Printer;
         qualityRequirement: QualityRequirement;
     }

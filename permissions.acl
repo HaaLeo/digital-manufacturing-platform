@@ -104,21 +104,41 @@ rule NetworkAdminSystem {
 }
 
 // Customer to have read access to all PrintingJob assets
-rule CustomerAccessPrintingJobRecord {
-    description: "Allow Customer all access to all PrintingJob assets"
-    participant: "org.usecase.printer.Customer"
-    operation: READ, UPDATE, DELETE
-    resource: "org.usecase.printer.PrintingJob"
-    action: ALLOW
-}
+ rule CustomerAccessPrintingJobRecord {
+     description: "Allow Customer all access to all PrintingJob assets"
+     participant: "org.usecase.printer.Customer"
+     operation: READ, UPDATE, DELETE
+     resource: "org.usecase.printer.PrintingJob"
+     action: ALLOW
+ }
 
-//Customer to have access to their own PrintingJob Assets
-rule CustomerAccessOwnPrintingJob {
-    description: "Allow Customer to access only their own PrintingJob assets"
-    participant(p): "org.usecase.printer.Customer"
-    operation: UPDATE, DELETE
-    resource(r): "org.usecase.printer.PrintingJob"
-    // TODO: check if r.customer accessible here
-    condition: (r.customer.getIdentifier() === p.getIdentifier())
-    action: ALLOW
-}
+ //Customer to have access to their own PrintingJob Assets
+ rule CustomerAccessOwnPrintingJob {
+     description: "Allow Customer to access only their own PrintingJob assets"
+     participant(p): "org.usecase.printer.Customer"
+     operation: UPDATE, DELETE
+     resource(r): "org.usecase.printer.PrintingJob"
+     // TODO: check if r.customer accessible here
+     condition: (r.customer.getIdentifier() === p.getIdentifier())
+     action: ALLOW
+ }
+
+ // Customer to have read access to all EvaluationResult assets
+ rule CustomerAccessEvaluationResultRecord {
+     description: "Allow Customer all access to all EvaluationResult assets"
+     participant: "org.usecase.printer.Customer"
+     operation: READ, UPDATE, DELETE
+     resource: "org.usecase.printer.EvaluationResult"
+     action: ALLOW
+ }
+
+ //Customer to have access to their own EvaluationResult Assets
+ rule CustomerAccessOwnEvaluationResult {
+     description: "Allow Customer to access only their own EvaluationResult assets"
+     participant(p): "org.usecase.printer.Customer"
+     operation: UPDATE, DELETE
+     resource(r): "org.usecase.printer.EvaluationResult"
+     // TODO: check if r.customer accessible here
+     condition: (r.customer.getIdentifier() === p.getIdentifier())
+     action: ALLOW
+ }

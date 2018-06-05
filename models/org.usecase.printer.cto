@@ -37,13 +37,25 @@ transaction CreatePrintingJob {
     --> QualityRequirement qualityRequirement
 }
 
+// TODO Make transaction @Leo
 asset PrintingJob identified by printingJobID{
 	o String printingJobID
     o String txID
     o String checksum
     o String metadata
     o String blueprint
+    --> qualityRequirement
     --> Printer printer
+    --> Customer customer
+}
+
+asset EvaluationResult identified by evaluationResultID{
+	o String evaluationResultID
+    o String txID
+    o String checksum
+    o String metadata
+    o String printingJobID // TODO with FK maybe?
+    o Boolean has_passed
     --> Customer customer
 }
 
@@ -56,3 +68,5 @@ transaction AddNewQualityRequirement{
     o Double pressure
     --> Customer owner
 }
+
+// TODO
