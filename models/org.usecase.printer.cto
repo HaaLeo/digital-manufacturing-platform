@@ -44,7 +44,7 @@ asset PrintingJob identified by printingJobID{
     o String checksum
     o String metadata
     o String blueprint
-    --> qualityRequirement
+    --> QualityRequirement qualityRequirement
     --> Printer printer
     --> Customer customer
 }

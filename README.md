@@ -1,7 +1,6 @@
 # 3DPrinter using Hyperledger Composer
 
-A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models. 
-
+A Blockchain application using Hyperledger Composer and BigchainDB for tranfering quality reports of 3D printer
 ## Running the Application
 
 Follow these steps to setup and run the application:
@@ -13,7 +12,7 @@ Follow these steps to setup and run the application:
 *	[Node](https://nodejs.org/en/)
 * [Hyperledger Composer](https://hyperledger.github.io/composer/installing/development-tools.html)
 	* to install composer cli `npm install -g composer-cli`
-	*	to install composer-rest-server `npm install -g composer-rest-server`
+	* to install composer-rest-server `npm install -g composer-rest-server`
 
 
 ### Steps
@@ -30,10 +29,10 @@ Follow these steps to setup and run the application:
 
 ### 1. Clone the repo
 
-Clone the `3DPrinter-Composer` code locally. In a terminal, run:
+Clone the `Quality Report Usecase` code locally. In a terminal, run:
 
 
-`git clone https://git.fortiss.org/nieves/3DPrinter-Composer.git`
+`git clone https://github.com/HaaLeo/digital-manufacturing-platform.git`
 
 #### Quick Run
 
@@ -63,7 +62,7 @@ Remove all previously created Hyperledger Fabric chaincode images:
 
 Set Hyperledger Fabric version to v1.0:
 
-`export FABRIC_VERSION=hlfv1`
+`export FABRIC_VERSION=hlfv11`
 
 All the necessary scripts are in the directory `/fabric-tools`. Start fabric and create peer admin card:
 
@@ -163,12 +162,9 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ./teardownFabric.sh
 ```
 
-
 ### 8.	Additional resources
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
-
-
 
 ### How to stay up to date with model changes:
 

@@ -5,18 +5,30 @@
   "scripts": {
     "test": "mocha --recursive"
   },
-  "author": "Patrick",
-  "email": "nieves_p@hotmail.de",
+  "contributors": [
+    {
+      "name": "Max Obpacher",
+      "url": "https://github.com/MaxObpacher"
+    },
+    {
+      "name": "Aidan Beale",
+      "url": "https://github.com/aidanbeale"
+    },
+    {
+      "name": "Leo Hanisch",
+      "url": "https://github.com/HaaLeo"
+    }
+  ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "composer-admin": "latest",
-    "composer-client": "latest",
-    "composer-common": "latest",
-    "composer-connector-embedded": "latest",
-    "chai": "latest",
-    "eslint": "latest",
-    "istanbul": "latest",
-    "mkdirp": "latest",
-    "mocha": "latest"
+    "composer-admin": "0.19.8",
+    "composer-client": "0.19.8",
+    "composer-common": "0.19.8",
+    "composer-connector-embedded": "0.19.8",
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "istanbul": "^0.4.5",
+    "mkdirp": "0.5.1",
+    "mocha": "^5.2.0"
   }
 }
