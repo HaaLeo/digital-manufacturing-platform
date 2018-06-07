@@ -10,18 +10,9 @@ abstract participant Stakeholder identified by stakeholderID {
     
 }
 
-participant Enduser extends Stakeholder {
+participant Customer extends Stakeholder {
     o String firstName
     o String lastName
-    o String contactInformation
-    --> Cash cash
-}
-
-participant Designer extends Stakeholder {
-    o String firstName
-    o String lastName
-    o String contactInformation
-    --> Cash cash
 }
 
 // Not sure if Printer should be participant or rather asset?
@@ -29,70 +20,53 @@ participant Printer extends Stakeholder {
     o String name
 }
 
-enum OwnerEntity {
-  o Enduser
-  o Designer
-}
-
-//This class represents a "wallet" of a Trader
-asset Cash identified by cashID {
-    o String cashID
-    o String currency
-    o Double value
-    o String ownerID
-    o OwnerEntity ownerEntity
-} 
-
-//This class represents a Master-Blueprint stored on BCDB
-asset BlueprintMaster identified by blueprintMasterID {
-    o String blueprintMasterID
+//This class represents a QualityRequirement stored on BCDB
+asset QualityRequirement identified by qualityRequirementID {
+    o String qualityRequirementID
     o String txID
     o String checksum
-    o Double price
     o String metadata
-    --> Designer owner
-}
-
-//This class represents a copy of a Master-Blueprint 
-asset BlueprintCopy identified by blueprintCopyID {
-    o String blueprintCopyID
-    o String txID
-    o String checksum
-    o Boolean printed
-    o String otpEncryptedWithDesignerPubKey
-    o String otpEncryptedWithPrinterPubKey
-    --> Printer printer
-    --> Enduser buyer
-    --> BlueprintMaster blueprintMaster
-    --> Stakeholder owner
+    o Double peakTemperature
+    o Double pressure
+    --> Customer owner
 }
 
 // Transaction after succesful printing
-transaction ConfirmTransaction {
-    --> BlueprintCopy blueprintCopy
+transaction CreatePrintingJob {
+	--> Printer printer
+    --> QualityRequirement qualityRequirement
 }
 
-transaction CancelRequest {
-    --> BlueprintCopy blueprintCopy
-}
-
-transaction UploadBlueprintCopy {
+// TODO Make transaction @Leo
+asset PrintingJob identified by printingJobID{
+	o String printingJobID
     o String txID
     o String checksum
-    --> BlueprintCopy blueprintCopy
+    o String metadata
+    o String blueprint
+    --> QualityRequirement qualityRequirement
+    --> Printer printer
+    --> Customer customer
 }
 
-transaction RequestBlueprint {
-    --> Enduser buyer
-    --> Printer printer
-    --> BlueprintMaster blueprintMaster
+asset EvaluationResult identified by evaluationResultID{
+	o String evaluationResultID
+    o String txID
+    o String checksum
+    o String metadata
+    o String printingJobID // TODO with FK maybe?
+    o Boolean has_passed
+    --> Customer customer
 }
 
 // NOT USED
-transaction AddNewBlueprintMaster {
-    o String blueprintMasterID
+transaction AddNewQualityRequirement{
+    o String qualityRequirementID
     o String assetHash
-    o Double price
     o String metadata
-    --> Designer owner
+    o Double peakTemperature
+    o Double pressure
+    --> Customer owner
 }
+
+// TODO

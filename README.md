@@ -1,11 +1,6 @@
-# Digital Manufacturing Platform
-This repository contains the basic folder structure for the BlockchainBLC4PI (SOSE 2018).
+# 3DPrinter using Hyperledger Composer
 
->This repository was forked from the [3D Printer use case](https://git.fortiss.org/Blockchain/Demonstrator/3DPrinter-Composer/commit/4eb1629f36305f2c7a3e3bea744fa90b123151d1) and will be the base for further development.
-A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models. 
-
-The idea is that designers upload their original models and set the price for each model. These models are avaliable to the end-users for 3D printing. The end-users select which models they want to print and pay the cost. The designers upload a copy of the already bought models and the printers print the 3D objects and transfer the money to the corresponding model creators.
-
+A Blockchain application using Hyperledger Composer and BigchainDB for tranfering quality reports of 3D printer
 ## Running the Application
 
 Follow these steps to setup and run the application:
@@ -17,7 +12,7 @@ Follow these steps to setup and run the application:
 *	[Node](https://nodejs.org/en/)
 * [Hyperledger Composer](https://hyperledger.github.io/composer/installing/development-tools.html)
 	* to install composer cli `npm install -g composer-cli`
-	*	to install composer-rest-server `npm install -g composer-rest-server`
+	* to install composer-rest-server `npm install -g composer-rest-server`
 
 
 ### Steps
@@ -34,10 +29,10 @@ Follow these steps to setup and run the application:
 
 ### 1. Clone the repo
 
-Clone the `3DPrinter-Composer` code locally. In a terminal, run:
+Clone the `Quality Report Usecase` code locally. In a terminal, run:
 
 
-`git clone https://git.fortiss.org/nieves/3DPrinter-Composer.git`
+`git clone https://github.com/HaaLeo/digital-manufacturing-platform.git`
 
 #### Quick Run
 
@@ -67,7 +62,7 @@ Remove all previously created Hyperledger Fabric chaincode images:
 
 Set Hyperledger Fabric version to v1.0:
 
-`export FABRIC_VERSION=hlfv1`
+`export FABRIC_VERSION=hlfv11`
 
 All the necessary scripts are in the directory `/fabric-tools`. Start fabric and create peer admin card:
 
@@ -167,11 +162,28 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ./teardownFabric.sh
 ```
 
-
 ### 8.	Additional resources
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
 
+### How to stay up to date with model changes:
 
+```
+cd fabric-tools/
+./stopFabric.sh
+./teardownFabric.sh
+```
 
+Delete everything in the dist folder
 
+```
+composer archive create -a dist/printer-use-case.bna --sourceType dir --sourceName . -f
+```
+
+Execute everything in step 2
+
+Execute everything in step 3
+
+Execute everything in step 4
+
+Start the composer-rest-server
