@@ -1,14 +1,8 @@
 
-query selectEndusers {
-  description: "Select all endusers"
+query selectCustomers {
+  description: "Select all customers"
   statement:
-      SELECT org.usecase.printer.Enduser
-}
-
-query selectDesigner {
-  description: "Select all designers"
-  statement:
-      SELECT org.usecase.printer.Designer
+      SELECT org.usecase.printer.Customer
 }
 
 query selectUtilityPrinter {
@@ -17,20 +11,20 @@ query selectUtilityPrinter {
       SELECT org.usecase.printer.Printer
 }
 
-query selectBlueprintMaster {
-  description: "Select all BlueprintMaster assets"
+query selectAllQualityRequirements {
+  description: "Select all QualityRequirement assets"
   statement:
-      SELECT org.usecase.printer.BlueprintMaster
+      SELECT org.usecase.printer.QualityRequirement
 }
 
-query selectBlueprintCopy {
-  description: "Select all BlueprintCopy assets"
+query selectAllPrintingJobs {
+  description: "Select all PrintingJobs assets"
   statement:
-      SELECT org.usecase.printer.BlueprintCopy
+      SELECT org.usecase.printer.PrintingJob
 }
 
-query selectCash {
-  description: "Select all cash assets"
+query selectAllEvaluationResults {
+  description: "Select all EvaluationResult assets"
   statement:
-      SELECT org.usecase.printer.Cash
+      SELECT org.usecase.printer.EvaluationResult
 }

@@ -1,10 +1,6 @@
-# Digital Manufacturing Platform
-This repository contains the basic folder structure for the BlockchainBLC4PI (SOSE 2018).
+# 3DPrinter using Hyperledger Composer
 
->This repository was forked from the [3D Printer use case](https://git.fortiss.org/Blockchain/Demonstrator/3DPrinter-Composer/commit/4eb1629f36305f2c7a3e3bea744fa90b123151d1) and will be the base for further development.
 A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models. 
-
-The idea is that designers upload their original models and set the price for each model. These models are avaliable to the end-users for 3D printing. The end-users select which models they want to print and pay the cost. The designers upload a copy of the already bought models and the printers print the 3D objects and transfer the money to the corresponding model creators.
 
 ## Running the Application
 
@@ -174,4 +170,24 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 
 
 
+### How to stay up to date with model changes:
 
+```
+cd fabric-tools/
+./stopFabric.sh
+./teardownFabric.sh
+```
+
+Delete everything in the dist folder
+
+```
+composer archive create -a dist/printer-use-case.bna --sourceType dir --sourceName . -f
+```
+
+Execute everything in step 2
+
+Execute everything in step 3
+
+Execute everything in step 4
+
+Start the composer-rest-server

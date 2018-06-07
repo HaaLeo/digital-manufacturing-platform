@@ -1,0 +1,96 @@
+@startuml Business-Network-Definition
+'** Auto generated content, any changes may be lost **'
+!define DATE %date[EEE, MMM d, ''yy 'at' HH:mm]%
+skinparam class {
+  Font {
+    Color Black
+    Style Plain
+    Size 16
+  }
+}
+skinparam title {
+  BackgroundColor LightYellow
+  BorderThickness 0.5
+  BorderRoundCorner 6
+  FontColor Black
+  FontSize 18
+}
+title
+Business Network Definition
+end title
+class eos.usecase.printer.Stakeholder << (P,lightblue) >> {
+   + String stakeholderID
+   + String pubKey
+}
+eos.usecase.printer.Stakeholder --|> eos.hyperledger.composer.system.Participant
+class eos.usecase.printer.Customer << (P,lightblue) >> {
+   + String firstName
+   + String lastName
+   + String contactInformation
+   + Cash cash
+}
+eos.usecase.printer.Customer --|> eos.usecase.printer.Stakeholder
+class eos.usecase.printer.Printer << (P,lightblue) >> {
+   + String name
+}
+eos.usecase.printer.Printer --|> eos.usecase.printer.Stakeholder
+class eos.usecase.printer.OwnerEntity << (E,grey) >> {
+   + Customer
+   + Printer
+}
+class eos.usecase.printer.Cash << (A,green) >> {
+   + String cashID
+   + String currency
+   + Double value
+   + String ownerID
+   + OwnerEntity ownerEntity
+}
+eos.usecase.printer.Cash --|> eos.hyperledger.composer.system.Asset
+class eos.usecase.printer.QualityRequirement << (A,green) >> {
+   + String qualityRequirementID
+   + String txID
+   + String checksum
+   + String metadata
+   + Stakeholder owner
+}
+eos.usecase.printer.QualityRequirement --|> eos.hyperledger.composer.system.Asset
+class eos.usecase.printer.QualityReport << (A,green) >> {
+   + String qualityReportCopyID
+   + String txID
+   + String checksum
+   + Boolean requirementFulfilled
+   + String otpEncryptedWithPrinterPubKey
+   + Customer buyer
+   + QualityRequirement qualityRequirement
+   + Printer owner
+}
+eos.usecase.printer.QualityReport --|> eos.hyperledger.composer.system.Asset
+class eos.usecase.printer.UploadQualityReport << (T,yellow) >> {
+   + String txID
+   + String checksum
+   + QualityReport qualityReport
+   + Printer owner
+}
+eos.usecase.printer.UploadQualityReport --|> eos.hyperledger.composer.system.Transaction
+class eos.usecase.printer.RequestPrintJob << (T,yellow) >> {
+   + Customer buyer
+   + BluePrint bluePrint
+   + QualityRequirement qualityRequirement
+}
+eos.usecase.printer.RequestPrintJob --|> eos.hyperledger.composer.system.Transaction
+class eos.usecase.printer.AddNewQualityRequirement << (T,yellow) >> {
+   + String qualityRequirementID
+   + String assetHash
+   + String metadata
+   + Stakeholder owner
+}
+eos.usecase.printer.AddNewQualityRequirement --|> eos.hyperledger.composer.system.Transaction
+class eos.usecase.printer.AddNewBluePrint << (T,yellow) >> {
+   + String bluePrintID
+   + String assetHash
+   + String metadata
+   + Customer owner
+}
+eos.usecase.printer.AddNewBluePrint --|> eos.hyperledger.composer.system.Transaction
+'right footer DATE
+@enduml
