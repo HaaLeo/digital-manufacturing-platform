@@ -1,4 +1,8 @@
-#!/bin/bash 
+#!/bin/bash
+
+docker rmi $(docker images dev-* -q) -f
+
+export FABRIC_VERSION=hlfv11
 
 cd fabric-tools/
 ./startFabric.sh
