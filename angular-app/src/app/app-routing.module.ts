@@ -12,6 +12,7 @@ import { CancelRequestTRComponent } from './CancelRequestTR/CancelRequestTR.comp
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
 import { DesignerComponent } from 'app/Designer/Designer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
+import {QualityRequirementComponent} from "./QualityRequirement/QualityRequirement.component";
 
 const routes: Routes = [
     // { path: 'transaction', component: TransactionComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
 		{ path: 'Cash', component: CashComponent},
 		{ path: 'BlueprintMaster', component: BlueprintMasterComponent},
 		{ path: 'BlueprintCopy', component: BlueprintCopyComponent},
+    { path: 'QualityRequirement', component: QualityRequirementComponent},
     { path: 'BuyAssetTR', component: BuyAssetTRComponent },
     { path: 'CancelRequestTR', component: CancelRequestTRComponent },
     { path: 'Enduser', component: EnduserComponent},

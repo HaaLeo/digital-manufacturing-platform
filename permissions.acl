@@ -251,3 +251,22 @@ rule NetworkAdminSystem {
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
 }
+
+//Endusers to have read access to all QualityRequirement assets
+rule EnduserAccessQualityRequirementRecord {
+    description: "Allow Endusers read access to all QualityRequirement assets"
+    participant: "org.usecase.printer.Enduser"
+    operation: ALL
+    resource: "org.usecase.printer.QualityRequirement"
+    action: ALLOW
+}
+
+//Printers to have read access to all QualityRequirement assets
+rule PrinterAccessQualityRequirementRecord {
+    description: "Allow Printers read access to all QualityRequirement assets"
+    participant: "org.usecase.printer.Printer"
+    operation: ALL
+    resource: "org.usecase.printer.Printer"
+    action: ALLOW
+}
+
