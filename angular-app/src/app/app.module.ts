@@ -18,6 +18,7 @@ import { PrinterComponent } from 'app/Printer/Printer.component';
 import { UsersPipe} from './BlueprintCopy/Pipe';
 import { FileuploadComponent } from './fileupload/fileupload.component';
 import { Ng2FileDropModule }  from 'ng2-file-drop';
+import { QualityRequirementComponent } from './QualityRequirement/QualityRequirement.component';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -34,7 +35,8 @@ import { Ng2FileDropModule }  from 'ng2-file-drop';
     PrinterComponent,
     BlueprintCopyComponent,
     UsersPipe,
-    FileuploadComponent
+    FileuploadComponent,
+    QualityRequirementComponent
 		
   ],
   imports: [

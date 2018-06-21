@@ -53,6 +53,14 @@ import {Event} from './org.hyperledger.composer.system';
       blueprintMaster: BlueprintMaster;
       owner: Stakeholder;
    }
+
+   export class QualityRequirement extends Asset {
+       qualityRequirementID: string;
+       txID: string;
+       checksum: string;
+       owner: Enduser;
+   }
+
    export class RequestBlueprint extends Transaction {
         buyer: Enduser;
         printer: Printer;
