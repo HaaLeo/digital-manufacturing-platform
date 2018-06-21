@@ -73,7 +73,6 @@ asset BlueprintCopy identified by blueprintCopyID {
 asset QualityRequirement identified by qualityRequirementID {
 	o String qualityRequirementID
     o String txID
-    o String checksum
     --> Enduser owner
 }
 

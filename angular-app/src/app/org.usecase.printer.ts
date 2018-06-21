@@ -57,7 +57,6 @@ import {Event} from './org.hyperledger.composer.system';
    export class QualityRequirement extends Asset {
        qualityRequirementID: string;
        txID: string;
-       checksum: string;
        owner: Enduser;
    }
 
