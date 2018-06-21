@@ -8,7 +8,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class BlueprintCopyService {
 
-	
+
     private NAMESPACE: string = 'org.usecase.printer.BlueprintCopy';
     private DESIGNER: string = 'org.usecase.printer.Designer';
     private PRINTER: string = 'org.usecase.printer.Printer';
@@ -59,7 +59,7 @@ export class BlueprintCopyService {
     public getAllEndusers(): Observable<Enduser[]> {
       return this.enduserService.getAll(this.ENDUSER);
    }
-  
+
     public getAllPrinters(): Observable<Printer[]> {
       return this.printerService.getAll(this.PRINTER);
     }

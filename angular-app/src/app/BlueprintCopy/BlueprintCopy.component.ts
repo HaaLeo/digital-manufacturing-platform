@@ -41,8 +41,8 @@ export class BlueprintCopyComponent implements OnInit {
   buyer = new FormControl("", Validators.required);
   blueprintMaster = new FormControl("", Validators.required);
   owner = new FormControl("", Validators.required);
-        
-  
+
+
   constructor(private serviceBlueprintCopy:BlueprintCopyService, fb: FormBuilder) {
     this.myForm = fb.group({
           blueprintCopyID:this.blueprintCopyID,
@@ -57,9 +57,9 @@ export class BlueprintCopyComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.load_allStakeholders().then(() => {                     
+    this.load_allStakeholders().then(() => {
       this.loadAll();
-    });    
+    });
     this.selectedElement = "all"
   }
 
@@ -76,7 +76,7 @@ export class BlueprintCopyComponent implements OnInit {
         bpc.blueprintMaster = this.serviceBlueprintCopy.getID(bpc.blueprintMaster);
         bpc.owner = this.serviceBlueprintCopy.getID(bpc.owner);
         bpcList.push(bpc);
-      });     
+      });
     })
     .then(() => {
       for (let bpc of bpcList) {
@@ -140,7 +140,7 @@ export class BlueprintCopyComponent implements OnInit {
       this.allStakeholders = tempList;
       })
     })
-    
+
 		;
   }
 
@@ -202,7 +202,7 @@ export class BlueprintCopyComponent implements OnInit {
             "printer":null,
             "buyer":null,
             "blueprintMaster":null,
-            "owner":null 
+            "owner":null
       };
 
         if(result.blueprintCopyID){
@@ -216,37 +216,37 @@ export class BlueprintCopyComponent implements OnInit {
         } else {
           formObject.printed = null;
         }
-      
+
         if(result.otpEncryptedWithDesignerPubKey){
             formObject.otpEncryptedWithDesignerPubKey = result.otpEncryptedWithDesignerPubKey;
         }else{
           formObject.otpEncryptedWithDesignerPubKey = null;
         }
-      
+
         if(result.otpEncryptedWithPrinterPubKey){
             formObject.otpEncryptedWithPrinterPubKey = result.otpEncryptedWithPrinterPubKey;
         }else{
           formObject.otpEncryptedWithPrinterPubKey = null;
         }
-      
+
         if(result.printer){
             formObject.printer = result.printer;
         }else{
           formObject.printer = null;
         }
-      
+
         if(result.buyer){
             formObject.buyer = result.buyer;
         }else{
           formObject.buyer = null;
         }
-      
+
         if(result.blueprintMaster){
             formObject.blueprintMaster = result.blueprintMaster;
         }else{
           formObject.blueprintMaster = null;
         }
-      
+
         if(result.owner){
             formObject.owner = result.owner;
         }else{
@@ -275,7 +275,7 @@ export class BlueprintCopyComponent implements OnInit {
   // Method which is called when Designer uploads the Blueprint Copy File
   uploadCopyAsset(form: any) {
     this.progressMessage = 'Please wait... ';
-    this.fileUploadComponent.postBCDB("","","")
+    this.fileUploadComponent.postBCDB("My ipfs test key", "My description", "my owner")
     .then(txId => {
     let currentChecksum = this.fileUploadComponent.getChecksum();
     this.asset = {
@@ -300,7 +300,7 @@ export class BlueprintCopyComponent implements OnInit {
         "printer":null,
         "buyer":null,
         "blueprintMaster":null,
-        "owner":null 
+        "owner":null
     });
 
     var uploadAsset = {
@@ -309,6 +309,12 @@ export class BlueprintCopyComponent implements OnInit {
           "checksum": currentChecksum,
           "blueprintCopy":this.asset.blueprintCopyID
     };
+
+    // For test purpose TODO Leo remove
+    this.fileUploadComponent.getBCDB(txId).then(asset => {
+      debugger;
+      console.log(asset);
+    });
 
     return this.serviceBlueprintCopy.upload(uploadAsset)
     .toPromise()
@@ -324,7 +330,7 @@ export class BlueprintCopyComponent implements OnInit {
           "printer":null,
           "buyer":null,
           "blueprintMaster":null,
-          "owner":null 
+          "owner":null
       });
       location.reload();
     })
@@ -354,7 +360,7 @@ export class BlueprintCopyComponent implements OnInit {
           "printer":null,
           "buyer":null,
           "blueprintMaster":null,
-          "owner":null 
+          "owner":null
       });
   }
 }
