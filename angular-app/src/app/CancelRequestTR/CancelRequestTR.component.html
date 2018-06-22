@@ -22,9 +22,9 @@
           <div class="panel-heading"><strong>Choose the transaction you want to cancel</strong></div>
           <div class="panel-body">
           <form [formGroup]="myForm">
-              <p>BlueprintCopyID:
-                <select [(ngModel)]="selectedCopy" name="blueprintCopy" formControlName="blueprintCopyID" >
-                  <option *ngFor="let blueprintCopy of allBlueprintCopies" value="{{blueprintCopy.blueprintCopyID}}">{{blueprintCopy.blueprintCopyID}}</option>
+              <p>PrintingJobID:
+                <select [(ngModel)]="selectedJob" name="printingJob" formControlName="printingJobID" >
+                  <option *ngFor="let printingJob of allPrintingJobs" value="{{printingJob.printingJobID}}">{{printingJob.printingJobID}}</option>
                 </select>
               </p>
               <br>
@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="row">  
-      <div *ngIf="selectedCopy" class="col-md-offset-4 col-md-4">
+      <div *ngIf="selectedJob" class="col-md-offset-4 col-md-4">
         <button (click)="execute(form);" type="button" class="btn btn-success" data-toggle="modal" >Cancel Request</button>	  
       </div>
     </div>

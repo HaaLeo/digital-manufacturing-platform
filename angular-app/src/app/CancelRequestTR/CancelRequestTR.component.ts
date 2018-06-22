@@ -11,56 +11,56 @@ import { CancelRequestTRService } from './CancelRequestTR.service';
 
 export class CancelRequestTRComponent {
 	myForm: FormGroup;
-	blueprintCopyID = new FormControl("", Validators.required);
+    printingJobID = new FormControl('', Validators.required);
 
 	private transactionFrom;
 	private errorMessage;
 	private progressMessage;
   private successMessage;
-	private allBlueprintCopies;
-	
-	private blueprintCopyCurrent;
+	private allPrintingJobs;
+
+	private printingJobCurrent;
 	private cancelRequestObj;
 	private transactionID;
-	private selectedCopy;
+	private selectedJob;
 
-	constructor(private serviceTransaction:CancelRequestTRService, fb: FormBuilder) {
+	constructor(private serviceTransaction: CancelRequestTRService, fb: FormBuilder) {
 		this.myForm = fb.group({
-			blueprintCopyID:this.blueprintCopyID,
+            printingJobID: this.printingJobID,
 	  });
 	}
-	
+
 	ngOnInit(): void {
 		this.transactionFrom  = false;
-		this.loadAllBlueprintCopies()
-		.then(() => {                     
+		this.loadAllPrintingJobs()
+		.then(() => {
 				this.transactionFrom  = true;
 		});
-		
+
 	  }
 
-	//Get all BlueprintCopies
-	loadAllBlueprintCopies(): Promise<any> {
-		let tempList = [];
-		return this.serviceTransaction.getAllBlueprintCopies()
+	//Get all PrintingJobs
+	loadAllPrintingJobs(): Promise<any> {
+		const tempList = [];
+		return this.serviceTransaction.getAllPrintingJobs()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
-		result.forEach(blueprintCopy => {
-			//DISPLAY ONLY BLUEPRINT COPIES THAT HAVEN'T PRINTED YET
-			if(blueprintCopy.printed == false)
-				tempList.push(blueprintCopy);
+		result.forEach(printingJob => {
+			//DISPLAY ONLY PRINTING JOBS THAT HAVEN'T PRINTED YET
+			if (printingJob.printed == false)
+				tempList.push(printingJob);
 		});
-		this.allBlueprintCopies = tempList;
+		this.allPrintingJobs = tempList;
 		})
 		.catch((error) => {
-			if(error == 'Server error'){
+			if (error == 'Server error'){
 				this.progressMessage = null;
-				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+				this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
 			}
-			else if(error == '404 - Not Found'){
+			else if (error == '404 - Not Found'){
 				this.progressMessage = null;
-					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+					this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
 			}
 			else{
 				this.progressMessage = null;
@@ -71,44 +71,44 @@ export class CancelRequestTRComponent {
 
   	execute(form: any){
   	this.progressMessage = 'Please wait... ';
-  	
-		for (let blueprintCopy of this.allBlueprintCopies) {
-			if(blueprintCopy.blueprintCopyID == this.blueprintCopyID.value) {
-				this.blueprintCopyCurrent = blueprintCopy;
+
+		for (const printingJob of this.allPrintingJobs) {
+			if (printingJob.printingJobID == this.printingJobID.value) {
+				this.printingJobCurrent = printingJob;
 			}
 		}
     	this.cancelRequestObj = {
-	      "$class": "org.usecase.printer.CancelRequest",
-	      "blueprintCopy": "resource:org.usecase.printer.BlueprintCopy#"+this.blueprintCopyCurrent.blueprintCopyID
+	      '$class': 'org.usecase.printer.CancelRequest',
+	      'printingJob': 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID
 	    };
 	    return this.serviceTransaction.cancelRequest(this.cancelRequestObj)
 	    .toPromise()
 	    .then((result) => {
-	    	this.selectedCopy = null;
-	    	
+	    	this.selectedJob = null;
+
 	    	this.errorMessage = null;
 	    	this.progressMessage = null;
         this.successMessage = 'Request was cancelled successfully.';
-        
+
         this.transactionID = result.transactionId;
         })
 	    .catch((error) => {
-                if(error == 'Server error'){
+                if (error == 'Server error'){
                 	this.progressMessage = null;
-                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
                 }
-                else if(error == '404 - Not Found'){
+                else if (error == '404 - Not Found'){
                 	this.progressMessage = null;
-                	this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+                	this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
                 }
                 else{
                 	this.progressMessage = null;
                     this.errorMessage = error;
                 }
             }).then(() => {
-            	if(this.errorMessage == 'Cannot buy asset. Not enough funds.') {
-            		this.transactionFrom = true;		
-            	} else 
+            	if (this.errorMessage == 'Cannot buy asset. Not enough funds.') {
+            		this.transactionFrom = true;
+            	} else
  		             this.transactionFrom = false;
             });
   	}

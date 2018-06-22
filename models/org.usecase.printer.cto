@@ -54,10 +54,10 @@ asset BlueprintMaster identified by blueprintMasterID {
     --> Designer owner
 }
 
-//This class represents a copy of a Master-Blueprint
+//This class represents a printingJob
 // TODO Rename to Printing Job
-asset BlueprintCopy identified by blueprintCopyID {
-    o String blueprintCopyID
+asset PrintingJob identified by printingJobID {
+    o String printingJobID
     o String txID
     o String checksum
     o Boolean printed
@@ -78,18 +78,18 @@ asset QualityRequirement identified by qualityRequirementID {
 
 // Transaction after succesful printing
 transaction ConfirmTransaction {
-    --> BlueprintCopy blueprintCopy
+    --> PrintingJob printingJob
 }
 
 transaction CancelRequest {
-    --> BlueprintCopy blueprintCopy
+    --> PrintingJob printingJob
 }
 
 // TODO rename to confirmPrinting Job
-transaction UploadBlueprintCopy {
+transaction UploadPrintingJob {
     o String txID
     o String checksum
-    --> BlueprintCopy blueprintCopy
+    --> PrintingJob printingJob
 }
 
 transaction RequestBlueprint {

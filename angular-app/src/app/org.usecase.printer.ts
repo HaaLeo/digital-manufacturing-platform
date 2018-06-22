@@ -41,8 +41,8 @@ import {Event} from './org.hyperledger.composer.system';
       metadata: string;
       owner: Designer;
    }
-   export class BlueprintCopy extends Asset {
-      blueprintCopyID: string;
+   export class PrintingJob extends Asset {
+       printingJobID: string;
       txID: string;
       checksum: string;
       printed: boolean;
@@ -66,14 +66,14 @@ import {Event} from './org.hyperledger.composer.system';
         blueprintMaster: BlueprintMaster;
     }
     export class CancelRequest extends Transaction {
-        blueprintCopy: BlueprintCopy;
+        printingJob: PrintingJob;
     }
     export class ConfirmTransaction extends Transaction {
-        blueprintCopy: BlueprintCopy;
+        printingJob: PrintingJob;
     }
-    export class UploadBlueprintCopy extends Transaction {
+    export class UploadPrintingJob extends Transaction {
         txID: string;
         checksum: string;
-        blueprintCopy: BlueprintCopy;   
+        printingJob: PrintingJob;
     }
 // }
