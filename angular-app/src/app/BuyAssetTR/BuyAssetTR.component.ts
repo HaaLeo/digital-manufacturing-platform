@@ -80,8 +80,8 @@ export class BuyAssetTRComponent {
 			}
 		}
     	this.confirmTransactionObj = {
-	      '$class': 'org.usecase.printer.ConfirmTransaction',
-	      'printingJobID': 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID
+	      "$class": "org.usecase.printer.ConfirmTransaction",
+	      "printingJob": "resource:org.usecase.printer.PrintingJob#"+this.printingJobCurrent.printingJobID
 	    };
 	    return this.serviceTransaction.printBlueprint(this.confirmTransactionObj)
 	    .toPromise()
