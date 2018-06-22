@@ -86,7 +86,7 @@ transaction CancelRequest {
 }
 
 // TODO rename to confirmPrinting Job
-transaction UploadPrintingJob {
+transaction ConfirmPrintingJob {
     o String txID
     o String checksum
     --> PrintingJob printingJob

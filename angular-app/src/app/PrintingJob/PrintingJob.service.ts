@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { PrintingJob, Designer, Printer, Enduser, BlueprintMaster, CancelRequest, UploadPrintingJob} from '../org.usecase.printer';
+import { PrintingJob, Designer, Printer, Enduser, BlueprintMaster, CancelRequest, ConfirmPrintingJob} from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -15,10 +15,10 @@ export class PrintingJobService {
     private ENDUSER = 'org.usecase.printer.Enduser';
     private BLUEPRINTMASTER = 'org.usecase.printer.BlueprintMaster';
     private CANCELREQUEST = 'org.usecase.printer.CancelRequest';
-    private UPDATEREQUEST = 'org.usecase.printer.UploadPrintingJob';
+    private UPDATEREQUEST = 'org.usecase.printer.ConfirmPrintingJob';
 
     constructor(private dataService: DataService<PrintingJob>, private designerService: DataService<Designer>,
-                private uploadPrintingJobService: DataService<UploadPrintingJob>,
+                private confirmPrintingJobService: DataService<ConfirmPrintingJob>,
                 private cancelRequestService: DataService<CancelRequest>,
                 private blueprintMasterService: DataService<BlueprintMaster>,
                 private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
@@ -48,8 +48,8 @@ export class PrintingJobService {
       return this.cancelRequestService.add(this.CANCELREQUEST, itemToCancel);
     }
 
-    public upload(itemToUpload: any): Observable<UploadPrintingJob> {
-      return this.uploadPrintingJobService.add(this.UPDATEREQUEST, itemToUpload);
+    public upload(itemToUpload: any): Observable<ConfirmPrintingJob> {
+      return this.confirmPrintingJobService.add(this.UPDATEREQUEST, itemToUpload);
     }
 
     public getAllPrintingJobs(): Observable<PrintingJob[]> {

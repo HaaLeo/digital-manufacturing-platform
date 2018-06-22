@@ -71,7 +71,7 @@ import {Event} from './org.hyperledger.composer.system';
     export class ConfirmTransaction extends Transaction {
         printingJob: PrintingJob;
     }
-    export class UploadPrintingJob extends Transaction {
+    export class ConfirmPrintingJob extends Transaction {
         txID: string;
         checksum: string;
         printingJob: PrintingJob;

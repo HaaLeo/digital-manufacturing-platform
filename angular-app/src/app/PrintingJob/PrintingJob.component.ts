@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { PrintingJobService } from './PrintingJob.service';
 import 'rxjs/add/operator/toPromise';
 import { UsersPipe} from './Pipe';
-import {FileuploadComponent} from "../fileupload/fileupload.component"
+import {FileuploadComponent} from "../fileupload/fileupload.component";
 import {PrintingJob} from "../org.usecase.printer";
 
 
@@ -176,7 +176,7 @@ export class PrintingJobComponent implements OnInit {
       }
       else if(error == '404 - Not Found'){
         this.progressMessage = null;
-        this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
       }
       else{
         this.progressMessage = null;
@@ -263,7 +263,7 @@ export class PrintingJobComponent implements OnInit {
         }
         else if(error == '404 - Not Found'){
           this.progressMessage = null;
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+				this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
         }
         else{
           this.progressMessage = null;
@@ -276,6 +276,7 @@ export class PrintingJobComponent implements OnInit {
   // Method which is called when Designer uploads the Blueprint Copy File
   uploadJobAsset(form: any) {
     this.progressMessage = 'Please wait... ';
+    debugger;
     this.fileUploadComponent.postBCDB("My ipfs test key", "My description", "my owner")
     .then(txId => {
     let currentChecksum = this.fileUploadComponent.getChecksum();
@@ -305,7 +306,7 @@ export class PrintingJobComponent implements OnInit {
     });
 
     var uploadAsset = {
-      $class: "org.usecase.printer.UploadPrintingJob",
+      $class: "org.usecase.printer.ConfirmPrintingJob",
           "txID":txId,
           "checksum": currentChecksum,
           "printingJob":this.asset.printingJobID
@@ -322,7 +323,7 @@ export class PrintingJobComponent implements OnInit {
     .then(() => {
 			this.errorMessage = null;
       this.progressMessage = null;
-      this.successMessage = 'Blueprint uploaded successfully. Refreshing page...'
+      this.successMessage = 'PrintingJob uploaded successfully. Refreshing page...'
       this.myForm.setValue({
           "printingJobID":null,
           "printed":null,

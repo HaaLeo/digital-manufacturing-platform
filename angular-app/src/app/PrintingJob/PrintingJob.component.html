@@ -90,7 +90,7 @@
             <td>{{asset.designerName}}</td>
             <td>
               <button *ngIf="!asset.printed;" (click)="setId(asset.printingJobID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelRequestModal">Cancel Request</button>
-              <button *ngIf="!asset.printed;" (click)="getForm(asset.printingJobID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadJobModal">Upload Job</button>
+              <button *ngIf="!asset.printed;" (click)="getForm(asset.printingJobID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadJobModal">Confirm Job</button>
             </td>
           </tr>
         </tbody>
