@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile } from 'ng2-file-drop';
-import {postKeyToBcDB, getAssetFromBcDB} from './bigchain-post/ipfsKeyAssetBigchain.js'
+import {postKeyToBcDB, getAssetFromBcDB} from './bigchain-post/ipfsKeyAssetBigchain.js';
 import generateCS from './bigchain-post/ChecksumGenerator.js';
 
 

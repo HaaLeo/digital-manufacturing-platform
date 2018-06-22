@@ -1,4 +1,3 @@
-import encryptor from './encryptor';
 
 const app_id = '5bc2b153';
 const app_key = 'cb78d7872622f4d0a2a2ec1cdf9eef21';
