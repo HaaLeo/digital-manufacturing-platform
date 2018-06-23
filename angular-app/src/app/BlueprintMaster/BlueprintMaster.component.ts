@@ -251,7 +251,7 @@ export class BlueprintMasterComponent implements OnInit {
     });
   }
 
-  // Method called when a Enduser wants to Buy a Copy of the BlueprintMaster Asset
+  // Method called when a Enduser wants to Buy a PrintingJob of the BlueprintMaster Asset
   requestAsset(form: any): Promise<any> {
     this.progressMessage = 'Please wait... ';
      //Get selected Printer
@@ -311,7 +311,7 @@ export class BlueprintMasterComponent implements OnInit {
     this.currentId = id;
   }
 
-  //Retrieve a BlueprintCopy with a certain id and copy its values to the Form Object
+  //Retrieve a PrintingJob with a certain id and printingJob its values to the Form Object
   getForm(id: any): Promise<any>{
     return this.serviceBlueprintMaster.getAsset(id)
     .toPromise()

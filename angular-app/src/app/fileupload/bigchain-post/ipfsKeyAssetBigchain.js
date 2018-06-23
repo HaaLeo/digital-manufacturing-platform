@@ -1,7 +1,6 @@
-import encryptor from './encryptor';
 
-const app_id = '';
-const app_key = '';
+const app_id = '5bc2b153';
+const app_key = 'cb78d7872622f4d0a2a2ec1cdf9eef21';
 const driver = require('bigchaindb-driver');
 const API_PATH = 'https://test.bigchaindb.com/api/v1/';
 const assert = require('assert');

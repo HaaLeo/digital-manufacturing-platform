@@ -5,7 +5,7 @@ import { Printer } from '../org.usecase.printer';
 
 
 import { BlueprintMaster } from '../org.usecase.printer';
-import { BlueprintCopy } from '../org.usecase.printer';
+import { PrintingJob } from '../org.usecase.printer';
 import { Cash } from '../org.usecase.printer';
 
 

@@ -28,7 +28,7 @@
 	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
 		<strong>Error:</strong> {{errorMessage}}
 	</div>
-  <h1 id='assetName'>Transaction History (BlueprintCopy)</h1>
+  <h1 id='assetName'>Transaction History (PrintingJob)</h1>
 
   <div class="container">
       <label for="stakeholder">stakeholder</label>
@@ -38,19 +38,19 @@
       </select>
   </div>
 
-  <div class="modal fade" id="uploadCopyModal" tabindex="-1" role="dialog" aria-labelledby="uploadCopyModalLabel">
+  <div class="modal fade" id="uploadJobModal" tabindex="-1" role="dialog" aria-labelledby="uploadJobModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="uploadCopyModalLabel">Add Asset</h4>
+          <h4 class="modal-title" id="uploadJobModalLabel">Add Asset</h4>
         </div>
         <form [formGroup]="myForm">
           <div class="modal-body">
                 <fileupload></fileupload>
           </div>
           <div class="modal-footer">
-            <button (click)="uploadCopyAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+            <button (click)="uploadJobAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </form>
@@ -63,7 +63,7 @@
       <table class="table table-bordered table-responsive table-striped">
         <thead class="thead">
           <tr class="thead-cols">
-                <th class="info">blueprintCopyID</th>
+                <th class="info">printingJobID</th>
                 <th class="info">printed</th>
                 <th class="info">BCDB ID</th>
                 <th class="info">Checksum</th>
@@ -77,8 +77,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let asset of allBlueprintCopyAssets | usersPipe: selectedElement">
-            <td>{{asset.blueprintCopyID}}</td>            
+          <tr *ngFor="let asset of allPrintingJobAssets | usersPipe: selectedElement">
+            <td>{{asset.printingJobID}}</td>
             <td>{{asset.printed}}</td>
             <td class="split">{{asset.txID}}</td>
             <td class="split">{{asset.checksum}}</td>
@@ -89,8 +89,8 @@
             <td>{{asset.ownerName}}</td>
             <td>{{asset.designerName}}</td>
             <td>
-              <button *ngIf="!asset.printed;" (click)="setId(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelRequestModal">Cancel Request</button>
-              <button *ngIf="!asset.printed;" (click)="getForm(asset.blueprintCopyID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadCopyModal">Upload Copy</button>
+              <button *ngIf="!asset.printed;" (click)="setId(asset.printingJobID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelRequestModal">Cancel Request</button>
+              <button *ngIf="!asset.printed;" (click)="getForm(asset.printingJobID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadJobModal">Confirm Job</button>
             </td>
           </tr>
         </tbody>

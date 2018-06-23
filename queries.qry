@@ -23,10 +23,10 @@ query selectBlueprintMaster {
       SELECT org.usecase.printer.BlueprintMaster
 }
 
-query selectBlueprintCopy {
-  description: "Select all BlueprintCopy assets"
+query selectPrintingJob {
+  description: "Select all PrintingJob assets"
   statement:
-      SELECT org.usecase.printer.BlueprintCopy
+      SELECT org.usecase.printer.PrintingJob
 }
 
 query selectCash {

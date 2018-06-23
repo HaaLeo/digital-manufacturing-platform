@@ -49,12 +49,12 @@ rule EnduserAccessBlueprintMasterRecord {
     action: ALLOW
 }
 
-//Endusers to have read access to all BlueprintCopy assets
-rule EnduserAccessBlueprintCopyRecord {
-    description: "Allow Endusers read access to all BlueprintCopy assets"
+//Endusers to have read access to all PrintingJob assets
+rule EnduserAccessPrintingJobRecord {
+    description: "Allow Endusers read access to all PrintingJob assets"
     participant: "org.usecase.printer.Enduser"
     operation: ALL
-    resource: "org.usecase.printer.BlueprintCopy"
+    resource: "org.usecase.printer.PrintingJob"
     action: ALLOW
 }
 
@@ -118,12 +118,12 @@ rule DesignerAccessOwnBlueprintMaster {
     action: ALLOW
 }
 
-//Designers to have read access to all BlueprintCopy assets
-rule DesignerAccessBlueprintCopyRecord {
-    description: "Allow Designer read access to all BlueprintCopy assets"
+//Designers to have read access to all PrintingJob assets
+rule DesignerAccessPrintingJobRecord {
+    description: "Allow Designer read access to all PrintingJob assets"
     participant: "org.usecase.printer.Designer"
     operation: READ
-    resource: "org.usecase.printer.BlueprintCopy"
+    resource: "org.usecase.printer.PrintingJob"
     action: ALLOW
 }
 
@@ -174,12 +174,12 @@ rule PrinterAccessBlueprintMasterRecord {
     action: ALLOW
 }
 
-//Printers to have all access to all BlueprintCopy assets
-rule PrinterAccessBlueprintCopyRecord {
-    description: "Allow Printers read access to all BlueprintCopy assets"
+//Printers to have all access to all PrintingJob assets
+rule PrinterAccessPrintingJobRecord {
+    description: "Allow Printers read access to all PrintingJob assets"
     participant: "org.usecase.printer.Printer"
     operation: ALL
-    resource: "org.usecase.printer.BlueprintCopy"
+    resource: "org.usecase.printer.PrintingJob"
     action: ALLOW
 }
 //Printers to have all access to all Cash assets
