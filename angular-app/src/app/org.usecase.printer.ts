@@ -54,6 +54,16 @@ import {Event} from './org.hyperledger.composer.system';
       owner: Stakeholder;
    }
 
+   export class EvaluationResult extends Asset {
+       printingJobID: string;
+       txID: string;
+       printerDatabaseHash: string;
+       requirementsMet: boolean;
+       printingJob: PrintingJob;
+       customer: Stakeholder;
+       // TODO add qualityReport
+   }
+
    export class QualityRequirement extends Asset {
        qualityRequirementID: string;
        txID: string;

@@ -76,6 +76,16 @@ asset QualityRequirement identified by qualityRequirementID {
     --> Enduser owner
 }
 
+asset EvaluationResult identified by evaluationResultID {
+	o String qualityRequirementID
+    o String txID
+    o Boolean requirementsMet
+    o String printerDatabaseHash
+    --> Customer customer
+    --> PrintingJob printingJob
+    // todo add qualityReport
+}
+
 // Transaction after succesful printing
 transaction ConfirmTransaction {
     --> PrintingJob printingJob
