@@ -19,6 +19,7 @@ import { UsersPipe} from './PrintingJob/Pipe';
 import { FileuploadComponent } from './fileupload/fileupload.component';
 import { Ng2FileDropModule } from 'ng2-file-drop';
 import { QualityRequirementComponent } from './QualityRequirement/QualityRequirement.component';
+import { ManufacturerComponent } from './Manufacturer/Manufacturer.component';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -36,7 +37,8 @@ import { QualityRequirementComponent } from './QualityRequirement/QualityRequire
       PrintingJobComponent,
     UsersPipe,
     FileuploadComponent,
-    QualityRequirementComponent
+    QualityRequirementComponent,
+    ManufacturerComponent
   ],
   imports: [
     BrowserModule,
