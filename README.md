@@ -1,6 +1,6 @@
 # 3DPrinter using Hyperledger Composer
 
-A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models. 
+A Blockchain application using Hyperledger Composer and BigchainDB for buying and printing 3D Printer models.
 
 The idea is that designers upload their original models and set the price for each model. These models are avaliable to the end-users for 3D printing. The end-users select which models they want to print and pay the cost. The designers upload a copy of the already bought models and the printers print the 3D objects and transfer the money to the corresponding model creators.
 
@@ -131,7 +131,7 @@ To start the application run:
 npm start
 ```
 
-NOTE: The application is now running at: http://localhost:4200 
+NOTE: The application is now running at: http://localhost:4200
 We are using the single BigchainDB node running at the fortiss network at the following IP and port: http://78.47.44.213:8209
 
 ### 6. Generate a REST server
@@ -155,8 +155,19 @@ composer-rest-server
 
 The REST server is available at: `http://localhost:3000/explorer/`
 
+### 6. Set Up Local BCDB Node
 
-### 7.	Stop Fabric
+1. Clone the BCDB github
+```
+git clone https://github.com/bigchaindb/bigchaindb.git
+```
+
+2. Open the 'bigchaindb' folder. Run BCDB
+```
+make run
+```
+
+### 8.	Stop Fabric
 
 To stop the fabric, run the following commands inside the `fabric-tools` directory:
 
@@ -166,10 +177,6 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ```
 
 
-### 8.	Additional resources
+### 9.	Additional resources
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
-
-
-
-
