@@ -7,18 +7,19 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Configuration } from '../configuration';
 import { DataService } from '../data.service';
-import { BlueprintCopyComponent } from './BlueprintCopy.component';
-import {BlueprintCopyService} from './BlueprintCopy.service';
+import { PrintingJobComponent } from './PrintingJob.component';
+import {PrintingJobService} from './PrintingJob.service';
 import { UsersPipe}    from './Pipe';
-describe('BlueprintCopyComponent', () => {
-  let component: BlueprintCopyComponent;
-  let fixture: ComponentFixture<BlueprintCopyComponent>;
+import {PrintingJob} from "../org.usecase.printer";
+describe('PrintingJobComponent', () => {
+  let component: PrintingJobComponent;
+  let fixture: ComponentFixture<PrintingJobComponent>;
   let fixture2: ComponentFixture<UsersPipe>;
   let component2: UsersPipe;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BlueprintCopyComponent, UsersPipe ],
+      declarations: [ PrintingJobComponent, UsersPipe ],
 imports: [
     BrowserModule,
     FormsModule,
@@ -26,13 +27,13 @@ imports: [
     HttpModule
   ],
   
-providers: [BlueprintCopyService,DataService,Configuration, UsersPipe]
+providers: [PrintingJobService,DataService,Configuration, UsersPipe]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BlueprintCopyComponent);
+    fixture = TestBed.createComponent(PrintingJobComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     fixture2 = TestBed.createComponent(UsersPipe);

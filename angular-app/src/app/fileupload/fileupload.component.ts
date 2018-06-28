@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile }  from 'ng2-file-drop';
+import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile } from 'ng2-file-drop';
 import {postKeyToBcDB, getAssetFromBcDB} from './bigchain-post/ipfsKeyAssetBigchain.js';
 import generateCS from './bigchain-post/ChecksumGenerator.js';
 
@@ -15,8 +15,8 @@ export class FileuploadComponent {
 
   //Supported File Types
   private txid: string;
-  private imageShown: boolean = false;
-  private currentProfileImage: string =  './uploadimage.png';
+  private imageShown = false;
+  private currentProfileImage =  './uploadimage.png';
   private acceptedFile;
   private checksum;
   private currentFileName;
@@ -38,7 +38,7 @@ export class FileuploadComponent {
     // Load the image in
 
      this.acceptedFile = acceptedFile.file;
-     console.log("test: " + acceptedFile.file.name)
+     console.log("test: " + acceptedFile.file.name);
      this.currentFileName = acceptedFile.file.name;
      this.imageShown = true;
 
@@ -58,7 +58,7 @@ export class FileuploadComponent {
    return this.checksum;
  }
   async postBCDB(key, description, ownerID) {
-    return await postKeyToBcDB(key, description, ownerID)
+    return await postKeyToBcDB(key, description, ownerID);
   }
 
   async getBCDB(txId) {

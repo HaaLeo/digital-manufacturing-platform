@@ -4,24 +4,25 @@ import { Observable } from 'rxjs/Observable';
 import { ConfirmTransaction } from '../org.usecase.printer';
 
 import 'rxjs/Rx';
-import { Designer, BlueprintCopy, Printer, Cash } from 'app/org.usecase.printer';
+import { Designer, PrintingJob, Printer, Cash } from 'app/org.usecase.printer';
 
 // Can be injected into a constructor
 @Injectable()
 export class BuyAssetTRService {
 
-    private NAMESPACE: string = 'org.usecase.printer.BlueprintCopy';
-    private BLUEPRINTCOPY: string = 'org.usecase.printer.BlueprintCopy';
+    private NAMESPACE: string = 'org.usecase.printer.PrintingJob';
+    private PRINTINGJOB: string = 'org.usecase.printer.PrintingJob';
     private CONFIRM_TRANSACTION: string = 'org.usecase.printer.ConfirmTransaction';
 
-    constructor(private blueprintCopyService: DataService<BlueprintCopy>, private confirmTransactionService: DataService<ConfirmTransaction>) {
+    constructor(private printingJobService: DataService<PrintingJob>, private confirmTransactionService: DataService<ConfirmTransaction>) {
     };
 
-    public getAllBlueprintCopies(): Observable<BlueprintCopy[]> {
-        return this.blueprintCopyService.getAll(this.BLUEPRINTCOPY)
+    public getAllPrintingJobs(): Observable<PrintingJob[]> {
+        return this.printingJobService.getAll(this.PRINTINGJOB);
     }
 
     public printBlueprint(itemToAdd: any): Observable<ConfirmTransaction> {
+        debugger;
       return this.confirmTransactionService.add(this.CONFIRM_TRANSACTION, itemToAdd);
     }
 }

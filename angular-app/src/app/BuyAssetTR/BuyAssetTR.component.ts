@@ -11,56 +11,56 @@ import { BuyAssetTRService } from './BuyAssetTR.service';
 
 export class BuyAssetTRComponent {
 	myForm: FormGroup;
-	blueprintCopyID = new FormControl("", Validators.required);
+    printingJobID = new FormControl("", Validators.required);
 
 	private transactionFrom;
 	private errorMessage;
 	private progressMessage;
   private successMessage;
-	private allBlueprintCopies;
-	
-	private blueprintCopyCurrent;
+	private allPrintingJobs;
+
+	private printingJobCurrent;
 	private confirmTransactionObj;
 	private transactionID;
-	private selectedCopy;
+	private selectedJob;
 
-	constructor(private serviceTransaction:BuyAssetTRService, fb: FormBuilder) {
+	constructor(private serviceTransaction: BuyAssetTRService, fb: FormBuilder) {
 		this.myForm = fb.group({
-			blueprintCopyID:this.blueprintCopyID,
+            printingJobID: this.printingJobID,
 	  });
 	}
-	
+
 	ngOnInit(): void {
 		this.transactionFrom  = false;
-		this.loadAllBlueprintCopies()
-		.then(() => {                     
+		this.loadAllPrintingJobs()
+		.then(() => {
 				this.transactionFrom  = true;
 		});
-		
+
 	  }
 
-	//Get all BlueprintCopies
-	loadAllBlueprintCopies(): Promise<any> {
-		let tempList = [];
-		return this.serviceTransaction.getAllBlueprintCopies()
+	// Get all PrintingJobs
+	loadAllPrintingJobs(): Promise<any> {
+		const tempList = [];
+		return this.serviceTransaction.getAllPrintingJobs()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
-		result.forEach(blueprintCopy => {
-			//DISPLAY ONLY BLUEPRINT COPIES THAT HAVEN'T PRINTED YET
-			if(blueprintCopy.txID != "" && !blueprintCopy.printed )
-				tempList.push(blueprintCopy);
+		result.forEach(printingJob => {
+			//DISPLAY ONLY PRINTING JOBS THAT HAVEN'T PRINTED YET
+			if (printingJob.txID != '' && !printingJob.printed )
+				tempList.push(printingJob);
 		});
-		this.allBlueprintCopies = tempList;
+		this.allPrintingJobs = tempList;
 		})
 		.catch((error) => {
-			if(error == 'Server error'){
+			if (error == 'Server error'){
 				this.progressMessage = null;
-				this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+				this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
 			}
-			else if(error == '404 - Not Found'){
+			else if (error == '404 - Not Found'){
 				this.progressMessage = null;
-					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+					this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
 			}
 			else{
 				this.progressMessage = null;
@@ -70,43 +70,45 @@ export class BuyAssetTRComponent {
   	}
 
   	execute(form: any){
+	    debugger;
 		this.progressMessage = 'Please wait... ';
-  	console.log(this.allBlueprintCopies);
-		for (let blueprintCopy of this.allBlueprintCopies) {
-			if(blueprintCopy.blueprintCopyID == this.blueprintCopyID.value) {
-				this.blueprintCopyCurrent = blueprintCopy;
+  	console.log(this.allPrintingJobs);
+		for (const printingJob of this.allPrintingJobs) {
+			if (printingJob.printingJobID == this.printingJobID.value) {
+				this.printingJobCurrent = printingJob;
+				debugger;
 			}
 		}
     	this.confirmTransactionObj = {
 	      "$class": "org.usecase.printer.ConfirmTransaction",
-	      "blueprintCopy": "resource:org.usecase.printer.BlueprintCopy#"+this.blueprintCopyCurrent.blueprintCopyID
+	      "printingJob": "resource:org.usecase.printer.PrintingJob#"+this.printingJobCurrent.printingJobID
 	    };
 	    return this.serviceTransaction.printBlueprint(this.confirmTransactionObj)
 	    .toPromise()
 	    .then((result) => {
-	    	this.selectedCopy = null;
+	    	this.selectedJob = null;
 	    	this.errorMessage = null;
 	    	this.progressMessage = null;
-        this.successMessage = 'Transaction executed successfully.'
+        this.successMessage = 'Transaction executed successfully.';
               this.transactionID = result.transactionId;
         })
 	    .catch((error) => {
-                if(error == 'Server error'){
+                if (error == 'Server error'){
                 	this.progressMessage = null;
-                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
                 }
-                else if(error == '404 - Not Found'){
+                else if (error == '404 - Not Found'){
                 	this.progressMessage = null;
-                	this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+                	this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
                 }
                 else{
                 	this.progressMessage = null;
                     this.errorMessage = error;
                 }
             }).then(() => {
-            	if(this.errorMessage == 'Cannot buy asset. Not enough funds.') {
-            		this.transactionFrom = true;		
-            	} else 
+            	if (this.errorMessage == 'Cannot buy asset. Not enough funds.') {
+            		this.transactionFrom = true;
+            	} else
  		             this.transactionFrom = false;
             });
   	}

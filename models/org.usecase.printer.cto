@@ -44,6 +44,7 @@ asset Cash identified by cashID {
 } 
 
 //This class represents a Master-Blueprint stored on BCDB
+// TODO optional rename to Blueprint
 asset BlueprintMaster identified by blueprintMasterID {
     o String blueprintMasterID
     o String txID
@@ -53,9 +54,10 @@ asset BlueprintMaster identified by blueprintMasterID {
     --> Designer owner
 }
 
-//This class represents a copy of a Master-Blueprint 
-asset BlueprintCopy identified by blueprintCopyID {
-    o String blueprintCopyID
+//This class represents a printingJob
+// TODO Rename to Printing Job
+asset PrintingJob identified by printingJobID {
+    o String printingJobID
     o String txID
     o String checksum
     o Boolean printed
@@ -65,21 +67,29 @@ asset BlueprintCopy identified by blueprintCopyID {
     --> Enduser buyer
     --> BlueprintMaster blueprintMaster
     --> Stakeholder owner
+    // TODO add QualityRequirement in here
+}
+
+asset QualityRequirement identified by qualityRequirementID {
+	o String qualityRequirementID
+    o String txID
+    --> Enduser owner
 }
 
 // Transaction after succesful printing
 transaction ConfirmTransaction {
-    --> BlueprintCopy blueprintCopy
+    --> PrintingJob printingJob
 }
 
 transaction CancelRequest {
-    --> BlueprintCopy blueprintCopy
+    --> PrintingJob printingJob
 }
 
-transaction UploadBlueprintCopy {
+// TODO rename to confirmPrinting Job
+transaction ConfirmPrintingJob {
     o String txID
     o String checksum
-    --> BlueprintCopy blueprintCopy
+    --> PrintingJob printingJob
 }
 
 transaction RequestBlueprint {

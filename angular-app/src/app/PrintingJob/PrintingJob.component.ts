@@ -1,26 +1,27 @@
 import { Component, OnInit, Input, NgModule, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { BlueprintCopyService } from './BlueprintCopy.service';
+import { PrintingJobService } from './PrintingJob.service';
 import 'rxjs/add/operator/toPromise';
 import { UsersPipe} from './Pipe';
-import {FileuploadComponent} from "../fileupload/fileupload.component"
+import {FileuploadComponent} from "../fileupload/fileupload.component";
+import {PrintingJob} from "../org.usecase.printer";
 
 
 @Component({
-	selector: 'app-BlueprintCopy',
-	templateUrl: './BlueprintCopy.component.html',
-	styleUrls: ['./BlueprintCopy.component.css'],
-  providers: [BlueprintCopyService]
+	selector: 'app-PrintingJob',
+	templateUrl: './PrintingJob.component.html',
+	styleUrls: ['./PrintingJob.component.css'],
+  providers: [PrintingJobService]
 })
 
-export class BlueprintCopyComponent implements OnInit {
+export class PrintingJobComponent implements OnInit {
 
   @ViewChild(FileuploadComponent)
   private fileUploadComponent: FileuploadComponent;
 
   myForm: FormGroup;
 
-  private allBlueprintCopyAssets;
+  private allPrintingJobAssets;
   private allStakeholders = [];
 
   private asset;
@@ -29,11 +30,11 @@ export class BlueprintCopyComponent implements OnInit {
   private progressMessage;
   private successMessage;
   private cancelRequestObj;
-  private blueprintCopyCurrent;
+  private printingJobCurrent;
   private filterID;
   private selectedElement;
 
-  blueprintCopyID = new FormControl("", Validators.required);
+  printingJobID = new FormControl("", Validators.required);
   printed = new FormControl("", Validators.required);
   otpEncryptedWithDesignerPubKey = new FormControl("", Validators.required);
   otpEncryptedWithPrinterPubKey = new FormControl("", Validators.required);
@@ -43,9 +44,9 @@ export class BlueprintCopyComponent implements OnInit {
   owner = new FormControl("", Validators.required);
 
 
-  constructor(private serviceBlueprintCopy:BlueprintCopyService, fb: FormBuilder) {
+  constructor(private servicePrintingJob:PrintingJobService, fb: FormBuilder) {
     this.myForm = fb.group({
-          blueprintCopyID:this.blueprintCopyID,
+        printingJobID:this.printingJobID,
           printed:this.printed,
           otpEncryptedWithDesignerPubKey:this.otpEncryptedWithDesignerPubKey,
           otpEncryptedWithPrinterPubKey:this.otpEncryptedWithPrinterPubKey,
@@ -63,29 +64,29 @@ export class BlueprintCopyComponent implements OnInit {
     this.selectedElement = "all"
   }
 
-   //load all BlueprintCopy assets and Master associated to it
+   //load all PrintingJob assets and Master associated to it
    loadAll(): Promise<any>  {
     let bpcList = [];
-    return this.serviceBlueprintCopy.getAll()
+    return this.servicePrintingJob.getAll()
     .toPromise()
     .then((result) => {
 			this.errorMessage = null;
       result.forEach(bpc => {
-        bpc.buyer = this.serviceBlueprintCopy.getID(bpc.buyer);
-        bpc.printer = this.serviceBlueprintCopy.getID(bpc.printer);
-        bpc.blueprintMaster = this.serviceBlueprintCopy.getID(bpc.blueprintMaster);
-        bpc.owner = this.serviceBlueprintCopy.getID(bpc.owner);
+        bpc.buyer = this.servicePrintingJob.getID(bpc.buyer);
+        bpc.printer = this.servicePrintingJob.getID(bpc.printer);
+        bpc.blueprintMaster = this.servicePrintingJob.getID(bpc.blueprintMaster);
+        bpc.owner = this.servicePrintingJob.getID(bpc.owner);
         bpcList.push(bpc);
       });
     })
     .then(() => {
       for (let bpc of bpcList) {
-        this.serviceBlueprintCopy.getBlueprintMaster(bpc.blueprintMaster)
+        this.servicePrintingJob.getBlueprintMaster(bpc.blueprintMaster)
         .toPromise()
         .then((result) => {
           this.errorMessage = null;
           if(result.owner){
-            bpc.designer = this.serviceBlueprintCopy.getID(result.owner);
+            bpc.designer = this.servicePrintingJob.getID(result.owner);
             for (let stakeholder of this.allStakeholders) {
               if(stakeholder.stakeholderID == bpc.designer) {
                 bpc.designerName = stakeholder.firstName + " " + stakeholder.lastName;
@@ -104,14 +105,14 @@ export class BlueprintCopyComponent implements OnInit {
           }
         });
       }
-      this.allBlueprintCopyAssets = bpcList;
+      this.allPrintingJobAssets = bpcList;
     });
   }
 
   //get all Stakeholders (Endusers, Designers, Printers)
 	load_allStakeholders(): Promise<any> {
 		let tempList = [];
-		return this.serviceBlueprintCopy.getAllDesigners()
+		return this.servicePrintingJob.getAllDesigners()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
@@ -120,7 +121,7 @@ export class BlueprintCopyComponent implements OnInit {
 		});
     })
     .then(() => {
-      this.serviceBlueprintCopy.getAllPrinters()
+      this.servicePrintingJob.getAllPrinters()
       .toPromise()
       .then((result) => {
           this.errorMessage = null;
@@ -130,7 +131,7 @@ export class BlueprintCopyComponent implements OnInit {
       })
     })
     .then(() => {
-      this.serviceBlueprintCopy.getAllEndusers()
+      this.servicePrintingJob.getAllEndusers()
       .toPromise()
       .then((result) => {
           this.errorMessage = null;
@@ -147,20 +148,20 @@ export class BlueprintCopyComponent implements OnInit {
   // Method called when Enduser wants to cancel his purchase
   cancelRequest(): Promise<any> {
     this.progressMessage = 'Please wait... ';
-    this.blueprintCopyID = this.currentId;
+    this.printingJobID = this.currentId;
     console.log("test: " + this.currentId);
-    for (let blueprintCopy of this.allBlueprintCopyAssets) {
-      console.log("test: " + blueprintCopy.blueprintCopyID);
-      if(blueprintCopy.blueprintCopyID == this.blueprintCopyID) {
-        this.blueprintCopyCurrent = blueprintCopy;
+    for (let printingJob of this.allPrintingJobAssets) {
+      console.log("test: " + printingJob.printingJobID);
+      if(printingJob.printingJobID == this.printingJobID) {
+        this.printingJobCurrent = printingJob;
       }
     }
     //transaction object
     this.cancelRequestObj = {
       "$class": "org.usecase.printer.CancelRequest",
-      "blueprintCopy": "resource:org.usecase.printer.BlueprintCopy#"+this.blueprintCopyCurrent.blueprintCopyID
+      "printingJob": "resource:org.usecase.printer.PrintingJob#"+this.printingJobCurrent.printingJobID
     };
-    return this.serviceBlueprintCopy.cancel(this.cancelRequestObj)
+    return this.servicePrintingJob.cancel(this.cancelRequestObj)
     .toPromise()
     .then(() => {
       this.errorMessage = null;
@@ -175,7 +176,7 @@ export class BlueprintCopyComponent implements OnInit {
       }
       else if(error == '404 - Not Found'){
         this.progressMessage = null;
-        this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
       }
       else{
         this.progressMessage = null;
@@ -188,14 +189,14 @@ export class BlueprintCopyComponent implements OnInit {
     this.currentId = id;
   }
 
-  //Retrieve a BlueprintCopy with a certain id and copy its values to the Form Object
+  //Retrieve a PrintingJob with a certain id and copy its values to the Form Object
   getForm(id: any): Promise<any>{
-    return this.serviceBlueprintCopy.getAsset(id)
+    return this.servicePrintingJob.getAsset(id)
     .toPromise()
     .then((result) => {
       this.errorMessage = null;
       let formObject = {
-            "blueprintCopyID":null,
+            "printingJobID":null,
             "printed":null,
             "otpEncryptedWithDesignerPubKey":null,
             "otpEncryptedWithPrinterPubKey":null,
@@ -205,10 +206,10 @@ export class BlueprintCopyComponent implements OnInit {
             "owner":null
       };
 
-        if(result.blueprintCopyID){
-            formObject.blueprintCopyID = result.blueprintCopyID;
+        if(result.printingJobID){
+            formObject.printingJobID = result.printingJobID;
         } else {
-          formObject.blueprintCopyID = null;
+          formObject.printingJobID = null;
         }
 
         if(result.printed != null){
@@ -262,7 +263,7 @@ export class BlueprintCopyComponent implements OnInit {
         }
         else if(error == '404 - Not Found'){
           this.progressMessage = null;
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+				this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
         }
         else{
           this.progressMessage = null;
@@ -273,14 +274,15 @@ export class BlueprintCopyComponent implements OnInit {
   }
 
   // Method which is called when Designer uploads the Blueprint Copy File
-  uploadCopyAsset(form: any) {
+  uploadJobAsset(form: any) {
     this.progressMessage = 'Please wait... ';
+    debugger;
     this.fileUploadComponent.postBCDB("My ipfs test key", "My description", "my owner")
     .then(txId => {
     let currentChecksum = this.fileUploadComponent.getChecksum();
     this.asset = {
-      $class: "org.usecase.printer.BlueprintCopy",
-          "blueprintCopyID":this.blueprintCopyID.value,
+      $class: "org.usecase.printer.PrintingJob",
+          "printingJobID":this.printingJobID.value,
           "txID":txId,
           "checksum": currentChecksum,
           "printed":this.printed.value,
@@ -293,7 +295,7 @@ export class BlueprintCopyComponent implements OnInit {
     };
 
     this.myForm.setValue({
-        "blueprintCopyID":null,
+        "printingJobID":null,
         "printed":null,
         "otpEncryptedWithDesignerPubKey":null,
         "otpEncryptedWithPrinterPubKey":null,
@@ -304,10 +306,10 @@ export class BlueprintCopyComponent implements OnInit {
     });
 
     var uploadAsset = {
-      $class: "org.usecase.printer.UploadBlueprintCopy",
+      $class: "org.usecase.printer.ConfirmPrintingJob",
           "txID":txId,
           "checksum": currentChecksum,
-          "blueprintCopy":this.asset.blueprintCopyID
+          "printingJob":this.asset.printingJobID
     };
 
     // For test purpose TODO Leo remove
@@ -316,14 +318,14 @@ export class BlueprintCopyComponent implements OnInit {
       console.log(asset);
     });
 
-    return this.serviceBlueprintCopy.upload(uploadAsset)
+    return this.servicePrintingJob.upload(uploadAsset)
     .toPromise()
     .then(() => {
 			this.errorMessage = null;
       this.progressMessage = null;
-      this.successMessage = 'Blueprint uploaded successfully. Refreshing page...'
+      this.successMessage = 'PrintingJob uploaded successfully. Refreshing page...'
       this.myForm.setValue({
-          "blueprintCopyID":null,
+          "printingJobID":null,
           "printed":null,
           "otpEncryptedWithDesignerPubKey":null,
           "otpEncryptedWithPrinterPubKey":null,
@@ -353,7 +355,7 @@ export class BlueprintCopyComponent implements OnInit {
   // Reset all Value incurrently saved in the Form Object
   resetForm(): void{
     this.myForm.setValue({
-          "blueprintCopyID":null,
+          "printingJobID":null,
           "printed":null,
           "otpEncryptedWithDesignerPubKey":null,
           "otpEncryptedWithPrinterPubKey":null,

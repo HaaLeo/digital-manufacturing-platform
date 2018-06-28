@@ -3,21 +3,22 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { Configuration }     from './configuration';
-import { DataService }     from './data.service';
+import { Configuration } from './configuration';
+import { DataService } from './data.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { CashComponent } from './Cash/Cash.component';
 import { BlueprintMasterComponent } from './BlueprintMaster/BlueprintMaster.component';
-import { BlueprintCopyComponent } from './BlueprintCopy/BlueprintCopy.component';
+import { PrintingJobComponent } from './PrintingJob/PrintingJob.component';
 import { BuyAssetTRComponent } from 'app/BuyAssetTR/BuyAssetTR.component';
 import { CancelRequestTRComponent } from 'app/CancelRequestTR/CancelRequestTR.component';
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
 import { DesignerComponent } from 'app/Designer/Designer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
-import { UsersPipe} from './BlueprintCopy/Pipe';
+import { UsersPipe} from './PrintingJob/Pipe';
 import { FileuploadComponent } from './fileupload/fileupload.component';
-import { Ng2FileDropModule }  from 'ng2-file-drop';
+import { Ng2FileDropModule } from 'ng2-file-drop';
+import { QualityRequirementComponent } from './QualityRequirement/QualityRequirement.component';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -32,10 +33,10 @@ import { Ng2FileDropModule }  from 'ng2-file-drop';
     EnduserComponent,
     DesignerComponent,
     PrinterComponent,
-    BlueprintCopyComponent,
+      PrintingJobComponent,
     UsersPipe,
-    FileuploadComponent
-		
+    FileuploadComponent,
+    QualityRequirementComponent
   ],
   imports: [
     BrowserModule,
