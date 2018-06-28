@@ -12,22 +12,23 @@ import { CancelRequestTRComponent } from './CancelRequestTR/CancelRequestTR.comp
 import { EnduserComponent } from 'app/Enduser/Enduser.component';
 import { DesignerComponent } from 'app/Designer/Designer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
-import {QualityRequirementComponent} from "./QualityRequirement/QualityRequirement.component";
-import {PrintingJob} from "./org.usecase.printer";
+import { QualityRequirementComponent } from "./QualityRequirement/QualityRequirement.component";
+import { ManufacturerComponent } from './Manufacturer/Manufacturer.component';
 
 const routes: Routes = [
-    // { path: 'transaction', component: TransactionComponent },
-    {path: '', component: HomeComponent},
-		{ path: 'Cash', component: CashComponent},
-		{ path: 'BlueprintMaster', component: BlueprintMasterComponent},
-		{ path: 'PrintingJob', component: PrintingJobComponent},
-    { path: 'QualityRequirement', component: QualityRequirementComponent},
-    { path: 'BuyAssetTR', component: BuyAssetTRComponent },
-    { path: 'CancelRequestTR', component: CancelRequestTRComponent },
-    { path: 'Enduser', component: EnduserComponent},
-    { path: 'Designer', component: DesignerComponent},
-    { path: 'Printer', component: PrinterComponent},
-		{path: '**', redirectTo:''}
+  // { path: 'transaction', component: TransactionComponent },
+  { path: '', component: HomeComponent },
+  { path: 'Cash', component: CashComponent },
+  { path: 'BlueprintMaster', component: BlueprintMasterComponent },
+  { path: 'PrintingJob', component: PrintingJobComponent },
+  { path: 'QualityRequirement', component: QualityRequirementComponent },
+  { path: 'BuyAssetTR', component: BuyAssetTRComponent },
+  { path: 'CancelRequestTR', component: CancelRequestTRComponent },
+  { path: 'Enduser', component: EnduserComponent },
+  { path: 'Designer', component: DesignerComponent },
+  { path: 'Printer', component: PrinterComponent },
+  { path: 'Manufacturer', component: ManufacturerComponent },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
