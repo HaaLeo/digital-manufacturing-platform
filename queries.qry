@@ -17,6 +17,12 @@ query selectUtilityPrinter {
       SELECT org.usecase.printer.Printer
 }
 
+query selectManufacturer {
+  description: "Select all manufacturer"
+  statement:
+      SELECT org.usecase.printer.Manufacturer
+}
+
 query selectBlueprintMaster {
   description: "Select all BlueprintMaster assets"
   statement:
