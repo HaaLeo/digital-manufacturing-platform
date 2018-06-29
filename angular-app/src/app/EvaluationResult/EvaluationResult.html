@@ -1,3 +1,36 @@
-<p>
-  evaluation-result works!
-</p>
+
+<div class="container">
+	<div *ngIf="successMessage" class="alert alert-success" role="alert">
+		<strong>Success:</strong> {{successMessage}}
+	</div>
+	<div *ngIf="progressMessage" class="alert alert-info" role="alert">
+		<strong>Status:</strong> {{progressMessage}}
+	</div>
+	<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+		<strong>Error:</strong> {{errorMessage}}
+	</div>
+	<h1 id='assetName'>EvaluationResult</h1>
+	<br>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered table-responsive table-striped">
+				<thead class="thead">
+				<tr class="thead-cols">
+					<th class="info">EvaluationResultID</th>
+					<th class="info">Requirements Met</th>
+					<th class="info">TxID</th>
+					<th class="info">Printing Job</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr *ngFor="let asset of allAssets">
+					<td>{{asset.evaluationResultID}}</td>
+					<td class="split">{{asset.requirementsMet}}</td>
+					<td class="split">{{asset.txID}}</td>
+					<td>{{asset.firstName + " " + asset.lastName}}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
