@@ -23,6 +23,7 @@ export class BuyAssetTRComponent {
 	private confirmTransactionObj;
 	private transactionID;
 	private selectedJob;
+    private qualityProperties: { peakTemperature: number; peakPressure: number };
 
 	constructor(private serviceTransaction: BuyAssetTRService, fb: FormBuilder) {
 		this.myForm = fb.group({
@@ -38,6 +39,13 @@ export class BuyAssetTRComponent {
 		});
 
 	  }
+
+	mockQualityProperties(){
+        return {
+            peakTemperature: Math.random()*300,
+            peakPressure: Math.random() *3000
+        }; //peakPressure in mBar
+    }
 
 	// Get all PrintingJobs
 	loadAllPrintingJobs(): Promise<any> {
@@ -89,8 +97,10 @@ export class BuyAssetTRComponent {
 	    	this.selectedJob = null;
 	    	this.errorMessage = null;
 	    	this.progressMessage = null;
-        this.successMessage = 'Transaction executed successfully.';
+            this.successMessage = 'Transaction executed successfully.';
               this.transactionID = result.transactionId;
+              this.qualityProperties = this.mockQualityProperties();
+              // TODO generate qualityReport and upload
         })
 	    .catch((error) => {
                 if (error == 'Server error'){
