@@ -24,7 +24,10 @@ participant Designer extends Stakeholder {
     --> Cash cash
 }
 
-// Not sure if Printer should be participant or rather asset?
+participant DataAnalyst extends Stakeholder {
+    o String name
+}
+
 participant Printer extends Stakeholder {
     o String name
 }
@@ -80,12 +83,18 @@ asset QualityRequirement identified by qualityRequirementID {
     --> Enduser owner
 }
 
+asset QualityReport identified by qualityReportID {
+	o String qualityReportID
+    o String txID
+    o String databaseHash
+    --> Manufacturer owner
+}
+
 asset EvaluationResult identified by evaluationResultID {
-	o String qualityRequirementID
+	o String evaluationResultID
     o String txID
     o Boolean requirementsMet
-    o String printerDatabaseHash
-    --> Customer customer
+    --> Stakeholder customer
     --> PrintingJob printingJob
     // todo add qualityReport
 }

@@ -25,6 +25,11 @@ import {Event} from './org.hyperledger.composer.system';
    export class Manufacturer extends Stakeholder {
       name: string;
    }
+
+   export class DataAnalyst extends Stakeholder {
+       name: string;
+   }
+
    export enum OwnerEntity {
       Enduser,
       Designer,
@@ -60,12 +65,18 @@ import {Event} from './org.hyperledger.composer.system';
    export class EvaluationResult extends Asset {
        printingJobID: string;
        txID: string;
-       printerDatabaseHash: string;
        requirementsMet: boolean;
        printingJob: PrintingJob;
        customer: Stakeholder;
        // TODO add qualityReport
    }
+
+    export class QualityReport extends Asset {
+        qualityReportID: string;
+        txID: string; // IPFS address
+        databaseHash: string;
+        owner: Manufacturer;
+    }
 
    export class QualityRequirement extends Asset {
        qualityRequirementID: string;
@@ -78,15 +89,20 @@ import {Event} from './org.hyperledger.composer.system';
         printer: Printer;
         blueprintMaster: BlueprintMaster;
     }
-    export class CancelRequest extends Transaction {
-        printingJob: PrintingJob;
-    }
-    export class ConfirmTransaction extends Transaction {
-        printingJob: PrintingJob;
-    }
-    export class ConfirmPrintingJob extends Transaction {
-        txID: string;
-        checksum: string;
-        printingJob: PrintingJob;
-    }
+
+   export class CancelRequest extends Transaction {
+       printingJob: PrintingJob;
+   }
+
+   export class ConfirmTransaction extends Transaction {
+       printingJob: PrintingJob;
+   }
+
+   export class ConfirmPrintingJob extends Transaction {
+       txID: string;
+       checksum: string;
+       printingJob: PrintingJob;
+   }
+
+
 // }

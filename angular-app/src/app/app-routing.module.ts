@@ -14,6 +14,9 @@ import { DesignerComponent } from 'app/Designer/Designer.component';
 import { PrinterComponent } from 'app/Printer/Printer.component';
 import { QualityRequirementComponent } from "./QualityRequirement/QualityRequirement.component";
 import { ManufacturerComponent } from './Manufacturer/Manufacturer.component';
+import {DataAnalystComponent} from "./DataAnalyst/DataAnalyst.component";
+import {QualityReportComponent} from "./QualityReport/QualityReport.component";
+import {EvaluationResultComponent} from "./EvaluationResult/EvaluationResult.component";
 
 const routes: Routes = [
   // { path: 'transaction', component: TransactionComponent },
@@ -28,7 +31,10 @@ const routes: Routes = [
   { path: 'Designer', component: DesignerComponent },
   { path: 'Printer', component: PrinterComponent },
   { path: 'Manufacturer', component: ManufacturerComponent },
-  { path: '**', redirectTo: '' }
+    { path: 'DataAnalyst', component: DataAnalystComponent },
+    { path: 'QualityReport', component: QualityReportComponent },
+    { path: 'EvaluationResult', component: EvaluationResultComponent },
+    { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

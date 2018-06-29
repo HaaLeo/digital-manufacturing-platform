@@ -22,12 +22,21 @@ rule EnduserReadAccessEndusers {
     action: ALLOW
 }
 
-//Endusers to have read only access to other Designers
+//Endusers to have read only access to Designers
 rule EnduserReadAccessDesigners {
     description: "Allow Endusers read access to other Designers"
     participant: "org.usecase.printer.Enduser"
     operation: READ
     resource: "org.usecase.printer.Designer"
+    action: ALLOW
+}
+
+//Endusers to have read only access to Manufacturers
+rule EnduserReadAccessManufacturers {
+    description: "Allow Endusers read access to Manufacturers"
+    participant: "org.usecase.printer.Enduser"
+    operation: READ
+    resource: "org.usecase.printer.Manufacturer"
     action: ALLOW
 }
 
@@ -40,6 +49,15 @@ rule EnduserReadAccessPrinters {
     action: ALLOW
 }
 
+//Endusers to have read access to all EvaluationResult assets
+rule EnduserAccessEvaluationResultRecord {
+    description: "Allow Endusers read access to all BlueprintMaster assets"
+    participant: "org.usecase.printer.Enduser"
+    operation: READ
+    resource: "org.usecase.printer.EvaluationResult"
+    action: ALLOW
+}
+
 //Endusers to have read access to all BlueprintMaster assets
 rule EnduserAccessBlueprintMasterRecord {
     description: "Allow Endusers read access to all BlueprintMaster assets"
@@ -49,7 +67,7 @@ rule EnduserAccessBlueprintMasterRecord {
     action: ALLOW
 }
 
-//Endusers to have read access to all PrintingJob assets
+//Endusers to have all access to all PrintingJob assets
 rule EnduserAccessPrintingJobRecord {
     description: "Allow Endusers read access to all PrintingJob assets"
     participant: "org.usecase.printer.Enduser"
@@ -182,12 +200,31 @@ rule PrinterAccessPrintingJobRecord {
     resource: "org.usecase.printer.PrintingJob"
     action: ALLOW
 }
+
+//Printers to have all access to all QualityReport assets
+rule PrinterAccessQualityReportRecord {
+    description: "Allow Printers read access to all PrintingJob assets"
+    participant: "org.usecase.printer.Printer"
+    operation: ALL
+    resource: "org.usecase.printer.QualityReport"
+    action: ALLOW
+}
+
 //Printers to have all access to all Cash assets
 rule PrinterAccessCashRecord {
     description: "Allow Printers read access to all Cash assets"
     participant: "org.usecase.printer.Printer"
     operation: ALL
     resource: "org.usecase.printer.Cash"
+    action: ALLOW
+}
+
+//Manufacturers to have all access to all EvaluationResult assets
+rule ManufacturerAccessEvaluationResultRecord {
+    description: "Allow Manufacturer read access to all EvaluationResult assets"
+    participant: "org.usecase.printer.Manufacturer"
+    operation: ALL
+    resource: "org.usecase.printer.EvaluationResult"
     action: ALLOW
 }
 

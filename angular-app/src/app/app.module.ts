@@ -21,6 +21,8 @@ import { Ng2FileDropModule } from 'ng2-file-drop';
 import { QualityRequirementComponent } from './QualityRequirement/QualityRequirement.component';
 import { EvaluationResultComponent } from './EvaluationResult/EvaluationResult.component';
 import {ManufacturerComponent} from "./Manufacturer/Manufacturer.component";
+import { QualityReportComponent } from './QualityReport/QualityReport.component';
+import { DataAnalystComponent } from './DataAnalyst/DataAnalyst.component';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -40,7 +42,9 @@ import {ManufacturerComponent} from "./Manufacturer/Manufacturer.component";
     FileuploadComponent,
     QualityRequirementComponent,
     EvaluationResultComponent,
-    ManufacturerComponent
+    ManufacturerComponent,
+    QualityReportComponent,
+    DataAnalystComponent
   ],
   imports: [
     BrowserModule,
