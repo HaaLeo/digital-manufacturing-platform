@@ -155,7 +155,7 @@ composer-rest-server
 
 The REST server is available at: `http://localhost:3000/explorer/`
 
-### 6. Set Up Local BCDB Node
+### 7. Set Up Local BCDB Node
 
 1. Clone the BCDB github
 ```
