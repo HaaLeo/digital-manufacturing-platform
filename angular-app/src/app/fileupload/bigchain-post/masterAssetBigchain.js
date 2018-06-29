@@ -6,7 +6,8 @@ export default async function postToDB(dataPayload, price, description, ownerID)
     const driver = require('bigchaindb-driver')
 
 
-    const API_PATH = 'https://test.bigchaindb.com/api/v1/'
+    //const API_PATH = 'https://test.bigchaindb.com/api/v1/'
+    const API_PATH = 'http://localhost:9984/api/v1/';
     //const API_PATH = 'http://78.47.44.213:8209/'
 
 

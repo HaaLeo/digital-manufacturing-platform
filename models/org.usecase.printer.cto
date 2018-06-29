@@ -7,7 +7,7 @@ namespace org.usecase.printer
 abstract participant Stakeholder identified by stakeholderID {
     o String stakeholderID
     o String pubKey
-    
+
 }
 
 participant Enduser extends Stakeholder {
@@ -29,6 +29,10 @@ participant Printer extends Stakeholder {
     o String name
 }
 
+participant Manufacturer extends Stakeholder {
+  o String name
+}
+
 enum OwnerEntity {
   o Enduser
   o Designer
@@ -41,7 +45,7 @@ asset Cash identified by cashID {
     o Double value
     o String ownerID
     o OwnerEntity ownerEntity
-} 
+}
 
 //This class represents a Master-Blueprint stored on BCDB
 // TODO optional rename to Blueprint

@@ -22,6 +22,9 @@ import {Event} from './org.hyperledger.composer.system';
    export class Printer extends Stakeholder {
       name: string;
    }
+   export class Manufacturer extends Stakeholder {
+      name: string;
+   }
    export enum OwnerEntity {
       Enduser,
       Designer,

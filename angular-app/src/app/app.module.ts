@@ -20,6 +20,7 @@ import { FileuploadComponent } from './fileupload/fileupload.component';
 import { Ng2FileDropModule } from 'ng2-file-drop';
 import { QualityRequirementComponent } from './QualityRequirement/QualityRequirement.component';
 import { EvaluationResultComponent } from './EvaluationResult/EvaluationResult.component';
+import {ManufacturerComponent} from "./Manufacturer/Manufacturer.component";
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -38,7 +39,8 @@ import { EvaluationResultComponent } from './EvaluationResult/EvaluationResult.c
     UsersPipe,
     FileuploadComponent,
     QualityRequirementComponent,
-    EvaluationResultComponent
+    EvaluationResultComponent,
+    ManufacturerComponent
   ],
   imports: [
     BrowserModule,
