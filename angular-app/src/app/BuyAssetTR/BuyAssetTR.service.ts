@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { ConfirmTransaction } from '../org.usecase.printer';
+import {ConfirmTransaction, EvaluateReport} from '../org.usecase.printer';
 
 import 'rxjs/Rx';
 import { Designer, PrintingJob, Printer, Cash } from 'app/org.usecase.printer';
@@ -10,11 +10,11 @@ import { Designer, PrintingJob, Printer, Cash } from 'app/org.usecase.printer';
 @Injectable()
 export class BuyAssetTRService {
 
-    private NAMESPACE: string = 'org.usecase.printer.PrintingJob';
     private PRINTINGJOB: string = 'org.usecase.printer.PrintingJob';
     private CONFIRM_TRANSACTION: string = 'org.usecase.printer.ConfirmTransaction';
+    private EVALUTE_REPORT: string = 'org.usecase.printer.EvaluateReport';
 
-    constructor(private printingJobService: DataService<PrintingJob>, private confirmTransactionService: DataService<ConfirmTransaction>) {
+    constructor(private printingJobService: DataService<PrintingJob>, private confirmTransactionService: DataService<ConfirmTransaction>, private evaluateReportService: DataService<EvaluateReport>) {
     };
 
     public getAllPrintingJobs(): Observable<PrintingJob[]> {
@@ -22,7 +22,10 @@ export class BuyAssetTRService {
     }
 
     public printBlueprint(itemToAdd: any): Observable<ConfirmTransaction> {
-        debugger;
       return this.confirmTransactionService.add(this.CONFIRM_TRANSACTION, itemToAdd);
+    }
+
+    public evaluateReport(itemToEvaluate: any): Observable<EvaluateReport>{
+        return this.evaluateReportService.add(this.EVALUTE_REPORT, itemToEvaluate);
     }
 }

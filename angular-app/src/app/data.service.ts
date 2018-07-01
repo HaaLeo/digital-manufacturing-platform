@@ -34,6 +34,7 @@ export class DataService<Type> {
     }
 
     public add(ns: string, asset: Type): Observable<Type> {
+        debugger;
         console.log('Entered DataService add');
         console.log('Add ' + ns);
         console.log('asset', asset);

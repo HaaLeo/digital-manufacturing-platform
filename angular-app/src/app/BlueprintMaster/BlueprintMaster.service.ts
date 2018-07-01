@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { BlueprintMaster } from '../org.usecase.printer';
+import {BlueprintMaster, QualityRequirement} from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 import { Designer, Enduser, Printer, RequestBlueprint, CancelRequest} from 'app/org.usecase.printer';
@@ -15,12 +15,14 @@ export class BlueprintMasterService {
     private DESIGNER: string = 'org.usecase.printer.Designer';
     private PRINTER: string = 'org.usecase.printer.Printer';
     private ENDUSER: string = 'org.usecase.printer.Enduser';
+    private QUALITY_REQUIREMENT: string = 'org.usecase.printer.QualityRequirement';
     private REQUESTBLUEPRINT: string = 'org.usecase.printer.RequestBlueprint';
 
     constructor(private dataService: DataService<BlueprintMaster>, 
                 private designerService: DataService<Designer>, 
                 private enduserService: DataService<Enduser>, 
-                private printerService: DataService<Printer>, 
+                private printerService: DataService<Printer>,
+                private qualityRequirementService: DataService<QualityRequirement>,
                 private requestBlueprintService: DataService<RequestBlueprint>) {
     };
 
@@ -60,9 +62,14 @@ public getAllPrinters(): Observable<Printer[]> {
   return this.printerService.getAll(this.PRINTER);
 }
 
+    public getAllQualityRequirements(): Observable<QualityRequirement[]> {
+        return this.qualityRequirementService.getAll(this.QUALITY_REQUIREMENT);
+    }
+
 //create requestBlueprint transaction
 public requestBlueprint(itemToAdd: any): Observable<RequestBlueprint> {
-  return this.requestBlueprintService.add(this.REQUESTBLUEPRINT, itemToAdd);
+        debugger;
+        return this.requestBlueprintService.add(this.REQUESTBLUEPRINT, itemToAdd);
 }
 
 }

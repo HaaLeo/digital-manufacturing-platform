@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { PrintingJob, Designer, Printer, Enduser, BlueprintMaster, CancelRequest, ConfirmPrintingJob} from '../org.usecase.printer';
+import {
+    PrintingJob, Designer, Printer, Enduser, BlueprintMaster, CancelRequest, ConfirmPrintingJob,
+    EvaluateReport
+} from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -16,12 +19,14 @@ export class PrintingJobService {
     private BLUEPRINTMASTER = 'org.usecase.printer.BlueprintMaster';
     private CANCELREQUEST = 'org.usecase.printer.CancelRequest';
     private UPDATEREQUEST = 'org.usecase.printer.ConfirmPrintingJob';
+    private EVALUATEREPORT = 'org.usecase.printer.EvaluateReport';
 
     constructor(private dataService: DataService<PrintingJob>, private designerService: DataService<Designer>,
                 private confirmPrintingJobService: DataService<ConfirmPrintingJob>,
                 private cancelRequestService: DataService<CancelRequest>,
                 private blueprintMasterService: DataService<BlueprintMaster>,
-                private enduserService: DataService<Enduser>, private printerService: DataService<Printer>) {
+                private enduserService: DataService<Enduser>, private printerService: DataService<Printer>,
+                private evaluateReportService: DataService<EvaluateReport>) {
     };
 
     public getAll(): Observable<PrintingJob[]> {
@@ -78,5 +83,9 @@ export class PrintingJobService {
 
     public getBlueprintMaster(id: any): Observable<BlueprintMaster> {
       return this.blueprintMasterService.getSingle(this.BLUEPRINTMASTER, id);
+    }
+
+    public evaluateReport(itemToEvaluate: any): Observable<EvaluateReport>{
+        return this.evaluateReportService.add(this.EVALUATEREPORT, itemToEvaluate);
     }
 }

@@ -60,15 +60,16 @@ import {Event} from './org.hyperledger.composer.system';
       buyer: Enduser;
       blueprintMaster: BlueprintMaster;
       owner: Stakeholder;
+      qualityRequirement: QualityRequirement;
    }
 
    export class EvaluationResult extends Asset {
-       printingJobID: string;
+       evaluationResultID: string;
        txID: string;
        requirementsMet: boolean;
        printingJob: PrintingJob;
        customer: Stakeholder;
-       // TODO add qualityReport
+       qualityReport: QualityReport;
    }
 
     export class QualityReport extends Asset {
@@ -79,6 +80,7 @@ import {Event} from './org.hyperledger.composer.system';
     }
 
    export class QualityRequirement extends Asset {
+       name: string;
        qualityRequirementID: string;
        txID: string;
        owner: Enduser;
@@ -88,6 +90,7 @@ import {Event} from './org.hyperledger.composer.system';
         buyer: Enduser;
         printer: Printer;
         blueprintMaster: BlueprintMaster;
+        qualityRequirement: QualityRequirement;
     }
 
    export class CancelRequest extends Transaction {
@@ -102,6 +105,12 @@ import {Event} from './org.hyperledger.composer.system';
        txID: string;
        checksum: string;
        printingJob: PrintingJob;
+   }
+
+   export class EvaluateReport extends Transaction {
+        printingJob: PrintingJob; // includes Quality Requirement and BlueprintMaster
+        customer: Stakeholder;
+        qualityReport: QualityReport;
    }
 
 

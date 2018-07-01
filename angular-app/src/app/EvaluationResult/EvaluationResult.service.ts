@@ -10,7 +10,6 @@ import { Designer, Enduser, Printer, RequestBlueprint, CancelRequest} from 'app/
 @Injectable()
 export class EvaluationResultService {
 
-
     private NAMESPACE: string = 'org.usecase.printer.BlueprintMaster';
     private DESIGNER: string = 'org.usecase.printer.Designer';
     private PRINTER: string = 'org.usecase.printer.Printer';

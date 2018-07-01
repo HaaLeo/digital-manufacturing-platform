@@ -6,6 +6,11 @@
 				<h4 class="modal-title" id="addAssetModalLabel">Add Asset</h4>
 			</div>
 			<form [formGroup]="myForm">
+				<div class="form-group text-left">
+					<label for="name">Name:</label>
+					<input formControlName="name" type="text" step='any' class="form-control">
+
+				</div>
 				<div class="modal-body">
 					<div class="form-group text-left">
 						<label for="owner">owner</label>
@@ -47,6 +52,7 @@
 				<thead class="thead">
 				<tr class="thead-cols">
 					<th class="info">QualityRequirementID</th>
+					<th class="info">Name</th>
 					<th class="info">TxID</th>
 					<th class="info">Owner</th>
 					<th class="info">Actions</th>

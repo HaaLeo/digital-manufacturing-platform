@@ -26,13 +26,14 @@ export class BlueprintMasterComponent implements OnInit {
   private successMessage;
 
   private allDesigners;
-
   private allEndusers;
   private allPrinters;
+  private allQualityRequirements;
 
   private printer;
   private buyer;
-  private blueprintMaster
+  private qualityRequirement;
+  private blueprintMaster;
   private requestBlueprintMasterObj;
 
   private current_db_id;
@@ -45,7 +46,8 @@ export class BlueprintMasterComponent implements OnInit {
   owner = new FormControl("", Validators.required);
   printerID = new FormControl("");
   buyerID = new FormControl("");
-        
+  qualityRequirementID = new FormControl("");
+
   constructor(private serviceBlueprintMaster:BlueprintMasterService, fb: FormBuilder) {
     this.myForm = fb.group({
           blueprintMasterID:this.blueprintMasterID,
@@ -55,19 +57,22 @@ export class BlueprintMasterComponent implements OnInit {
           metadata:this.metadata,
           owner:this.owner,
           printerID:this.printerID,
-          buyerID:this.buyerID
+          buyerID:this.buyerID,
+            qualityRequirementID:this.qualityRequirementID
+
     });
   };
 
   ngOnInit(): void {
-    this.loadAll().then(() => {                     
+    this.loadAll().then(() => {
       this.load_OnlyDesigners();
-    }).then(() => {                     
+    }).then(() => {
       this.load_OnlyEndusers();
-    }).then(() => {                     
+    }).then(() => {
       this.load_OnlyPrinters();
-    });    
-
+    }).then(() => {
+        this.load_OnlyQualityRequirements();
+    });
   }
 
 	//Get all Designers
@@ -89,7 +94,7 @@ export class BlueprintMasterComponent implements OnInit {
 			}
 			else if(error == '404 - Not Found'){
         this.progressMessage = null;
-					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
 			}
 			else{
         this.progressMessage = null;
@@ -117,7 +122,7 @@ export class BlueprintMasterComponent implements OnInit {
 			}
 			else if(error == '404 - Not Found'){
           this.progressMessage = null;
-					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
 			}
 			else{
         this.progressMessage = null;
@@ -127,16 +132,16 @@ export class BlueprintMasterComponent implements OnInit {
   }
 
   //Get all Endusers
-	load_OnlyEndusers(): Promise<any> {
+	load_OnlyQualityRequirements(): Promise<any> {
 		let tempList = [];
-		return this.serviceBlueprintMaster.getAllEndusers()
+		return this.serviceBlueprintMaster.getAllQualityRequirements()
 		.toPromise()
 		.then((result) => {
 				this.errorMessage = null;
-		result.forEach(enduser => {
-      tempList.push(enduser);
+		result.forEach(qualityRequirement => {
+      tempList.push(qualityRequirement);
 		});
-		this.allEndusers = tempList;
+		this.allQualityRequirements = tempList;
 		})
 		.catch((error) => {
 			if(error == 'Server error'){
@@ -145,7 +150,7 @@ export class BlueprintMasterComponent implements OnInit {
 			}
 			else if(error == '404 - Not Found'){
         this.progressMessage = null;
-					this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+					this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
 			}
 			else{
         this.progressMessage = null;
@@ -154,7 +159,35 @@ export class BlueprintMasterComponent implements OnInit {
 		});
   }
 
-  //Gtet all BlueprintMaster Assets and the Designers associated to them 
+    //Get all Endusers
+    load_OnlyEndusers(): Promise<any> {
+        let tempList = [];
+        return this.serviceBlueprintMaster.getAllEndusers()
+            .toPromise()
+            .then((result) => {
+                this.errorMessage = null;
+                result.forEach(enduser => {
+                    tempList.push(enduser);
+                });
+                this.allEndusers = tempList;
+            })
+            .catch((error) => {
+                if(error == 'Server error'){
+                    this.progressMessage = null;
+                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                }
+                else if(error == '404 - Not Found'){
+                    this.progressMessage = null;
+                    this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
+                }
+                else{
+                    this.progressMessage = null;
+                    this.errorMessage = error;
+                }
+            });
+    }
+
+  //Gtet all BlueprintMaster Assets and the Designers associated to them
   loadAll(): Promise<any>  {
     //retrieve all BlueprintMaster
     let tempList = [];
@@ -164,11 +197,11 @@ export class BlueprintMasterComponent implements OnInit {
 			this.errorMessage = null;
       result.forEach(blueprintMaster => {
         tempList.push(blueprintMaster);
-      });     
+      });
     })
     .then(() => {
       for (let blueprintMaster of tempList) {
-        var splitted_ownerID = blueprintMaster.owner.split("#", 2); 
+        var splitted_ownerID = blueprintMaster.owner.split("#", 2);
         var ownerID = String(splitted_ownerID[1]);
         this.serviceBlueprintMaster.getDesigner(ownerID)
         .toPromise()
@@ -184,9 +217,9 @@ export class BlueprintMasterComponent implements OnInit {
       }
       this.allAssets = tempList;
       if (0 < tempList.length) {
-        this.current_db_id = tempList[tempList.length - 1].blueprintMasterID.substr(2)
+        this.current_db_id = tempList[tempList.length - 1].blueprintMasterID.substr(2);
       } else {
-        this.current_db_id = 0
+        this.current_db_id = 0;
       }
     });
   }
@@ -218,7 +251,8 @@ export class BlueprintMasterComponent implements OnInit {
           "metadata":null,
           "owner":null,
           "buyerID":null,
-          "printerID":null
+          "printerID":null,
+            "qualityRequirementID": null
     });
     return this.serviceBlueprintMaster.addAsset(this.asset)
     .toPromise()
@@ -234,7 +268,8 @@ export class BlueprintMasterComponent implements OnInit {
           "metadata":null,
           "owner":null,
           "buyerID":null,
-          "printerID":null
+          "printerID":null,
+          "qualityRequirementID": null
       });
       location.reload();
     })
@@ -247,7 +282,7 @@ export class BlueprintMasterComponent implements OnInit {
             this.progressMessage = null;
             this.errorMessage = error;
         }
-    })
+    });
     });
   }
 
@@ -255,29 +290,37 @@ export class BlueprintMasterComponent implements OnInit {
   requestAsset(form: any): Promise<any> {
     this.progressMessage = 'Please wait... ';
      //Get selected Printer
-     for (let printer of this.allPrinters) {    
+     for (let printer of this.allPrinters) {
       if(printer.stakeholderID == this.printerID.value){
         this.printer = printer;
-      }     
+      }
     }
     //Get selected Endusers
     for (let buyer of this.allEndusers) {
       if(buyer.stakeholderID == this.buyerID.value){
         this.buyer = buyer;
-      }     
+      }
     }
+
+      //Get selected Endusers
+      for (let qualityRequirement of this.allQualityRequirements) {
+          if(qualityRequirement.qualityRequirementID == this.qualityRequirementID.value){
+              this.qualityRequirement = qualityRequirement;
+          }
+      }
     //get selected BlueprintMaster
     for (let blueprintMaster of this.allAssets) {
       if(blueprintMaster.blueprintMasterID == this.currentId){
         this.blueprintMaster = blueprintMaster;
-      }     
+      }
     }
     //transaction object
     this.requestBlueprintMasterObj = {
       $class: "org.usecase.printer.RequestBlueprint",
       "buyer": this.buyerID.value,
       "printer": this.printerID.value,
-      "blueprintMaster": this.currentId
+      "blueprintMaster": this.currentId,
+        "qualityRequirement": this.qualityRequirementID.value
     };
     return this.serviceBlueprintMaster.requestBlueprint(this.requestBlueprintMasterObj)
     .toPromise()
@@ -294,7 +337,7 @@ export class BlueprintMasterComponent implements OnInit {
         }
         else if(error == '404 - Not Found'){
           this.progressMessage = null;
-        this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+        this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
         }
         else if(error == '500 - Internal Server Error') {
           this.progressMessage = null;
@@ -325,20 +368,21 @@ export class BlueprintMasterComponent implements OnInit {
             "metadata":null,
             "printerID":null,
             "buyerID":null,
-            "owner":null 
+          "qualityRequirementID":null,
+            "owner":null
       };
         if(result.blueprintMasterID){
             formObject.blueprintMasterID = result.blueprintMasterID;
         }else{
           formObject.blueprintMasterID = null;
         }
-      
+
         if(result.txID){
             formObject.txID = result.txID;
         }else{
           formObject.txID = null;
         }
-      
+
         if(result.checksum) {
           formObject.checksum = result.checksum;
         } else {
@@ -350,13 +394,13 @@ export class BlueprintMasterComponent implements OnInit {
         }else{
           formObject.price = null;
         }
-      
+
         if(result.metadata){
             formObject.metadata = result.metadata;
         }else{
           formObject.metadata = null;
         }
-      
+
         if(result.owner){
             formObject.owner = result.owner;
         }else{
@@ -371,7 +415,7 @@ export class BlueprintMasterComponent implements OnInit {
         }
         else if(error == '404 - Not Found'){
           this.progressMessage = null;
-				this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+				this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
         }
         else{
           this.progressMessage = null;
@@ -391,7 +435,8 @@ export class BlueprintMasterComponent implements OnInit {
           "metadata":null,
           "owner":null,
           "buyerID":null,
-          "printerID":null
+          "printerID":null,
+        "qualityRequirementID":null
       });
   }
 }

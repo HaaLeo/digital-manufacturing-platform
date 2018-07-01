@@ -48,9 +48,4 @@ export class QualityRequirementService {
     }
 
 
-//create requestBlueprint transaction
-//public requestBlueprint(itemToAdd: any): Observable<RequestBlueprint> {
-//  return this.requestBlueprintService.add(this.REQUESTBLUEPRINT, itemToAdd);
-//}
-
 }

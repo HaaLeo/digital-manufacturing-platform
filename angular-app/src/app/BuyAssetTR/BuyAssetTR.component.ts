@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { BuyAssetTRService } from './BuyAssetTR.service';
+import {Printer, PrintingJob, QualityReport, Stakeholder} from "../org.usecase.printer";
 
 @Component({
 	selector: 'app-BuyAssetTR',
@@ -23,7 +24,8 @@ export class BuyAssetTRComponent {
 	private confirmTransactionObj;
 	private transactionID;
 	private selectedJob;
-    private qualityProperties: { peakTemperature: number; peakPressure: number };
+    private qualityProperties;
+    private evaluateReportObj;
 
 	constructor(private serviceTransaction: BuyAssetTRService, fb: FormBuilder) {
 		this.myForm = fb.group({
@@ -39,13 +41,6 @@ export class BuyAssetTRComponent {
 		});
 
 	  }
-
-	mockQualityProperties(){
-        return {
-            peakTemperature: Math.random()*300,
-            peakPressure: Math.random() *3000
-        }; //peakPressure in mBar
-    }
 
 	// Get all PrintingJobs
 	loadAllPrintingJobs(): Promise<any> {
@@ -76,6 +71,44 @@ export class BuyAssetTRComponent {
 			}
 		});
   	}
+    /**
+    TODO uploadQualityReport to ipfs. (as a json.) read this and pass it into the evaluateReport Method.
+     This might be implemented in an own transaction. Do not forget to upload QualityRequirement properly aswell.
+    **/
+
+  	evaluateReport(form: any){
+	    debugger;
+        this.evaluateReportObj = {
+            $class: "org.usecase.printer.EvaluateReport",
+            "printingJob": this.printingJobCurrent, // includes Quality Requirement and BlueprintMaster
+            "customer": this.printingJobCurrent.buyer,
+            "qualityReport": this.qualityProperties,
+        };
+        debugger;
+        this.serviceTransaction.evaluateReport(this.evaluateReportObj)
+            .toPromise()
+            .then((result) => {
+                this.selectedJob = null;
+                this.errorMessage = null;
+                this.progressMessage = null;
+                this.successMessage = 'Transaction executed successfully.';
+                this.transactionID = result.transactionId;
+            })
+            .catch((error) => {
+                if (error == 'Server error'){
+                    this.progressMessage = null;
+                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+                }
+                else if (error == '404 - Not Found'){
+                    this.progressMessage = null;
+                    this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+                }
+                else {
+                    this.progressMessage = null;
+                    this.errorMessage = error;
+                }
+            });
+    }
 
   	execute(form: any){
 	    debugger;
@@ -94,13 +127,15 @@ export class BuyAssetTRComponent {
 	    return this.serviceTransaction.printBlueprint(this.confirmTransactionObj)
 	    .toPromise()
 	    .then((result) => {
+	        // this.uploadQualityReport(form);
+            debugger;
+            // this.evaluateReport(form); TODO first upload qualityReport properly
 	    	this.selectedJob = null;
 	    	this.errorMessage = null;
 	    	this.progressMessage = null;
             this.successMessage = 'Transaction executed successfully.';
               this.transactionID = result.transactionId;
-              this.qualityProperties = this.mockQualityProperties();
-              // TODO generate qualityReport and upload
+              this.qualityProperties = {"peakTemperature":100, "peakPressure":50};
         })
 	    .catch((error) => {
                 if (error == 'Server error'){

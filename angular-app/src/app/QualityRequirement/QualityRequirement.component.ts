@@ -18,16 +18,23 @@ export class QualityRequirementComponent implements OnInit {
 
     private errorMessage;
     private progressMessage;
+    private successMessage;
     private allEndusers;
+    private current_db_id;
+    private asset;
+    private allAssets;
+
 
     qualityRequirementID = new FormControl("", Validators.required);
     txID = new FormControl("", Validators.required);
     owner = new FormControl("", Validators.required);
+    name = new FormControl("", Validators.required);
 
     constructor(private serviceQualityRequirement:QualityRequirementService, fb: FormBuilder) {
         this.myForm = fb.group({
             qualityRequirementID:this.qualityRequirementID,
             txID:this.txID,
+            name:this.name,
             owner:this.owner,
         });
     };
@@ -69,42 +76,90 @@ export class QualityRequirementComponent implements OnInit {
 
     //Get all QualityRequirement Assets and the Designers associated to them
     loadAll(): Promise<any>  {
-        //retrieve all BlueprintMaster
+        //retrieve all QualityRequirements
         let tempList = [];
         return this.serviceQualityRequirement.getAll()
             .toPromise()
             .then((result) => {
                 this.errorMessage = null;
-                result.forEach(blueprintMaster => {
-                    tempList.push(blueprintMaster);
+                result.forEach(qualityRequirement => {
+                    tempList.push(qualityRequirement);
                 });
             })
             .then(() => {
-                for (let blueprintMaster of tempList) {
-                    var splitted_ownerID = blueprintMaster.owner.split("#", 2);
+                for (let qualityRequirement of tempList) {
+                    var splitted_ownerID = qualityRequirement.owner.split("#", 2);
                     var ownerID = String(splitted_ownerID[1]);
                     this.serviceQualityRequirement.getEnduser(ownerID)
                         .toPromise()
                         .then((result) => {
                             this.errorMessage = null;
                             if(result.firstName){
-                                blueprintMaster.firstName = result.firstName;
+                                qualityRequirement.firstName = result.firstName;
                             }
                             if(result.lastName){
-                                blueprintMaster.lastName = result.lastName;
+                                qualityRequirement.lastName = result.lastName;
                             }
                         });
+                }
+                this.allAssets = tempList;
+                if (0 < tempList.length) {
+                    this.current_db_id = tempList[tempList.length - 1].qualityRequirementID.substr(2);
+                } else {
+                    this.current_db_id = 0;
                 }
             });
     }
 
-    // Method called when a Designer wants to upload a new BlueprintMaster Asset
+
+    // Method called when a Designer wants to upload a new QualityRequirement Asset
     addAsset(form: any) {
         this.progressMessage = 'Please wait... ';
         let owner = this.owner.value;
-        // @a.beale: Upload file here to ipfs and on the response upload the txID to BigChainDB
+        let name = this.name.value;
+        this.fileUploadComponent.postBCDB("", name, owner) //TODO write own post for QualityRequirement
+            .then(txId => {
+                this.current_db_id++;
+                let currentChecksum = this.fileUploadComponent.getChecksum();
+                this.asset = {
+                    $class: "org.usecase.printer.QualityRequirement",
+                    "qualityRequirementID":"QReq_" + this.current_db_id,
+                    "txID":txId,
+                    "name":this.name.value,
+                    "owner":this.owner.value
+                };
+                this.myForm.setValue({
+                    "qualityRequirementID":null,
+                    "txID":null,
+                    "name":null,
+                    "owner":null,
+                });
+                return this.serviceQualityRequirement.addAsset(this.asset)
+                    .toPromise()
+                    .then(() => {
+                        this.errorMessage = null;
+                        this.progressMessage = null;
+                        this.successMessage = 'Quality Requirement added successfully. Refreshing page...';
+                        this.myForm.setValue({
+                            "qualityRequirementID":null,
+                            "txID":null,
+                            "name":null,
+                            "owner":null,
+                        });
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        if(error == 'Server error'){
+                            this.progressMessage = null;
+                            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                        }
+                        else{
+                            this.progressMessage = null;
+                            this.errorMessage = error;
+                        }
+                    });
+            });
     }
-
 
     //Retrieve a QualityRequirement with a certain id and printingJob its values to the Form Object
     getForm(id: any): Promise<any>{
@@ -115,6 +170,7 @@ export class QualityRequirementComponent implements OnInit {
                 let formObject = {
                     "qualityRequirementID":null,
                     "txID":null,
+                    "name":null,
                     "owner":null
                 };
                 if(result.qualityRequirementID){
@@ -133,6 +189,11 @@ export class QualityRequirementComponent implements OnInit {
                     formObject.owner = result.owner;
                 }else{
                     formObject.owner = null;
+                }
+                if(result.name){
+                    formObject.name = result.name;
+                }else{
+                    formObject.name = null;
                 }
                 this.myForm.setValue(formObject);
             })
@@ -157,6 +218,7 @@ export class QualityRequirementComponent implements OnInit {
     resetForm(): void{
         this.myForm.setValue({
             "qualityRequirementID":null,
+            "name": null,
             "txID":null,
             "owner":null,
         });
