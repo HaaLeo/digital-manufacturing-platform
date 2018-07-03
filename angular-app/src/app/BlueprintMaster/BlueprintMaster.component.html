@@ -55,6 +55,7 @@
                 </select>
             </div>
 	        <div class="form-group text-left">
+              <label for="buyer">Quality Requirement</label>
 		        <select name="qualityRequirement" formControlName="qualityRequirementID" >
 			        <option *ngFor="let qualityRequirement of allQualityRequirements" value="{{qualityRequirement.qualityRequirementID}}">{{qualityRequirement.name}}</option>
 		        </select>

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile } from 'ng2-file-drop';
-import {postKeyToBcDB, getAssetFromBcDB} from './bigchain-post/ipfsKeyAssetBigchain.js';
+import { postKeyToBcDB, getAssetFromBcDB } from './bigchain-post/ipfsKeyAssetBigchain.js';
+import postBluePrintMaster from './bigchain-post/masterAssetBigchain.js';
 import generateCS from './bigchain-post/ChecksumGenerator.js';
-
+import { Buffer } from 'buffer';
+import * as ipfsAPI from 'ipfs-api';
 
 @Component({
   selector: 'fileupload',
@@ -16,7 +18,7 @@ export class FileuploadComponent {
   //Supported File Types
   private txid: string;
   private imageShown = false;
-  private currentProfileImage =  './uploadimage.png';
+  private currentProfileImage = './uploadimage.png';
   private acceptedFile;
   private checksum;
   private currentFileName;
@@ -37,27 +39,37 @@ export class FileuploadComponent {
 
     // Load the image in
 
-     this.acceptedFile = acceptedFile.file;
-     console.log("test: " + acceptedFile.file.name);
-     this.currentFileName = acceptedFile.file.name;
-     this.imageShown = true;
+    this.acceptedFile = acceptedFile.file;
+    console.log("test: " + acceptedFile.file.name);
+    this.currentFileName = acceptedFile.file.name;
+    this.imageShown = true;
 
-      generateCS(this.acceptedFile)
+    generateCS(this.acceptedFile)
       .then(hs => {
-         this.checksum = hs;
+        this.checksum = hs;
       });
-
-      // Read in the file
-    // masterAssetBigchain(acceptedFile.file)
-    // .then(txid => {
-    //   console.log("[dragFileAccepted]", txid);
-    // });
   }
 
- getChecksum() {
-   return this.checksum;
- }
-  async postBCDB(key, description, ownerID) {
+  getChecksum() {
+    return this.checksum;
+  }
+
+  public async postFileToIPFS(): Promise<string> {
+    let hashVal: string;
+    let readerResult = await this.readAsArrayBuffer(this.acceptedFile);
+    let ipfsApi;
+    ipfsApi = ipfsAPI('localhost', '5001');
+    const buffer = Buffer.from(readerResult);
+    let ipfsResponse = await ipfsApi.add(buffer, { progress: (prog) => console.log(`received: ${prog}`) });
+    hashVal = ipfsResponse[0].hash;
+    console.log('Hash Value: ' + hashVal);
+
+    return hashVal;
+}
+  async postBluePrintMasterBCDB(price, meta, ownerID) {
+    return postBluePrintMaster(this.acceptedFile, price, meta, ownerID);
+  }
+  async postKeyToBCDB(key, description, ownerID) {
     return await postKeyToBcDB(key, description, ownerID);
   }
 
@@ -69,4 +81,13 @@ export class FileuploadComponent {
     console.log("File being dragged has been dropped and has been rejected");
   }
 
+  private async readAsArrayBuffer(blob: Blob): Promise<ArrayBuffer> {
+    console.log('Blob: ' + blob);
+    return new Promise<ArrayBuffer>((resolve, reject) => {
+      let reader = new FileReader();
+      reader.addEventListener('load', e => resolve((<FileReader>e.target).result));
+      reader.addEventListener('error', e => reject((<FileReader>e.target).error));
+      reader.readAsArrayBuffer(blob);
+    });
+}
 }
