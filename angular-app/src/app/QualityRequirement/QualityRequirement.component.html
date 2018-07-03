@@ -55,13 +55,14 @@
 					<th class="info">Name</th>
 					<th class="info">TxID</th>
 					<th class="info">Owner</th>
-					<th class="info">Actions</th>
 				</tr>
 				</thead>
 				<tbody>
 				<tr *ngFor="let asset of allAssets">
 					<td>{{asset.qualityRequirementID}}</td>
+					<td>{{asset.name}}</td>
 					<td class="split">{{asset.txID}}</td>
+					<td>{{asset.owner}}</td>
 				</tr>
 				</tbody>
 			</table>

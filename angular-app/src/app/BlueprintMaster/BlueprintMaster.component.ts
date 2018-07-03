@@ -230,7 +230,7 @@ export class BlueprintMasterComponent implements OnInit {
     let inputPrice = this.price.value;
     let inputMetadata = this.metadata.value;
     let owner = this.owner.value;
-    this.fileUploadComponent.postBCDB(inputPrice, inputMetadata, owner)
+    this.fileUploadComponent.postBluePrintMasterBCDB(inputPrice, inputMetadata, owner)
     .then(txId => {
     this.current_db_id++;
     let currentChecksum = this.fileUploadComponent.getChecksum();
@@ -320,7 +320,7 @@ export class BlueprintMasterComponent implements OnInit {
       "buyer": this.buyerID.value,
       "printer": this.printerID.value,
       "blueprintMaster": this.currentId,
-        "qualityRequirement": this.qualityRequirementID.value
+      "qualityRequirement": this.qualityRequirementID.value
     };
     return this.serviceBlueprintMaster.requestBlueprint(this.requestBlueprintMasterObj)
     .toPromise()
