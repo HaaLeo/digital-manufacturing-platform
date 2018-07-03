@@ -1,3 +1,4 @@
+'use strict';
 
 const app_id = '';
 const app_key = '';
