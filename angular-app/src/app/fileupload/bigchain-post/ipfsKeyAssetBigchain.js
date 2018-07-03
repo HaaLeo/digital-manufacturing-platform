@@ -73,7 +73,7 @@ export async function getAssetFromBcDB (txId) {
         app_key: app_key,
     })
 
-    var assets = await conn.searchAssets(txCreateSimpleSigned.id);
+    var assets = await conn.searchAssets(txId);
     console.log('Found assets: ', assets);
     assert.equal(assets.length, 1);
     debugger;
