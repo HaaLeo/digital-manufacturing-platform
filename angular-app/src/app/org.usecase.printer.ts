@@ -21,6 +21,7 @@ import {Event} from './org.hyperledger.composer.system';
    }
    export class Printer extends Stakeholder {
       name: string;
+      printerManufacturer: string;
    }
    export class Manufacturer extends Stakeholder {
       name: string;
@@ -72,11 +73,13 @@ import {Event} from './org.hyperledger.composer.system';
        qualityReport: QualityReport;
    }
 
-    export class QualityReport extends Asset {
+
+export class QualityReport extends Asset {
         qualityReportID: string;
         txID: string; // IPFS address
         databaseHash: string;
         owner: Manufacturer;
+        printingJob: PrintingJob;
     }
 
    export class QualityRequirement extends Asset {

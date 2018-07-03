@@ -30,6 +30,7 @@ participant DataAnalyst extends Stakeholder {
 
 participant Printer extends Stakeholder {
     o String name
+    --> Manufacturer printerManufacturer
 }
 
 participant Manufacturer extends Stakeholder {
@@ -87,6 +88,7 @@ asset QualityReport identified by qualityReportID {
     o String txID
     o String databaseHash
     --> Manufacturer owner
+    --> PrintingJob printingJob
 }
 
 asset EvaluationResult identified by evaluationResultID {

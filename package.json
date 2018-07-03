@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@theledger/fabric-chaincode-utils": "^2.0.10",
+    "js-sha512": "^0.7.1",
     "yup": "^0.25.1"
   }
 }
