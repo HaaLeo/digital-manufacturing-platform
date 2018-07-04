@@ -15,6 +15,12 @@
                 <label for="name">Name</label>  
                   <input formControlName="name" type="text" class="form-control">          
               </div>
+	          <div class="form-group text-left">
+		          <label for="printerManufacturer">Printer Manufacturer</label>
+		          <select name="designers" formControlName="printerManufacturer" >
+			          <option *ngFor="let manufacturer of allManufacturers" value="{{manufacturer.stakeholderID}}">{{manufacturer.name}}</option>
+		          </select>
+	          </div>
           </div>
           <div class="modal-footer">
             <button (click)="addPrinter(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
