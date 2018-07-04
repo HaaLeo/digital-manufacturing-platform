@@ -2,26 +2,6 @@
 # yarn lockfile v1
 
 
-"@theledger/couchdb-query-engine@^2.4.4":
-  version "2.4.4"
-  resolved "https://registry.yarnpkg.com/@theledger/couchdb-query-engine/-/couchdb-query-engine-2.4.4.tgz#e2860bbb594cecb9f79e8ae0b333db5fadb015b4"
-  dependencies:
-    babel-runtime "^6.26.0"
-
-"@theledger/fabric-chaincode-utils@^2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@theledger/fabric-chaincode-utils/-/fabric-chaincode-utils-2.0.10.tgz#eb93779fccdc09b775b63b66272137bde70fef03"
-  dependencies:
-    "@theledger/couchdb-query-engine" "^2.4.4"
-    "@types/lodash" "^4.14.104"
-    fabric-shim "^1.1.2"
-    fabric-shim-crypto "^1.1.2"
-    google-protobuf "^3.5.0"
-    lodash "^4.17.5"
-    serialize-error "^2.1.0"
-    winston "^2.4.0"
-    yup "^0.24.1"
-
 "@types/lodash@^4.14.104":
   version "4.14.110"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.110.tgz#fb07498f84152947f30ea09d89207ca07123461e"

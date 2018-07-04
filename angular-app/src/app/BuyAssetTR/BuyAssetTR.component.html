@@ -44,9 +44,12 @@
       </div>
     </div>
   </div>
-  <div class="row">  
+  <div class="row">
+	  <div *ngIf="selectedJob" class="col-md-offset-4 col-md-4">
+		  <button (click)="uploadQualityReport(form);" type="button" class="btn btn-success" data-toggle="modal" >Upload Quality Report</button>
+	  </div>
     <div *ngIf="selectedJob" class="col-md-offset-4 col-md-4">
-      <button (click)="execute(form);" type="button" class="btn btn-success" data-toggle="modal" >Confirm Transaction</button>	  
+      <button (click)="execute(form);" type="button" class="btn btn-success" data-toggle="modal" >Confirm Transaction</button>
     </div>
   </div>
   <div class="row">
