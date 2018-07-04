@@ -13,7 +13,9 @@ import * as ipfsAPI from 'ipfs-api';
 })
 export class FileuploadComponent {
 
-  //Maximum file size in bytes
+  // IPFS connection details
+  private readonly ipfsHost = 'localhost';
+  private readonly ipfsPort = '5001';
 
   //Supported File Types
   private txid: string;
@@ -55,17 +57,27 @@ export class FileuploadComponent {
   }
 
   public async postFileToIPFS(): Promise<string> {
-    let hashVal: string;
-    let readerResult = await this.readAsArrayBuffer(this.acceptedFile);
-    let ipfsApi;
-    ipfsApi = ipfsAPI('localhost', '5001');
+    const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
+
+    const readerResult = await this.readAsArrayBufferAsync(this.acceptedFile);
     const buffer = Buffer.from(readerResult);
-    let ipfsResponse = await ipfsApi.add(buffer, { progress: (prog) => console.log(`received: ${prog}`) });
-    hashVal = ipfsResponse[0].hash;
-    console.log('Hash Value: ' + hashVal);
+
+    let ipfsResponse = await ipfs.add(buffer, { progress: (prog) => console.log(`received: ${prog}`) });
+    const hashVal = ipfsResponse[0].hash;
+    console.log('Ipfs hash value: ' + hashVal);
 
     return hashVal;
-}
+  }
+
+  public async getFileFromIPFS(hash: string, filename: string): Promise<File> {
+    const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
+
+    const buffer:Buffer = await ipfs.cat(hash);
+    console.log('Received buffer from ipfs: ' + buffer.toString());
+    const retrievedFile = new File([buffer], filename);
+    return retrievedFile;
+  }
+
   async postBluePrintMasterBCDB(price, meta, ownerID) {
     return postBluePrintMaster(this.acceptedFile, price, meta, ownerID);
   }
@@ -81,7 +93,7 @@ export class FileuploadComponent {
     console.log("File being dragged has been dropped and has been rejected");
   }
 
-  private async readAsArrayBuffer(blob: Blob): Promise<ArrayBuffer> {
+  private async readAsArrayBufferAsync(blob: Blob): Promise<ArrayBuffer> {
     console.log('Blob: ' + blob);
     return new Promise<ArrayBuffer>((resolve, reject) => {
       let reader = new FileReader();
@@ -89,5 +101,14 @@ export class FileuploadComponent {
       reader.addEventListener('error', e => reject((<FileReader>e.target).error));
       reader.readAsArrayBuffer(blob);
     });
-}
+  }
+
+  public async readAsTextAsync(blob: Blob): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      let reader = new FileReader();
+      reader.addEventListener('load', e => resolve((<FileReader>e.target).result));
+      reader.addEventListener('error', e => reject((<FileReader>e.target).error));
+      reader.readAsText(blob);
+    });
+  }
 }

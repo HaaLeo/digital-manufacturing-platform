@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { FileuploadComponent } from "../fileupload/fileupload.component";
 import { QualityRequirementService } from "./QualityRequirement.service";
+import { QualityRequirement } from '../org.usecase.printer';
 
 @Component({
     selector: 'app-quality-requirement',
@@ -170,7 +171,7 @@ export class QualityRequirementComponent implements OnInit {
     getForm(id: any): Promise<any> {
         return this.serviceQualityRequirement.getAsset(id)
             .toPromise()
-            .then((result) => {
+            .then((result: QualityRequirement) => {
                 this.errorMessage = null;
                 let formObject = {
                     "qualityRequirementID": null,
@@ -194,6 +195,12 @@ export class QualityRequirementComponent implements OnInit {
                     formObject.owner = result.owner;
                 } else {
                     formObject.owner = null;
+                }
+
+                if (result.name) {
+                    formObject.name = result.name;
+                } else {
+                    formObject.name = null;
                 }
                 this.myForm.setValue(formObject);
             })
