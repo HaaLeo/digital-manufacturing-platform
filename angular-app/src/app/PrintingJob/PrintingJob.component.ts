@@ -276,7 +276,7 @@ export class PrintingJobComponent implements OnInit {
   // Method which is called when Designer uploads the Blueprint Copy File
   uploadJobAsset(form: any) {
     this.progressMessage = 'Please wait... ';
-    this.fileUploadComponent.postBCDB("My ipfs test key", "My description", "my owner")
+    this.fileUploadComponent.postBluePrintMasterBCDB('', '', '')
     .then(txId => {
     let currentChecksum = this.fileUploadComponent.getChecksum();
     this.asset = {
@@ -310,12 +310,6 @@ export class PrintingJobComponent implements OnInit {
           "checksum": currentChecksum,
           "printingJob":this.asset.printingJobID
     };
-
-    // For test purpose TODO Leo remove
-    this.fileUploadComponent.getBCDB(txId).then(asset => {
-      debugger;
-      console.log(asset);
-    });
 
     return this.servicePrintingJob.upload(uploadAsset)
     .toPromise()

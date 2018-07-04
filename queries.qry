@@ -23,6 +23,12 @@ query selectManufacturer {
       SELECT org.usecase.printer.Manufacturer
 }
 
+query selectQualityRequirement {
+  description: "Select all quality requirements"
+  statement:
+      SELECT org.usecase.printer.QualityRequirement
+}
+
 query selectBlueprintMaster {
   description: "Select all BlueprintMaster assets"
   statement:

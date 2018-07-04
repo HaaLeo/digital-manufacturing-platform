@@ -162,12 +162,32 @@ The REST server is available at: `http://localhost:3000/explorer/`
 git clone https://github.com/bigchaindb/bigchaindb.git
 ```
 
-2. Open the 'bigchaindb' folder. Run BCDB
+2. Open the 'bigchaindb' folder. Install BCDB
 ```
 make run
 ```
 
-### 8.	Stop Fabric
+3. You can start and stop BCDB in the future by entering the following in the BCDB directory:
+```
+make start
+make stop
+```
+
+### 8.	Install and run IPFS
+
+1. Follow these instructions to install IPFS https://ipfs.io/docs/install/
+
+2. Initialise IPFS
+```
+ipfs init
+```
+
+3. Start IPFS node
+```
+ipfs daemon
+```
+
+### 9.	Stop Fabric
 
 To stop the fabric, run the following commands inside the `fabric-tools` directory:
 
@@ -177,6 +197,6 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ```
 
 
-### 9.	Additional resources
+### 10.	Additional resources
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
