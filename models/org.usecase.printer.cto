@@ -123,6 +123,10 @@ transaction RequestBlueprint {
 }
 
 transaction EvaluateReport {
+	o Integer pressure
+    o Integer temperature
+    o Integer peakPressure
+    o Integer peakTemperature
 	--> PrintingJob printingJob // includes Quality Requirement and BlueprintMaster
 	--> Stakeholder customer
 	--> QualityReport qualityReport

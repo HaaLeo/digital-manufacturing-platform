@@ -111,9 +111,13 @@ export class QualityReport extends Asset {
    }
 
    export class EvaluateReport extends Transaction {
-        printingJob: PrintingJob; // includes Quality Requirement and BlueprintMaster
-        customer: Stakeholder;
-        qualityReport: QualityReport;
+       pressure: number;
+       temperature: number;
+       peakPressure: number;
+       peakTemperature: number;
+       printingJob: PrintingJob; // includes Quality Requirement and BlueprintMaster
+       customer: Stakeholder;
+       qualityReport: QualityReport;
    }
 
 
