@@ -25,10 +25,12 @@ export class BuyAssetTRComponent {
     private successMessage;
 	private allPrintingJobs;
 	private allPrinters;
+	private allQualityReports;
 	private printer;
 
 	private printingJobCurrent;
-	private confirmTransactionObj;
+    private qualityReportCurrent;
+    private confirmTransactionObj;
 	private qualityReportObj;
     private transactionID;
 	private selectedJob;
@@ -92,6 +94,7 @@ export class BuyAssetTRComponent {
                 result.forEach(qualityReport => {
                         tempList.push(qualityReport);
                 });
+                this.allQualityReports = tempList;
                 debugger;
                 if ( 0 < tempList.length) {
                     this.current_db_id = tempList[tempList.length - 1];
@@ -143,21 +146,47 @@ export class BuyAssetTRComponent {
     }
 
   	evaluateReport(form: any){
-  	    debugger;
+  	    // TODO read from QualityRequirement Asset and decrypt
+        let peakTemperature = Math.floor(Math.random()*500);
+        let peakPressure = Math.floor(Math.random()*500);
+
+        // TODO read from DB
+        let temperature = Math.floor(Math.random()*300);
+        let pressure = Math.floor(Math.random()*3000);
+
+
+        this.progressMessage = 'Please wait... ';
+        console.log(this.allPrintingJobs);
+        for (const printingJob of this.allPrintingJobs) {
+            if (printingJob.printingJobID == this.printingJobID.value) {
+                this.printingJobCurrent = printingJob;
+            }
+        }
+
+        for (const qualityReport of this.allQualityReports) {
+            debugger;
+            if (qualityReport.printingJob == "resource:org.usecase.printer.PrintingJob#"+this.printingJobCurrent.printingJobID) {
+                this.qualityReportCurrent = qualityReport;
+            }
+        }
+
         this.evaluateReportObj = {
             $class: "org.usecase.printer.EvaluateReport",
-            "printingJob": this.printingJobCurrent.printingJobID, // includes Quality Requirement and BlueprintMaster
+            "temperature": temperature,
+            "pressure": pressure,
+            "peakTemperature": peakTemperature,
+            "peakPressure": peakPressure,
+            "printingJob": 'resource:org.usecase.printer.PrintingJob#'+this.printingJobCurrent.printingJobID,
             "customer": this.printingJobCurrent.buyer,
-            "qualityReport": this.qualityReportObj,
+            "qualityReport": 'resource:org.usecase.printer.QualityReport#'+this.qualityReportCurrent.qualityReportID,
         };
-        debugger;
         this.serviceTransaction.evaluateReport(this.evaluateReportObj)
             .toPromise()
             .then((result) => {
                 this.selectedJob = null;
                 this.errorMessage = null;
                 this.progressMessage = null;
-                this.successMessage = 'Transaction executed successfully.';
+                this.successMessage = 'Report evaluated successfully.';
                 this.transactionID = result.transactionId;
             })
             .catch((error) => {
@@ -198,7 +227,8 @@ export class BuyAssetTRComponent {
             "peakPressure":Math.random()*3000,
             "peakTemperature": Math.random()*800
         };
-        this.current_db_id =(this.allPrinters).length;
+        this.current_db_id =(this.allQualityReports).length;
+        this.current_db_id ++;
         debugger;
         this.qualityReportObj = {
             "$class": "org.usecase.printer.QualityReport",
@@ -215,7 +245,8 @@ export class BuyAssetTRComponent {
                 debugger;
                 this.errorMessage = null;
                 this.progressMessage = null;
-                this.successMessage = 'QualityReport added successfully.';
+                this.successMessage = 'QualityReport added successfully. Reloading...';
+                location.reload();
             })
             .catch((error) => {
                 if(error == 'Server error'){
@@ -227,13 +258,11 @@ export class BuyAssetTRComponent {
                     this.errorMessage = error;
                 }
             });
-
     }
 
   	execute(form: any){
-	    debugger;
 		this.progressMessage = 'Please wait... ';
-  	console.log(this.allPrintingJobs);
+  	    console.log(this.allPrintingJobs);
 		for (const printingJob of this.allPrintingJobs) {
             if (printingJob.printingJobID == this.printingJobID.value) {
                 this.printingJobCurrent = printingJob;

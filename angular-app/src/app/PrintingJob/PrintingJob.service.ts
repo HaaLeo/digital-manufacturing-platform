@@ -84,8 +84,4 @@ export class PrintingJobService {
     public getBlueprintMaster(id: any): Observable<BlueprintMaster> {
       return this.blueprintMasterService.getSingle(this.BLUEPRINTMASTER, id);
     }
-
-    public evaluateReport(itemToEvaluate: any): Observable<EvaluateReport>{
-        return this.evaluateReportService.add(this.EVALUATEREPORT, itemToEvaluate);
-    }
 }
