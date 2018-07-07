@@ -37,6 +37,8 @@
     "jquery": "^3.2.1",
     "js-sha1": "^0.6.0",
     "js-sha512": "^0.7.1",
+    "mongodb": "^3.1.1",
+    "mongodb-core": "^3.1.0",
     "ng2-file-drop": "^1.1.0",
     "rxjs": "^5.1.0",
     "tether": "^1.4.0",
