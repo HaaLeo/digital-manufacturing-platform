@@ -6,7 +6,7 @@ import {EvaluationResultService} from "./EvaluationResult.service";
 
 @Component({
   selector: 'app-evaluation-result',
-  templateUrl: './EvaluationResult.html',
+  templateUrl: './EvaluationResult.component.html',
   styleUrls: ['./EvaluationResult.component.css'],
     providers: [EvaluationResultService]
 })
@@ -135,9 +135,15 @@ export class EvaluationResultComponent implements OnInit {
             });
     }
 
-    //Gtet all BlueprintMaster Assets and the Designers associated to them
+    // TODO implement transaction for transfering password to Manufactueer
+    setId(id: any): void {
+        debugger;
+         this.current_db_id = id;
+    }
+
+    //Get all EvaluationResult Assets and the Endusers associated to them
     loadAll(): Promise<any>  {
-        //retrieve all BlueprintMaster
+        //retrieve all Evaluation Results
         let tempList = [];
         return this.serviceEvaluationResult.getAll()
             .toPromise()
@@ -146,30 +152,10 @@ export class EvaluationResultComponent implements OnInit {
                 result.forEach(evaluationResult => {
                     tempList.push(evaluationResult);
                 });
-            })
-            .then(() => {
-                for (let evaluationResult of tempList) {
-                    var splitted_ownerID = evaluationResult.owner.split("#", 2);
-                    var ownerID = String(splitted_ownerID[1]);
-                    this.serviceEvaluationResult.getDesigner(ownerID)
-                        .toPromise()
-                        .then((result) => {
-                            this.errorMessage = null;
-                            if(result.firstName){
-                                evaluationResult.firstName = result.firstName;
-                            }
-                            if(result.lastName){
-                                evaluationResult.lastName = result.lastName;
-                            }
-                        });
-                }
+                debugger;
                 this.allAssets = tempList;
-                if (0 < tempList.length) {
-                    this.current_db_id = tempList[tempList.length - 1].evaluationResultID.substr(2);
-                } else {
-                    this.current_db_id = 0;
-                }
             });
     }
+
 }
 
