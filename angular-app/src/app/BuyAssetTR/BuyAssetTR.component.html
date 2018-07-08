@@ -51,6 +51,9 @@
 	    <div *ngIf="selectedJob" class="col-md-offset-4 col-md-4">
 		     <button (click)="evaluateReport(form);" type="button" class="btn btn-success" data-toggle="modal" >Evaluate Report</button>
 	    </div>
+	    <div *ngIf="selectedJob" class="col-md-offset-4 col-md-4">
+		  <button (click)="transferRawData(form);" type="button" class="btn btn-success" data-toggle="modal" >Transfer Raw Data</button>
+	    </div>
         <div *ngIf="selectedJob" class="col-md-offset-4 col-md-4">
             <button (click)="execute(form);" type="button" class="btn btn-success" data-toggle="modal">Finish</button>
         </div>
