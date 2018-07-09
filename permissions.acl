@@ -219,12 +219,13 @@ rule PrinterAccessCashRecord {
     action: ALLOW
 }
 
-//Manufacturers to have all access to all EvaluationResult assets
+
+//Manufacturers to have all access to all QualityReportRawData assets
 rule ManufacturerAccessEvaluationResultRecord {
-    description: "Allow Manufacturer read access to all EvaluationResult assets"
+    description: "Allow Manufacturer read access to all QualityReportRawData assets"
     participant: "org.usecase.printer.Manufacturer"
     operation: ALL
-    resource: "org.usecase.printer.EvaluationResult"
+    resource: "org.usecase.printer.QualityReportRawData"
     action: ALLOW
 }
 
