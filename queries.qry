@@ -29,6 +29,12 @@ query selectQualityRequirement {
       SELECT org.usecase.printer.QualityRequirement
 }
 
+query selectQualityReportRaw {
+  description: "Select all raw quality report assets"
+  statement:
+      SELECT org.usecase.printer.QualityReportRaw
+}
+
 query selectBlueprintMaster {
   description: "Select all BlueprintMaster assets"
   statement:

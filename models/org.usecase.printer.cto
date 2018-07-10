@@ -91,7 +91,7 @@ asset QualityReport identified by qualityReportID {
     --> PrintingJob printingJob
 }
 
-asset QualityReportRawData identified by qualityReportRawID {
+asset QualityReportRaw identified by qualityReportRawID {
 	o String qualityReportRawID
 	o String encryptedReport
 	o String accessPermissionCode optional
