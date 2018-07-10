@@ -2,26 +2,27 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { BuyAssetTRService } from './BuyAssetTR.service';
-import { Printer, PrintingJob, QualityReport, QualityReportRawData, Stakeholder, QualityRequirement } from "../org.usecase.printer";
+import { Printer, PrintingJob, QualityReport, QualityReportRaw, Stakeholder, QualityRequirement } from "../org.usecase.printer";
 import { QualityReportService } from "../QualityReport/QualityReport.service";
 import { PrinterService } from "../Printer/Printer.service";
-import { QualityReportRawDataService } from "../QualityReportRaw/QualityReportRaw.service";
+import { QualityReportRawService } from "../QualityReportRaw/QualityReportRaw.service";
 import { FileuploadComponent } from '../fileupload/fileupload.component';
 import { QualityRequirementService } from '../QualityRequirement/QualityRequirement.service';
 
 import request from "request";
 import bodyParser from "body-parser";
+import {ManufacturerService} from "../Manufacturer/Manufacturer.service";
 
 declare function require(name: string);
 let sha512 = require('js-sha512');
 
-var url = "http://localhost:3004/api/"
+var url = "http://localhost:3004/api/";
 
 @Component({
     selector: 'app-BuyAssetTR',
     templateUrl: './BuyAssetTR.component.html',
     styleUrls: ['./BuyAssetTR.component.css'],
-    providers: [BuyAssetTRService, QualityReportService, PrinterService, QualityReportRawDataService, QualityRequirementService]
+    providers: [BuyAssetTRService, QualityReportService, PrinterService, QualityReportRawService, QualityRequirementService, ManufacturerService]
 })
 
 export class BuyAssetTRComponent {
@@ -37,10 +38,12 @@ export class BuyAssetTRComponent {
     private allQualityRequirements: QualityRequirement[];
     private allQualityReports;
     private allQualityReportRawData;
+    private allManufacturers;
     private printer;
 
     private printingJobCurrent: PrintingJob;
     private qualityReportCurrent;
+    private manufacturerCurrent;
     private qualityRequirementCurrent;
     private qualityReportRawDataObj;
     private confirmTransactionObj;
@@ -52,9 +55,10 @@ export class BuyAssetTRComponent {
 
     constructor(private serviceTransaction: BuyAssetTRService, fb: FormBuilder,
         private serviceQualityReport: QualityReportService,
-        private serviceQualityReportRawData: QualityReportRawDataService,
+        private serviceQualityReportRawData: QualityReportRawService,
         private servicePrinter: PrinterService,
         private serviceQualityRequirement: QualityRequirementService,
+				private serviceManufacturer: ManufacturerService,
 				private http: HttpClient) {
         this.myForm = fb.group({
             printingJobID: this.printingJobID,
@@ -71,6 +75,7 @@ export class BuyAssetTRComponent {
         this.loadAllPrinters();
         this.loadAllQualityReportRawData();
         this.loadAllQualityRequirements();
+        this.loadAllManufacturers();
     }
 
     // Get all PrintingJobs
@@ -224,6 +229,36 @@ export class BuyAssetTRComponent {
             });
     }
 
+    // Get All Manufacturers
+    loadAllManufacturers(): Promise<any> {
+        const tempList = [];
+        return this.serviceManufacturer.getAllManufacturers()
+            .toPromise()
+            .then((result) => {
+                this.errorMessage = null;
+                result.forEach(manufacturer => {
+                    //DISPLAY ONLY PRINTING JOBS THAT HAVEN'T PRINTED YET
+                    tempList.push(manufacturer);
+                });
+                this.allManufacturers = tempList;
+            })
+            .catch((error) => {
+                if (error == 'Server error') {
+                    this.progressMessage = null;
+                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+                }
+                else if (error == '404 - Not Found') {
+                    this.progressMessage = null;
+                    this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+                }
+                else {
+                    this.progressMessage = null;
+                    this.errorMessage = error;
+                }
+            });
+    };
+
+
     async evaluateReport(form: any) {
 
         this.progressMessage = 'Please wait... ';
@@ -273,7 +308,8 @@ export class BuyAssetTRComponent {
 	            "printingJob": 'resource:org.usecase.printer.PrintingJob#'+this.printingJobCurrent.printingJobID,
 	            "customer": this.printingJobCurrent.buyer,
 	            "qualityReport": 'resource:org.usecase.printer.QualityReport#'+this.qualityReportCurrent.qualityReportID,
-	        };
+	            "manufacturer": null
+                    };
 	        this.serviceTransaction.evaluateReport(this.evaluateReportObj)
 	            .toPromise()
 	            .then((result) => {
@@ -306,6 +342,18 @@ export class BuyAssetTRComponent {
                 this.printingJobCurrent = printingJob;
             }
         }
+        for (const printer of this.allPrinters) {
+            if (printer.stakeholderID == this.printingJobCurrent.printer.toString().split("#")[1]) {
+                this.printer = printer;
+            }
+        }
+
+        for (const manufacturer of this.allManufacturers) {
+            if ("resource:org.usecase.printer.Manufacturer#"+manufacturer.stakeholderID==this.printer.printerManufacturer) {
+                this.manufacturerCurrent = "resource:org.usecase.printer.Manufacturer#"+manufacturer.stakeholderID;
+            }
+        }
+
 
         // Search MongoDB for raw data
 				console.log('Searching MongoDB for job ID: ' + this.printingJobCurrent.printingJobID);
@@ -318,12 +366,17 @@ export class BuyAssetTRComponent {
 	        this.current_db_id =(this.allQualityReportRawData).length;
 	        this.current_db_id ++;
 
+	        let stakeholderObjs = [];
+	        stakeholderObjs.push(this.manufacturerCurrent);
+
 	        this.qualityReportRawDataObj = {
-	            $class: "org.usecase.printer.QualityReportRawData",
-	            "printingJob": 'resource:org.usecase.printer.PrintingJob#'+this.printingJobCurrent.printingJobID,
-	            "qualityReportRawID":"QREPRAW_" + this.current_db_id,
-	            "encryptedReport": JSON.stringify(qualityReportRawData),
-	        };
+                $class: "org.usecase.printer.QualityReportRawData",
+                "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
+                "qualityReportRawID": "QREPRAW_" + this.current_db_id,
+                "encryptedReport": JSON.stringify(qualityReportRawData),
+                "accessPermissionCode": 'None',
+                "stakeholder": stakeholderObjs
+            };
 
 	        return this.serviceQualityReportRawData.addAsset(this.qualityReportRawDataObj)
 	            .toPromise()
@@ -389,13 +442,14 @@ export class BuyAssetTRComponent {
 
         this.current_db_id = (this.allQualityReports).length;
         this.current_db_id++;
+
         this.qualityReportObj = {
             "$class": "org.usecase.printer.QualityReport",
             "qualityReportID": "QREP_" + this.current_db_id,
-            "password": sha512(JSON.stringify(qualityReportRawData)),
             "databaseHash": sha512(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 255)),
             "owner": this.printer.printerManufacturer,
             "printingJob": "resource:org.usecase.printer.PrintingJob#" + this.printingJobCurrent.printingJobID,
+            "accessPermissionCode": 'None',
         };
         return this.serviceQualityReport.addAsset(this.qualityReportObj)
             .toPromise()

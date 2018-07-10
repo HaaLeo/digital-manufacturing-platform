@@ -71,22 +71,25 @@ import {Event} from './org.hyperledger.composer.system';
        printingJob: PrintingJob;
        customer: Stakeholder;
        qualityReport: QualityReport;
+       manufacturer: Manufacturer;
    }
 
 
     export class QualityReport extends Asset {
         qualityReportID: string;
-        password: string; // IPFS address
+        accessPermissionCode: string; // IPFS address
         databaseHash: string;
         owner: Manufacturer;
         printingJob: PrintingJob;
     }
 
 
-    export class QualityReportRawData extends Asset {
+    export class QualityReportRaw extends Asset {
         qualityReportRawID: String;
         encryptedReport: String;
+        accessPermissionCode: String;
         printingJob: PrintingJob;
+        stakeholder: Stakeholder[];
     }
 
    export class QualityRequirement extends Asset {
@@ -125,6 +128,7 @@ import {Event} from './org.hyperledger.composer.system';
        printingJob: PrintingJob; // includes Quality Requirement and BlueprintMaster
        customer: Stakeholder;
        qualityReport: QualityReport;
+       manufacturer: Manufacturer;
    }
 
 
