@@ -54,7 +54,8 @@ export class BuyAssetTRComponent {
         private serviceQualityReport: QualityReportService,
         private serviceQualityReportRawData: QualityReportRawDataService,
         private servicePrinter: PrinterService,
-        private serviceQualityRequirement: QualityRequirementService) {
+        private serviceQualityRequirement: QualityRequirementService,
+				private http: HttpClient) {
         this.myForm = fb.group({
             printingJobID: this.printingJobID,
         });
