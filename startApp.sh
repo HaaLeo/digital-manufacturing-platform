@@ -24,3 +24,6 @@ composer card import --file networkadmin.card
 
 cd ../angular-app
 ng serve --open
+
+cd ../mongoserver
+node mongoAPI.js

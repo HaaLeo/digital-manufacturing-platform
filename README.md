@@ -187,7 +187,16 @@ ipfs init
 ipfs daemon
 ```
 
-### 9.	Stop Fabric
+### 9.	Install and run MongoDB
+
+1. Follow these instructions to install MongoDB depending on your Operating System https://docs.mongodb.com/manual/administration/install-community/
+
+2. After you have installed MongoDB and set up the data directory, run MongoDB
+```
+mongod
+```
+
+### 10.	Stop Fabric
 
 To stop the fabric, run the following commands inside the `fabric-tools` directory:
 
@@ -197,6 +206,6 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ```
 
 
-### 10.	Additional resources
+### 11.	Additional resources
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
