@@ -71,6 +71,7 @@ import {Event} from './org.hyperledger.composer.system';
        printingJob: PrintingJob;
        customer: Stakeholder;
        qualityReport: QualityReport;
+       manufacturer: Manufacturer;
    }
 
 
@@ -127,6 +128,7 @@ import {Event} from './org.hyperledger.composer.system';
        printingJob: PrintingJob; // includes Quality Requirement and BlueprintMaster
        customer: Stakeholder;
        qualityReport: QualityReport;
+       manufacturer: Manufacturer;
    }
 
 

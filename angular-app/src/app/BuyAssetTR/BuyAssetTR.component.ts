@@ -298,6 +298,7 @@ export class BuyAssetTRComponent {
             "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
             "customer": this.printingJobCurrent.buyer,
             "qualityReport": 'resource:org.usecase.printer.QualityReport#' + this.qualityReportCurrent.qualityReportID,
+            "manufacturer": null
         };
         this.serviceTransaction.evaluateReport(this.evaluateReportObj)
             .toPromise()
