@@ -85,7 +85,7 @@ asset QualityRequirement identified by qualityRequirementID {
 
 asset QualityReport identified by qualityReportID {
 	o String qualityReportID
-    o String password
+    o String accessPermissionCode
     o String databaseHash
     --> Manufacturer owner
     --> PrintingJob printingJob
@@ -94,7 +94,9 @@ asset QualityReport identified by qualityReportID {
 asset QualityReportRawData identified by qualityReportRawID {
 	o String qualityReportRawID
 	o String encryptedReport
+	o String accessPermissionCode
 	--> PrintingJob printingJob
+	--> Stakeholder[] stakeholder
 	}
 
 asset EvaluationResult identified by evaluationResultID {

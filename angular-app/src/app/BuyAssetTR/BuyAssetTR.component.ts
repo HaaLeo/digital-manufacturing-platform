@@ -4,7 +4,7 @@ import { BuyAssetTRService } from './BuyAssetTR.service';
 import {Printer, PrintingJob, QualityReport, QualityReportRawData, Stakeholder} from "../org.usecase.printer";
 import {QualityReportService} from "../QualityReport/QualityReport.service";
 import {PrinterService} from "../Printer/Printer.service";
-import {QualityReportRawDataService} from "../QualityReportRaw/QualityReportRaw.service";
+import {QualityReportRawDataService} from "../QualityReportRawData/QualityReportRawData.service";
 
 declare function require(name:string);
 let sha512 = require('js-sha512');
@@ -304,6 +304,7 @@ export class BuyAssetTRComponent {
 
         // TODO Password first is encrypted with Manufacturer PubKey then with EnduserPubKey. encrypt qualityReportRawData with this
         let password = "";
+
 
         let qualityReportRawData = {
             "peakPressure":Math.random()*3000,
