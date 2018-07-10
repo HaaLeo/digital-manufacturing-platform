@@ -208,7 +208,7 @@ export class ManufacturerComponent {
     this.current_db_id++;
     this.manufacturer = {
       $class: "org.usecase.printer.Manufacturer",
-          "stakeholderID":"P_" + this.current_db_id,
+          "stakeholderID":"M_" + this.current_db_id,
           "pubKey":this.pubKey.value,
           "name":this.name.value
       };
