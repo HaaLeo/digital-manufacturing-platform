@@ -7,6 +7,7 @@ import { PrinterService } from "../Printer/Printer.service";
 import { QualityReportRawDataService } from "../QualityReportRaw/QualityReportRaw.service";
 import { FileuploadComponent } from '../fileupload/fileupload.component';
 import { QualityRequirementService } from '../QualityRequirement/QualityRequirement.service';
+import {ManufacturerService} from "../Manufacturer/Manufacturer.service";
 
 declare function require(name: string);
 let sha512 = require('js-sha512');
@@ -15,7 +16,7 @@ let sha512 = require('js-sha512');
     selector: 'app-BuyAssetTR',
     templateUrl: './BuyAssetTR.component.html',
     styleUrls: ['./BuyAssetTR.component.css'],
-    providers: [BuyAssetTRService, QualityReportService, PrinterService, QualityReportRawDataService, QualityRequirementService]
+    providers: [BuyAssetTRService, QualityReportService, PrinterService, QualityReportRawDataService, QualityRequirementService, ManufacturerService]
 })
 
 export class BuyAssetTRComponent {
@@ -28,6 +29,7 @@ export class BuyAssetTRComponent {
     private successMessage;
     private allPrintingJobs;
     private allPrinters;
+    private allManufacturers;
     private allQualityRequirements: QualityRequirement[];
     private allQualityReports;
     private allQualityReportRawData;
@@ -36,6 +38,7 @@ export class BuyAssetTRComponent {
     private printingJobCurrent: PrintingJob;
     private qualityReportCurrent;
     private qualityRequirementCurrent;
+    private manufacturerCurrent;
     private qualityReportRawDataObj;
     private confirmTransactionObj;
     private qualityReportObj;
@@ -43,11 +46,13 @@ export class BuyAssetTRComponent {
     private selectedJob;
     private evaluateReportObj;
     private current_db_id;
+    private stakeholderObjs;
 
     constructor(private serviceTransaction: BuyAssetTRService, fb: FormBuilder,
         private serviceQualityReport: QualityReportService,
         private serviceQualityReportRawData: QualityReportRawDataService,
         private servicePrinter: PrinterService,
+        private serviceManufacturer: ManufacturerService,
         private serviceQualityRequirement: QualityRequirementService) {
         this.myForm = fb.group({
             printingJobID: this.printingJobID,
@@ -62,6 +67,7 @@ export class BuyAssetTRComponent {
             });
         this.loadAllQualityReports();
         this.loadAllPrinters();
+        this.loadAllManufacturers();
         this.loadAllQualityReportRawData();
         this.loadAllQualityRequirements();
     }
@@ -79,6 +85,34 @@ export class BuyAssetTRComponent {
                         tempList.push(printingJob);
                 });
                 this.allPrintingJobs = tempList;
+            })
+            .catch((error) => {
+                if (error == 'Server error') {
+                    this.progressMessage = null;
+                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+                }
+                else if (error == '404 - Not Found') {
+                    this.progressMessage = null;
+                    this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+                }
+                else {
+                    this.progressMessage = null;
+                    this.errorMessage = error;
+                }
+            });
+    };
+    // Get All Manufacturers
+    loadAllManufacturers(): Promise<any> {
+        const tempList = [];
+        return this.serviceManufacturer.getAllManufacturers()
+            .toPromise()
+            .then((result) => {
+                this.errorMessage = null;
+                result.forEach(manufacturer => {
+                    //DISPLAY ONLY PRINTING JOBS THAT HAVEN'T PRINTED YET
+                        tempList.push(manufacturer);
+                });
+                this.allManufacturers = tempList;
             })
             .catch((error) => {
                 if (error == 'Server error') {
@@ -264,6 +298,7 @@ export class BuyAssetTRComponent {
             "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
             "customer": this.printingJobCurrent.buyer,
             "qualityReport": 'resource:org.usecase.printer.QualityReport#' + this.qualityReportCurrent.qualityReportID,
+            "manufacturer": null
         };
         this.serviceTransaction.evaluateReport(this.evaluateReportObj)
             .toPromise()
@@ -297,6 +332,19 @@ export class BuyAssetTRComponent {
             }
         }
 
+
+        for (const printer of this.allPrinters) {
+            if (printer.stakeholderID == this.printingJobCurrent.printer.toString().split("#")[1]) {
+                this.printer = printer;
+            }
+        }
+
+        for (const manufacturer of this.allManufacturers) {
+            if ("resource:org.usecase.printer.Manufacturer#"+manufacturer.stakeholderID==this.printer.printerManufacturer) {
+                this.manufacturerCurrent = "resource:org.usecase.printer.Manufacturer#"+manufacturer.stakeholderID;
+            }
+        }
+
         // TODO replace with search in DB for RawData (by printingJobCurrent.printingJobID)
         let qualityReportRawData = {
             "peakPressure": Math.random() * 3000,
@@ -306,12 +354,17 @@ export class BuyAssetTRComponent {
         this.current_db_id = (this.allQualityReportRawData).length;
         this.current_db_id++;
 
+        this.stakeholderObjs = [];
+        this.stakeholderObjs.push(this.manufacturerCurrent);
         this.qualityReportRawDataObj = {
             $class: "org.usecase.printer.QualityReportRawData",
             "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
             "qualityReportRawID": "QREPRAW_" + this.current_db_id,
             "encryptedReport": JSON.stringify(qualityReportRawData),
+            "accessPermissionCode": 'None',
+            "stakeholder": this.stakeholderObjs
         };
+        debugger;
 
         return this.serviceQualityReportRawData.addAsset(this.qualityReportRawDataObj)
             .toPromise()
@@ -342,10 +395,8 @@ export class BuyAssetTRComponent {
             }
         }
         for (const printer of this.allPrinters) {
-            debugger;
             if (printer.stakeholderID == this.printingJobCurrent.printer.toString().split("#")[1]) {
                 this.printer = printer;
-                debugger;
             }
         }
 
@@ -368,7 +419,7 @@ export class BuyAssetTRComponent {
         this.qualityReportObj = {
             "$class": "org.usecase.printer.QualityReport",
             "qualityReportID": "QREP_" + this.current_db_id,
-            "password": sha512(JSON.stringify(qualityReportRawData)),
+            "accessPermissionCode": sha512(JSON.stringify(qualityReportRawData)),
             "databaseHash": sha512(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 255)),
             "owner": this.printer.printerManufacturer,
             "printingJob": "resource:org.usecase.printer.PrintingJob#" + this.printingJobCurrent.printingJobID,
@@ -400,7 +451,6 @@ export class BuyAssetTRComponent {
         for (const printingJob of this.allPrintingJobs) {
             if (printingJob.printingJobID == this.printingJobID.value) {
                 this.printingJobCurrent = printingJob;
-                debugger;
             }
         }
 

@@ -23,7 +23,7 @@ import { EvaluationResultComponent } from './EvaluationResult/EvaluationResult.c
 import {ManufacturerComponent} from "./Manufacturer/Manufacturer.component";
 import { QualityReportComponent } from './QualityReport/QualityReport.component';
 import { DataAnalystComponent } from './DataAnalyst/DataAnalyst.component';
-import { QualityReportRawComponent } from './QualityReportRaw/QualityReportRaw.component';
+import { QualityReportRawComponent } from './QualityReportRawData/QualityReportRawData.component';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
