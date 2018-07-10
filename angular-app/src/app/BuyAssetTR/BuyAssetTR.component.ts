@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { BuyAssetTRService } from './BuyAssetTR.service';
 import {Printer, PrintingJob, QualityReport, QualityReportRawData, Stakeholder} from "../org.usecase.printer";
@@ -6,8 +7,13 @@ import {QualityReportService} from "../QualityReport/QualityReport.service";
 import {PrinterService} from "../Printer/Printer.service";
 import {QualityReportRawDataService} from "../QualityReportRaw/QualityReportRaw.service";
 
+import request from "request";
+import bodyParser from "body-parser";
+
 declare function require(name:string);
 let sha512 = require('js-sha512');
+
+var url = "http://localhost:3004/api/"
 
 @Component({
 	selector: 'app-BuyAssetTR',
@@ -43,7 +49,8 @@ export class BuyAssetTRComponent {
 	constructor(private serviceTransaction: BuyAssetTRService, fb: FormBuilder,
                 private serviceQualityReport: QualityReportService,
                 private serviceQualityReportRawData: QualityReportRawDataService,
-                private servicePrinter: PrinterService) {
+                private servicePrinter: PrinterService,
+								private http: HttpClient) {
 		this.myForm = fb.group({
             printingJobID: this.printingJobID,
 	  });
@@ -101,7 +108,7 @@ export class BuyAssetTRComponent {
                         tempList.push(qualityReport);
                 });
                 this.allQualityReports = tempList;
-                debugger;
+                //debugger;
                 if ( 0 < tempList.length) {
                     this.current_db_id = tempList[tempList.length - 1];
                 } else {
@@ -189,11 +196,6 @@ export class BuyAssetTRComponent {
         let peakTemperature = Math.floor(Math.random()*500);
         let peakPressure = Math.floor(Math.random()*500);
 
-        // TODO read from DB
-        let temperature = Math.floor(Math.random()*300);
-        let pressure = Math.floor(Math.random()*3000);
-
-
         this.progressMessage = 'Please wait... ';
         console.log(this.allPrintingJobs);
         for (const printingJob of this.allPrintingJobs) {
@@ -208,39 +210,47 @@ export class BuyAssetTRComponent {
             }
         }
 
-        this.evaluateReportObj = {
-            $class: "org.usecase.printer.EvaluateReport",
-            "temperature": temperature,
-            "pressure": pressure,
-            "peakTemperature": peakTemperature,
-            "peakPressure": peakPressure,
-            "printingJob": 'resource:org.usecase.printer.PrintingJob#'+this.printingJobCurrent.printingJobID,
-            "customer": this.printingJobCurrent.buyer,
-            "qualityReport": 'resource:org.usecase.printer.QualityReport#'+this.qualityReportCurrent.qualityReportID,
-        };
-        this.serviceTransaction.evaluateReport(this.evaluateReportObj)
-            .toPromise()
-            .then((result) => {
-                this.selectedJob = null;
-                this.errorMessage = null;
-                this.progressMessage = null;
-                this.successMessage = 'Report evaluated successfully.';
-                this.transactionID = result.transactionId;
-            })
-            .catch((error) => {
-                if (error == 'Server error'){
-                    this.progressMessage = null;
-                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-                }
-                else if (error == '404 - Not Found'){
-                    this.progressMessage = null;
-                    this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-                }
-                else {
-                    this.progressMessage = null;
-                    this.errorMessage = error;
-                }
-            });
+				// Retrieving report data from MongoDB
+				console.log('Retrieving report from Job ID: ' + this.printingJobID.value);
+				this.http.get('http://localhost:3004/api/getData/' + this.printingJobID.value).subscribe(data => {
+					let temperature = data[0]["qualityReportRawData"]["peakTemperature"];
+	        let pressure = data[0]["qualityReportRawData"]["peakPressure"];
+					console.log("Temp: " + temperature + "   Pressure: " + pressure);
+
+					this.evaluateReportObj = {
+	            $class: "org.usecase.printer.EvaluateReport",
+	            "temperature": temperature,
+	            "pressure": pressure,
+	            "peakTemperature": peakTemperature,
+	            "peakPressure": peakPressure,
+	            "printingJob": 'resource:org.usecase.printer.PrintingJob#'+this.printingJobCurrent.printingJobID,
+	            "customer": this.printingJobCurrent.buyer,
+	            "qualityReport": 'resource:org.usecase.printer.QualityReport#'+this.qualityReportCurrent.qualityReportID,
+	        };
+	        this.serviceTransaction.evaluateReport(this.evaluateReportObj)
+	            .toPromise()
+	            .then((result) => {
+	                this.selectedJob = null;
+	                this.errorMessage = null;
+	                this.progressMessage = null;
+	                this.successMessage = 'Report evaluated successfully.';
+	                this.transactionID = result.transactionId;
+	            })
+	            .catch((error) => {
+	                if (error == 'Server error'){
+	                    this.progressMessage = null;
+	                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+	                }
+	                else if (error == '404 - Not Found'){
+	                    this.progressMessage = null;
+	                    this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+	                }
+	                else {
+	                    this.progressMessage = null;
+	                    this.errorMessage = error;
+	                }
+	            });
+    		});
     }
 
     transferRawData(form: any){
@@ -250,40 +260,42 @@ export class BuyAssetTRComponent {
             }
         }
 
-        // TODO replace with search in DB for RawData (by printingJobCurrent.printingJobID)
-        let qualityReportRawData = {
-            "peakPressure":Math.random()*3000,
-            "peakTemperature": Math.random()*800
-        };
+        // Search MongoDB for raw data
+				console.log('Searching MongoDB for job ID: ' + this.printingJobCurrent.printingJobID);
+				this.http.get('http://localhost:3004/api/getData/' + this.printingJobCurrent.printingJobID).subscribe(data => {
 
-        this.current_db_id =(this.allQualityReportRawData).length;
-        this.current_db_id ++;
+					let qualityReportRawData = data[0]["qualityReportRawData"];
 
-        this.qualityReportRawDataObj = {
-            $class: "org.usecase.printer.QualityReportRawData",
-            "printingJob": 'resource:org.usecase.printer.PrintingJob#'+this.printingJobCurrent.printingJobID,
-            "qualityReportRawID":"QREPRAW_" + this.current_db_id,
-            "encryptedReport": JSON.stringify(qualityReportRawData),
-        };
+					console.log('Quality Report Raw Data: ' + JSON.stringify(qualityReportRawData));
 
-        return this.serviceQualityReportRawData.addAsset(this.qualityReportRawDataObj)
-            .toPromise()
-            .then(() => {
-                this.errorMessage = null;
-                this.progressMessage = null;
-                this.successMessage = 'QualityReportRawData added successfully for Manufacturer.';
-            })
-            .catch((error) => {
-                if(error == 'Server error'){
-                    this.progressMessage = null;
-                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-                }
-                else{
-                    this.progressMessage = null;
-                    this.errorMessage = error;
-                }
-            });
+	        this.current_db_id =(this.allQualityReportRawData).length;
+	        this.current_db_id ++;
 
+	        this.qualityReportRawDataObj = {
+	            $class: "org.usecase.printer.QualityReportRawData",
+	            "printingJob": 'resource:org.usecase.printer.PrintingJob#'+this.printingJobCurrent.printingJobID,
+	            "qualityReportRawID":"QREPRAW_" + this.current_db_id,
+	            "encryptedReport": JSON.stringify(qualityReportRawData),
+	        };
+
+	        return this.serviceQualityReportRawData.addAsset(this.qualityReportRawDataObj)
+	            .toPromise()
+	            .then(() => {
+	                this.errorMessage = null;
+	                this.progressMessage = null;
+	                this.successMessage = 'QualityReportRawData added successfully for Manufacturer.';
+	            })
+	            .catch((error) => {
+	                if(error == 'Server error'){
+	                    this.progressMessage = null;
+	                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+	                }
+	                else{
+	                    this.progressMessage = null;
+	                    this.errorMessage = error;
+	                }
+	            });
+    		});
     }
 
 
@@ -295,10 +307,10 @@ export class BuyAssetTRComponent {
             }
         }
         for (const printer of this.allPrinters) {
-            debugger;
+            //debugger;
             if (printer.stakeholderID == this.printingJobCurrent.printer.split("#")[1]) {
                 this.printer = printer;
-                debugger;
+                //debugger;
             }
         }
 
@@ -310,7 +322,19 @@ export class BuyAssetTRComponent {
             "peakTemperature": Math.random()*800
         };
 
-        // TODO save this in Mongodb
+        // Save data in MongoDB
+				const req = this.http.post('http://localhost:3004/api/addData', {
+      		jobID: this.printingJobCurrent.printingJobID,
+      		qualityReportRawData: qualityReportRawData,
+    		}).subscribe(
+        	res => {
+          	console.log("Saved raw data in MongoDB...");
+
+        	},
+        	err => {
+          	console.log("Error occured saving data to MongoDB...");
+        });
+
         let qualityReportRawDataObj = {
             "qualityReportRawData": qualityReportRawData,
             "printingJob": this.printingJobCurrent.printingJobID
@@ -348,46 +372,47 @@ export class BuyAssetTRComponent {
     }
 
   	execute(form: any){
-		this.progressMessage = 'Please wait... ';
-  	    console.log(this.allPrintingJobs);
-		for (const printingJob of this.allPrintingJobs) {
-            if (printingJob.printingJobID == this.printingJobID.value) {
-                this.printingJobCurrent = printingJob;
-                debugger;
-            }
+			this.progressMessage = 'Please wait... ';
+  	  console.log(this.allPrintingJobs);
+			for (const printingJob of this.allPrintingJobs) {
+      	if (printingJob.printingJobID == this.printingJobID.value) {
+        	this.printingJobCurrent = printingJob;
+        	debugger;
         }
+      }
 
     	this.confirmTransactionObj = {
 	      "$class": "org.usecase.printer.ConfirmTransaction",
 	      "printingJob": "resource:org.usecase.printer.PrintingJob#"+this.printingJobCurrent.printingJobID
 	    };
+
 	   return this.serviceTransaction.printBlueprint(this.confirmTransactionObj)
 	    .toPromise()
 	    .then((result) => {
 	    	this.selectedJob = null;
 	    	this.errorMessage = null;
 	    	this.progressMessage = null;
-            this.successMessage = 'Transaction executed successfully.';
-            this.transactionID = result.transactionId;
+          this.successMessage = 'Transaction executed successfully.';
+          this.transactionID = result.transactionId;
         })
 	    .catch((error) => {
-                if (error == 'Server error'){
-                	this.progressMessage = null;
-                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-                }
-                else if (error == '404 - Not Found'){
-                	this.progressMessage = null;
-                	this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-                }
-                else{
-                	this.progressMessage = null;
-                    this.errorMessage = error;
-                }
-            }).then(() => {
-            	if (this.errorMessage == 'Cannot buy asset. Not enough funds.') {
-            		this.transactionFrom = true;
-            	} else
- 		             this.transactionFrom = false;
-            });
+      	if (error == 'Server error') {
+        	this.progressMessage = null;
+          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        }
+        else if (error == '404 - Not Found') {
+        	this.progressMessage = null;
+          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+        }
+        else {
+          this.progressMessage = null;
+          this.errorMessage = error;
+      	}
+      }).then(() => {
+        if (this.errorMessage == 'Cannot buy asset. Not enough funds.') {
+          this.transactionFrom = true;
+        } else
+ 		      this.transactionFrom = false;
+      });
   	}
 }

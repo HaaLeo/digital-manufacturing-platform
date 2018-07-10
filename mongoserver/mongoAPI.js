@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient
 var request = require("request");
+//var cors = require('cors');
 
 var url = 'mongodb://localhost:27017';
 var dbase;
@@ -27,19 +28,37 @@ MongoClient.connect(url, function(err, db) {
 //Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:true}));
+//app.use(cors({origin: 'http://localhost:8888'}));
 
-app.post('/addData', function(req, res) {
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+
+app.post('/api/addData', function(req, res) {
   console.log('POST to /addData');
-  var hashID = req.body.hashID;
-  var temperature = req.body.temperature;
-  var pressure = req.body.pressure;
+  var jobID = req.body.jobID;
+  var qualityReportRawData = req.body.qualityReportRawData;
 
-  console.log("DATA: hashID (" + hashID + "), temperature (" + temperature + "), pressure (" + pressure + ")");
+  console.log("DATA: jobID (" + jobID + "), raw data (" + qualityReportRawData + ")");
 
   insert = {
-    'hashID': hashID,
-    'temperature': temperature,
-    'pressure': pressure
+    'jobID': jobID,
+    'qualityReportRawData': qualityReportRawData
   }
 
   dbase.collection('QualityReports').insert(insert, function(err, doc) {
@@ -48,27 +67,27 @@ app.post('/addData', function(req, res) {
      throw err;
     } else {
      res.send(doc);
-     console.log('Added data of hash value: ' + hashID);
+     console.log('Added data of jobID value: ' + jobID);
     }
   });
 });
 
-app.get('/getData/:hashID', function(req, res) {
-  console.log("Quality Report Data being requested for hash: " + req.params.hashID);
+app.get('/api/getData/:jobID', function(req, res) {
+  console.log("Quality Report Data being requested for jobID: " + req.params.jobID);
 
-  var hashID = req.params.hashID;
+  var jobID = req.params.jobID;
 
-  dbase.collection('QualityReports').find({"hashID":hashID}).toArray(function(err, result) {
+  dbase.collection('QualityReports').find({"jobID":jobID}).toArray(function(err, result) {
     if (err) {
         console.log("Error retrieving data: " + err);
         throw err;
     } else {
-      var completeString = "";
+      var jsonData = [];
       result.forEach(function(value) {
-        completeString += JSON.stringify(value);
-        completeString += "|";
+        jsonData.push({jobID: value.jobID, qualityReportRawData: value.qualityReportRawData});
       });
-      res.send(completeString);
+      res.contentType('application/json');
+      res.send(JSON.stringify(jsonData));
     }
   });
 });

@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { Configuration } from './configuration';
@@ -54,7 +55,8 @@ import { QualityReportRawComponent } from './QualityReportRaw/QualityReportRaw.c
     ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
-    Ng2FileDropModule
+    Ng2FileDropModule,
+    HttpClientModule
   ],
   providers: [
     Configuration,
