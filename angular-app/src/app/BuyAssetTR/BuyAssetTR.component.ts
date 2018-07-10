@@ -22,7 +22,8 @@ var url = "http://localhost:3004/api/";
     selector: 'app-BuyAssetTR',
     templateUrl: './BuyAssetTR.component.html',
     styleUrls: ['./BuyAssetTR.component.css'],
-    providers: [BuyAssetTRService, QualityReportService, PrinterService, QualityReportRawService, QualityRequirementService, ManufacturerService]
+    providers: [BuyAssetTRService, QualityReportService, PrinterService, QualityReportRawService,
+        QualityRequirementService, ManufacturerService]
 })
 
 export class BuyAssetTRComponent {
@@ -370,7 +371,7 @@ export class BuyAssetTRComponent {
 	        stakeholderObjs.push(this.manufacturerCurrent);
 
 	        this.qualityReportRawDataObj = {
-                $class: "org.usecase.printer.QualityReportRawData",
+                $class: "org.usecase.printer.QualityReportRaw",
                 "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
                 "qualityReportRawID": "QREPRAW_" + this.current_db_id,
                 "encryptedReport": JSON.stringify(qualityReportRawData),
