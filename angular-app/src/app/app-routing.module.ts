@@ -17,7 +17,7 @@ import { ManufacturerComponent } from './Manufacturer/Manufacturer.component';
 import {DataAnalystComponent} from "./DataAnalyst/DataAnalyst.component";
 import {QualityReportComponent} from "./QualityReport/QualityReport.component";
 import {EvaluationResultComponent} from "./EvaluationResult/EvaluationResult.component";
-import {QualityReportRawComponent} from "./QualityReportRawData/QualityReportRawData.component";
+import {QualityReportRawComponent} from "./QualityReportRaw/QualityReportRaw.component";
 
 const routes: Routes = [
   // { path: 'transaction', component: TransactionComponent },

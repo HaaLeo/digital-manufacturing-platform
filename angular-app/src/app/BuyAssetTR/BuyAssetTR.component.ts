@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { BuyAssetTRService } from './BuyAssetTR.service';
-import { Printer, PrintingJob, QualityReport, QualityReportRawData, Stakeholder, QualityRequirement } from "../org.usecase.printer";
+import { Printer, PrintingJob, QualityReport, QualityReportRaw, Stakeholder, QualityRequirement } from "../org.usecase.printer";
 import { QualityReportService } from "../QualityReport/QualityReport.service";
 import { PrinterService } from "../Printer/Printer.service";
-import { QualityReportRawDataService } from "../QualityReportRaw/QualityReportRaw.service";
+import { QualityReportRawService } from "../QualityReportRaw/QualityReportRaw.service";
 import { FileuploadComponent } from '../fileupload/fileupload.component';
 import { QualityRequirementService } from '../QualityRequirement/QualityRequirement.service';
 import {ManufacturerService} from "../Manufacturer/Manufacturer.service";
@@ -16,7 +16,7 @@ let sha512 = require('js-sha512');
     selector: 'app-BuyAssetTR',
     templateUrl: './BuyAssetTR.component.html',
     styleUrls: ['./BuyAssetTR.component.css'],
-    providers: [BuyAssetTRService, QualityReportService, PrinterService, QualityReportRawDataService, QualityRequirementService, ManufacturerService]
+    providers: [BuyAssetTRService, QualityReportService, PrinterService, QualityReportRawService, QualityRequirementService, ManufacturerService]
 })
 
 export class BuyAssetTRComponent {
@@ -32,14 +32,14 @@ export class BuyAssetTRComponent {
     private allManufacturers;
     private allQualityRequirements: QualityRequirement[];
     private allQualityReports;
-    private allQualityReportRawData;
+    private allQualityReportRaw;
     private printer;
 
     private printingJobCurrent: PrintingJob;
     private qualityReportCurrent;
     private qualityRequirementCurrent;
     private manufacturerCurrent;
-    private qualityReportRawDataObj;
+    private qualityReportRawObj;
     private confirmTransactionObj;
     private qualityReportObj;
     private transactionID;
@@ -50,7 +50,7 @@ export class BuyAssetTRComponent {
 
     constructor(private serviceTransaction: BuyAssetTRService, fb: FormBuilder,
         private serviceQualityReport: QualityReportService,
-        private serviceQualityReportRawData: QualityReportRawDataService,
+        private serviceQualityReportRaw: QualityReportRawService,
         private servicePrinter: PrinterService,
         private serviceManufacturer: ManufacturerService,
         private serviceQualityRequirement: QualityRequirementService) {
@@ -68,7 +68,7 @@ export class BuyAssetTRComponent {
         this.loadAllQualityReports();
         this.loadAllPrinters();
         this.loadAllManufacturers();
-        this.loadAllQualityReportRawData();
+        this.loadAllQualityReportRaw();
         this.loadAllQualityRequirements();
     }
 
@@ -165,16 +165,16 @@ export class BuyAssetTRComponent {
     }
 
     // Get all QualityReports
-    loadAllQualityReportRawData(): Promise<any> {
+    loadAllQualityReportRaw(): Promise<any> {
         const tempList = [];
-        return this.serviceQualityReportRawData.getAll()
+        return this.serviceQualityReportRaw.getAll()
             .toPromise()
             .then((result) => {
                 this.errorMessage = null;
-                result.forEach(qualityReportRawData => {
-                    tempList.push(qualityReportRawData);
+                result.forEach(rawQualityReport => {
+                    tempList.push(rawQualityReport);
                 });
-                this.allQualityReportRawData = tempList;
+                this.allQualityReportRaw = tempList;
                 if (0 < tempList.length) {
                     this.current_db_id = tempList[tempList.length - 1];
                 } else {
@@ -346,32 +346,32 @@ export class BuyAssetTRComponent {
         }
 
         // TODO replace with search in DB for RawData (by printingJobCurrent.printingJobID)
-        let qualityReportRawData = {
+        let rawQualityReport = {
             "peakPressure": Math.random() * 3000,
             "peakTemperature": Math.random() * 800
         };
 
-        this.current_db_id = (this.allQualityReportRawData).length;
+        this.current_db_id = (this.allQualityReportRaw).length;
         this.current_db_id++;
 
         this.stakeholderObjs = [];
         this.stakeholderObjs.push(this.manufacturerCurrent);
-        this.qualityReportRawDataObj = {
-            $class: "org.usecase.printer.QualityReportRawData",
+        this.qualityReportRawObj = {
+            $class: "org.usecase.printer.QualityReportRaw",
             "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
             "qualityReportRawID": "QREPRAW_" + this.current_db_id,
-            "encryptedReport": JSON.stringify(qualityReportRawData),
+            "encryptedReport": JSON.stringify(rawQualityReport),
             "accessPermissionCode": 'None',
             "stakeholder": this.stakeholderObjs
         };
         debugger;
 
-        return this.serviceQualityReportRawData.addAsset(this.qualityReportRawDataObj)
+        return this.serviceQualityReportRaw.addAsset(this.qualityReportRawObj)
             .toPromise()
             .then(() => {
                 this.errorMessage = null;
                 this.progressMessage = null;
-                this.successMessage = 'QualityReportRawData added successfully for Manufacturer.';
+                this.successMessage = 'QualityReportRaw added successfully for Manufacturer.';
             })
             .catch((error) => {
                 if (error == 'Server error') {
@@ -400,17 +400,17 @@ export class BuyAssetTRComponent {
             }
         }
 
-        // TODO Password first is encrypted with Manufacturer PubKey then with EnduserPubKey. encrypt qualityReportRawData with this
+        // TODO Password first is encrypted with Manufacturer PubKey then with EnduserPubKey. encrypt qualityReportRaw with this
         let password = "";
 
-        let qualityReportRawData = {
+        let rawQualityReport = {
             "peakPressure": Math.random() * 3000,
             "peakTemperature": Math.random() * 800
         };
 
         // TODO save this in Mongodb
-        let qualityReportRawDataObj = {
-            "qualityReportRawData": qualityReportRawData,
+        let qualityReportRawObj = {
+            "qualityReportRaw": rawQualityReport,
             "printingJob": this.printingJobCurrent.printingJobID
         };
 
@@ -419,7 +419,7 @@ export class BuyAssetTRComponent {
         this.qualityReportObj = {
             "$class": "org.usecase.printer.QualityReport",
             "qualityReportID": "QREP_" + this.current_db_id,
-            "accessPermissionCode": sha512(JSON.stringify(qualityReportRawData)),
+            "accessPermissionCode": sha512(JSON.stringify(rawQualityReport)),
             "databaseHash": sha512(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 255)),
             "owner": this.printer.printerManufacturer,
             "printingJob": "resource:org.usecase.printer.PrintingJob#" + this.printingJobCurrent.printingJobID,

@@ -84,7 +84,7 @@ import {Event} from './org.hyperledger.composer.system';
     }
 
 
-    export class QualityReportRawData extends Asset {
+    export class QualityReportRaw extends Asset {
         qualityReportRawID: String;
         encryptedReport: String;
         accessPermissionCode: String;
