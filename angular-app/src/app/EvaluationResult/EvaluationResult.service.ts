@@ -44,4 +44,8 @@ export class EvaluationResultService {
     public getAllPrinters(): Observable<Printer[]> {
         return this.printerService.getAll(this.PRINTER);
     }
+
+    public updateEvaluationResult(id: any, itemToUpdate: any): Observable<EvaluationResult> {
+        return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
+    }
 }

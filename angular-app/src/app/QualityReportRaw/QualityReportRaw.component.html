@@ -1,4 +1,29 @@
 
+<div class="modal fade" id="shareDataModal" tabindex="-1" role="dialog" aria-labelledby="requestAssetModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="shareDataModal">Share Raw Data with Analyst</h4>
+			</div>
+			<form [formGroup]="myForm">
+				<div class="modal-body">
+					<div class="form-group text-left">
+						<label for="dataAnalyst">Data Analyst</label>
+						<select name="dataAnalysts" formControlName="dataAnalystID" >
+							<option *ngFor="let dataAnalyst of allAnalysts" value="{{dataAnalyst.stakeholderID}}">{{dataAnalyst.name}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button (click)="shareDataWithAnalyst(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <div class="container">
 	<div *ngIf="successMessage" class="alert alert-success" role="alert">
 		<strong>Success:</strong> {{successMessage}}
@@ -18,18 +43,23 @@
 				<tr class="thead-cols">
 					<th class="info">Quality-Report-Raw-Data ID</th>
 					<th class="info">Encrypted Report</th>
-					<th class="info">Access Permission Code</th>
 					<th class="info">Printing Job</th>
 					<th class="info">Stakeholders</th>
+					<th class="info">Share</th>
+
 				</tr>
 				</thead>
 				<tbody>
 				<tr *ngFor="let asset of allQualityReportsRaw">
 					<td>{{asset.qualityReportRawID}}</td>
 					<td class="split">{{asset.encryptedReport}}</td>
-					<td class="split">{{asset.accessPermissionCode}}</td>
 					<td>{{asset.formattedPrintingJob}}</td>
 					<td>{{asset.formattedStakeholders}}</td>
+					<td>
+						<button (click)="setId(asset.blueprintMasterID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#shareDataModal">Share</button>
+					</td>
+
+
 				</tr>
 				</tbody>
 			</table>

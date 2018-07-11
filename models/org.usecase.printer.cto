@@ -101,7 +101,7 @@ asset QualityReportRaw identified by qualityReportRawID {
 
 asset EvaluationResult identified by evaluationResultID {
 	o String evaluationResultID
-    o String txID
+    o String txID optional
     o Boolean requirementsMet
     --> Stakeholder customer
     --> PrintingJob printingJob
