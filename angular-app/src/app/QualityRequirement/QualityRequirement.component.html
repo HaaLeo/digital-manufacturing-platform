@@ -18,6 +18,12 @@
 							<option *ngFor="let enduser of allEndusers" value="{{enduser.stakeholderID}}">{{enduser.firstName + " " + enduser.lastName}}</option>
 						</select>
 					</div>
+					<div class="form-group text-left">
+							<label for="printer">Printer</label>
+							<select name="printers" formControlName="printerID" >
+								<option *ngFor="let printer of allPrinters" value="{{printer.stakeholderID}}">{{printer.name}}</option>
+							</select>
+					</div>
 					<fileupload></fileupload>
 				</div>
 				<div class="modal-footer">

@@ -4,18 +4,19 @@ import { Observable } from 'rxjs/Observable';
 import { QualityRequirement} from '../org.usecase.printer';
 import 'rxjs/Rx';
 
-import { Enduser} from 'app/org.usecase.printer';
+import { Enduser, Printer } from 'app/org.usecase.printer';
 
 // Can be injected into a constructor
 @Injectable()
 export class QualityRequirementService {
 
-
     private NAMESPACE = 'org.usecase.printer.QualityRequirement';
     private ENDUSER = 'org.usecase.printer.Enduser';
+    private PRINTER = 'org.usecase.printer.Printer';
 
     constructor(private dataService: DataService<QualityRequirement>,
-                private enduserService: DataService<Enduser>) {
+                private enduserService: DataService<Enduser>,
+                private printerService: DataService<Printer>,) {
     };
 
     public getAll(): Observable<QualityRequirement[]> {
@@ -38,14 +39,15 @@ export class QualityRequirementService {
       return this.dataService.delete(this.NAMESPACE, id);
     }
 
-
-  public getEnduser(id: any): Observable<Enduser> {
-    return this.enduserService.getSingle(this.ENDUSER, id);
-  }
-
-  public getAllEndusers(): Observable<Enduser[]> {
-    return this.enduserService.getAll(this.ENDUSER);
+    public getEnduser(id: any): Observable<Enduser> {
+      return this.enduserService.getSingle(this.ENDUSER, id);
     }
 
+    public getAllEndusers(): Observable<Enduser[]> {
+      return this.enduserService.getAll(this.ENDUSER);
+    }
 
+    public getAllPrinters(): Observable<Printer[]> {
+      return this.printerService.getAll(this.PRINTER);
+    }
 }

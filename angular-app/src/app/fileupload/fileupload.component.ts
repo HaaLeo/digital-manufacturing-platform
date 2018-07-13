@@ -5,6 +5,10 @@ import postBluePrintMaster from './bigchain-post/masterAssetBigchain.js';
 import generateCS from './bigchain-post/ChecksumGenerator.js';
 import { Buffer } from 'buffer';
 import * as ipfsAPI from 'ipfs-api';
+import * as openpgp from 'openpgp';
+//declare var openpgp: any;
+
+//import { openpgp } from 'openpgp';
 
 @Component({
   selector: 'fileupload',
@@ -24,6 +28,10 @@ export class FileuploadComponent {
   private acceptedFile;
   private checksum;
   private currentFileName;
+  private encryptedFile;
+
+  // Set web worker path for openpgp
+  //openpgp.initWorker({ path:'openpgp.worker.js' });
 
   // File being dragged has moved into the drop region
   private dragFileOverStart() {
@@ -76,6 +84,26 @@ export class FileuploadComponent {
     console.log('Received buffer from ipfs: ' + buffer.toString());
     const retrievedFile = new File([buffer], filename);
     return retrievedFile;
+  }
+
+  public encryptFile(pubKey) {
+    return new Promise(function(resolve, reject) {
+      let encrypted;
+
+      const options = {
+        data: 'Hello, World!',
+        publicKeys: openpgp.key.readArmored(pubKey).keys,
+      }
+
+      openpgp.encrypt(options).then(ciphertext => {
+        let returnedEncrypted = ciphertext.data
+        return returnedEncrypted
+      })
+      .then(returnedEncrypted => {
+        encrypted = returnedEncrypted;
+        resolve(encrypted);
+      })
+    });
   }
 
   async postBluePrintMasterBCDB(price, meta, ownerID) {
