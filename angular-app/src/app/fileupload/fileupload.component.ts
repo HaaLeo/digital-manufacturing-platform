@@ -87,6 +87,13 @@ export class FileuploadComponent {
   }
 
   public encryptFile(pubKey) {
+    this.readAsTextAsync(this.acceptedFile).then(response => {
+
+      console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+
     return new Promise(function(resolve, reject) {
       let encrypted;
 

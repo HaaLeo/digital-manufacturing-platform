@@ -213,7 +213,7 @@ export class QualityRequirementComponent implements OnInit {
                                   });
                           });
                   })
-
+                  
             }).catch(error => {
               console.error(error);
             });
