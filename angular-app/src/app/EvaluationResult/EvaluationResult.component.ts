@@ -183,7 +183,6 @@ export class EvaluationResultComponent implements OnInit {
                 result.forEach(evaluationResult => {
                     tempList.push(evaluationResult);
                 });
-                debugger;
                 this.allAssets = tempList;
             });
     }
@@ -191,7 +190,6 @@ export class EvaluationResultComponent implements OnInit {
     //allow update name of Printer
     shareResult(form: any): Promise<any> {
         this.progressMessage = 'Please wait... ';
-        debugger;
 
         for (const evaluationResult of this.allAssets){
             if (evaluationResult.evaluationResultID == form){
@@ -199,20 +197,17 @@ export class EvaluationResultComponent implements OnInit {
             }
         }
         for (const printingJob of this.allPrintingJobs){
-            debugger;
             if ("resource:org.usecase.printer.PrintingJob#"+printingJob.printingJobID == this.currentEvaluationResult.printingJob){
                 this.currentPrintingJob = printingJob;
             }
         }
 
         for (const printer of this.allPrinters){
-            debugger;
             if ("resource:org.usecase.printer.Printer#"+printer.stakeholderID == this.currentPrintingJob.printer){
                 this.currentPrinter = printer;
             }
         }
 
-        debugger;
         this.evaluationResult = {
             $class: "org.usecase.printer.EvaluationResult",
             "txID": this.currentEvaluationResult.txID+"_",
@@ -221,7 +216,6 @@ export class EvaluationResultComponent implements OnInit {
             "printingJob": this.currentEvaluationResult.printingJob,
             "qualityReport": this.currentEvaluationResult.qualityReport,
             "manufacturer": this.currentPrinter.printerManufacturer,
-
         };
         return this.serviceEvaluationResult.updateEvaluationResult(form,this.evaluationResult)
             .toPromise()

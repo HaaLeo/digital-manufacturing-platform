@@ -2,9 +2,7 @@ import { Component, OnInit, Input, NgModule, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { PrintingJobService } from './PrintingJob.service';
 import 'rxjs/add/operator/toPromise';
-import { UsersPipe} from './Pipe';
 import {FileuploadComponent} from "../fileupload/fileupload.component";
-import {PrintingJob} from "../org.usecase.printer";
 
 
 @Component({
@@ -31,7 +29,6 @@ export class PrintingJobComponent implements OnInit {
   private successMessage;
   private cancelRequestObj;
   private printingJobCurrent;
-  private filterID;
   private selectedElement;
 
   printingJobID = new FormControl("", Validators.required);
@@ -61,7 +58,7 @@ export class PrintingJobComponent implements OnInit {
     this.load_allStakeholders().then(() => {
       this.loadAll();
     });
-    this.selectedElement = "all"
+    this.selectedElement = "all";
   }
 
    //load all PrintingJob assets and Master associated to it
@@ -128,7 +125,7 @@ export class PrintingJobComponent implements OnInit {
       result.forEach(printer => {
         tempList.push(printer);
       });
-      })
+      });
     })
     .then(() => {
       this.servicePrintingJob.getAllEndusers()
@@ -139,7 +136,7 @@ export class PrintingJobComponent implements OnInit {
         tempList.push(enduser);
       });
       this.allStakeholders = tempList;
-      })
+      });
     })
 
 		;
@@ -166,7 +163,7 @@ export class PrintingJobComponent implements OnInit {
     .then(() => {
       this.errorMessage = null;
       this.progressMessage = null;
-      this.successMessage = 'Request was cancelled successfully. Refreshing page...'
+      this.successMessage = 'Request was cancelled successfully. Refreshing page...';
       location.reload();
     })
     .catch((error) => {
@@ -316,7 +313,7 @@ export class PrintingJobComponent implements OnInit {
     .then(() => {
 			this.errorMessage = null;
       this.progressMessage = null;
-      this.successMessage = 'PrintingJob uploaded successfully. Refreshing page...'
+      this.successMessage = 'PrintingJob uploaded successfully. Refreshing page...';
       this.myForm.setValue({
           "printingJobID":null,
           "printed":null,
@@ -341,7 +338,7 @@ export class PrintingJobComponent implements OnInit {
           this.progressMessage = null;
             this.errorMessage = error;
         }
-    })
+    });
     });
   }
 

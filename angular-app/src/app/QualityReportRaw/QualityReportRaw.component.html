@@ -50,13 +50,23 @@
 				</tr>
 				</thead>
 				<tbody>
-				<tr *ngFor="let asset of allQualityReportsRaw">
+				<tr *ngFor="let asset of allAccessibleQualityReportsRaw">
 					<td>{{asset.qualityReportRawID}}</td>
 					<td class="split">{{asset.encryptedReport}}</td>
 					<td>{{asset.formattedPrintingJob}}</td>
 					<td>{{asset.formattedStakeholders}}</td>
 					<td>
-						<button (click)="setId(asset.blueprintMasterID);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#shareDataModal">Share</button>
+						<button (click)="setAsset(asset);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#shareDataModal">Share</button>
+					</td>
+
+
+				</tr>
+				<tr *ngFor="let asset of allInaccessibleQualityReportsRaw">
+					<td>{{asset.qualityReportRawID}}</td>
+					<td class="split">{{asset.encryptedReport}}</td>
+					<td>{{asset.formattedPrintingJob}}</td>
+					<td>{{asset.formattedStakeholders}}</td>
+					<td>
 					</td>
 
 
