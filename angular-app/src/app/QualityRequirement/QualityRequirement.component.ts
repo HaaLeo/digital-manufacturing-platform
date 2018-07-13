@@ -161,8 +161,8 @@ export class QualityRequirementComponent implements OnInit {
 
           this.fileUploadComponent.encryptFile(newPubKey4)
            .then(encryptedFile => {
-              console.log(encryptedFile);
-
+              console.log("TEST" + encryptedFile);
+              /*
               this.progressMessage = 'Please wait... ';
               let owner = this.owner.value;
               let name = this.name.value;
@@ -213,7 +213,7 @@ export class QualityRequirementComponent implements OnInit {
                                   });
                           });
                   })
-                  
+                */
             }).catch(error => {
               console.error(error);
             });

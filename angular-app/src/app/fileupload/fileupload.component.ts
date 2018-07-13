@@ -86,15 +86,9 @@ export class FileuploadComponent {
     return retrievedFile;
   }
 
-  public encryptFile(pubKey) {
-    this.readAsTextAsync(this.acceptedFile).then(response => {
-
+  public async encryptFile(pubKey: string): Promise<string> {
+    return this.readAsTextAsync(this.acceptedFile).then(response => {
       console.log(response);
-    }).catch(error => {
-      console.error(error);
-    })
-
-    return new Promise(function(resolve, reject) {
       let encrypted;
 
       const options = {
@@ -102,16 +96,47 @@ export class FileuploadComponent {
         publicKeys: openpgp.key.readArmored(pubKey).keys,
       }
 
-      openpgp.encrypt(options).then(ciphertext => {
+      return openpgp.encrypt(options).then(ciphertext => {
         let returnedEncrypted = ciphertext.data
         return returnedEncrypted
       })
       .then(returnedEncrypted => {
         encrypted = returnedEncrypted;
-        resolve(encrypted);
+        console.log(encrypted);
+        return encrypted;
       })
+      .catch(error => {
+        return error;
+      });
     });
   }
+
+/*
+  public async encryptFile(pubKey) {
+    this.readAsTextAsync(this.acceptedFile).then(response => {
+      return new Promise(function(resolve, reject) {
+        let encrypted;
+
+        const options = {
+          data: 'Hello, World!',
+          publicKeys: openpgp.key.readArmored(pubKey).keys,
+        }
+
+        openpgp.encrypt(options).then(ciphertext => {
+          let returnedEncrypted = ciphertext.data
+          return returnedEncrypted
+        })
+        .then(returnedEncrypted => {
+          encrypted = returnedEncrypted;
+          resolve(encrypted);
+        })
+      });
+      //console.log(response);
+    }).catch(error => {
+      console.error(error);
+    })
+  }
+  */
 
   async postBluePrintMasterBCDB(price, meta, ownerID) {
     return postBluePrintMaster(this.acceptedFile, price, meta, ownerID);
