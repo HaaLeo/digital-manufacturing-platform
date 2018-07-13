@@ -10,17 +10,16 @@ import { Designer, Enduser, Printer, RequestBlueprint, CancelRequest} from 'app/
 @Injectable()
 export class BlueprintMasterService {
 
-	
-		private NAMESPACE: string = 'org.usecase.printer.BlueprintMaster';
-    private DESIGNER: string = 'org.usecase.printer.Designer';
-    private PRINTER: string = 'org.usecase.printer.Printer';
-    private ENDUSER: string = 'org.usecase.printer.Enduser';
-    private QUALITY_REQUIREMENT: string = 'org.usecase.printer.QualityRequirement';
-    private REQUESTBLUEPRINT: string = 'org.usecase.printer.RequestBlueprint';
+    private NAMESPACE = 'org.usecase.printer.BlueprintMaster';
+    private DESIGNER = 'org.usecase.printer.Designer';
+    private PRINTER = 'org.usecase.printer.Printer';
+    private ENDUSER = 'org.usecase.printer.Enduser';
+    private QUALITY_REQUIREMENT = 'org.usecase.printer.QualityRequirement';
+    private REQUESTBLUEPRINT = 'org.usecase.printer.RequestBlueprint';
 
-    constructor(private dataService: DataService<BlueprintMaster>, 
-                private designerService: DataService<Designer>, 
-                private enduserService: DataService<Enduser>, 
+    constructor(private dataService: DataService<BlueprintMaster>,
+                private designerService: DataService<Designer>,
+                private enduserService: DataService<Enduser>,
                 private printerService: DataService<Printer>,
                 private qualityRequirementService: DataService<QualityRequirement>,
                 private requestBlueprintService: DataService<RequestBlueprint>) {
@@ -68,7 +67,6 @@ public getAllPrinters(): Observable<Printer[]> {
 
 //create requestBlueprint transaction
 public requestBlueprint(itemToAdd: any): Observable<RequestBlueprint> {
-        debugger;
         return this.requestBlueprintService.add(this.REQUESTBLUEPRINT, itemToAdd);
 }
 

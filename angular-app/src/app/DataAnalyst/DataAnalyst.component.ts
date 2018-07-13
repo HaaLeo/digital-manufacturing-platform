@@ -209,7 +209,7 @@ export class DataAnalystComponent {
         this.current_db_id++;
         this.dataAnalyst = {
             $class: "org.usecase.printer.DataAnalyst",
-            "stakeholderID":"P_" + this.current_db_id,
+            "stakeholderID":"DA_" + this.current_db_id,
             "pubKey":this.pubKey.value,
             "name":this.name.value
         };

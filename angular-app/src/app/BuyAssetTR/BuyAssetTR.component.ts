@@ -120,7 +120,6 @@ export class BuyAssetTRComponent {
                     tempList.push(qualityReport);
                 });
                 this.allQualityReports = tempList;
-                debugger;
                 if (0 < tempList.length) {
                     this.current_db_id = tempList[tempList.length - 1];
                 } else {
@@ -408,10 +407,8 @@ export class BuyAssetTRComponent {
             }
         }
         for (const printer of this.allPrinters) {
-            debugger;
             if (printer.stakeholderID == this.printingJobCurrent.printer.toString().split("#")[1]) {
                 this.printer = printer;
-                //debugger;
             }
         }
 
@@ -455,7 +452,6 @@ export class BuyAssetTRComponent {
         return this.serviceQualityReport.addAsset(this.qualityReportObj)
             .toPromise()
             .then(() => {
-                debugger;
                 this.errorMessage = null;
                 this.progressMessage = null;
                 this.successMessage = 'QualityReport added successfully. Reloading...';
@@ -479,7 +475,6 @@ export class BuyAssetTRComponent {
 			for (const printingJob of this.allPrintingJobs) {
       	if (printingJob.printingJobID == this.printingJobID.value) {
         	this.printingJobCurrent = printingJob;
-        	debugger;
         }
       }
 
