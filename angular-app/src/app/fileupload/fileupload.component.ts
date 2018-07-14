@@ -77,6 +77,18 @@ export class FileuploadComponent {
     return hashVal;
   }
 
+  public async postTextToIPFS(text: string): Promise<string> {
+    const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
+
+    const buffer = Buffer.from(text);
+
+    let ipfsResponse = await ipfs.add(buffer, { progress: (prog) => console.log(`received: ${prog}`) });
+    const hashVal = ipfsResponse[0].hash;
+    console.log('Ipfs hash value: ' + hashVal);
+
+    return hashVal;
+  }
+
   public async getFileFromIPFS(hash: string, filename: string): Promise<File> {
     const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
 
@@ -92,7 +104,7 @@ export class FileuploadComponent {
       let encrypted;
 
       const options = {
-        data: 'Hello, World!',
+        data: response,
         publicKeys: openpgp.key.readArmored(pubKey).keys,
       }
 

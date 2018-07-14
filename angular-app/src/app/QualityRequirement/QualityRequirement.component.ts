@@ -32,7 +32,7 @@ export class QualityRequirementComponent implements OnInit {
     txID = new FormControl("", Validators.required);
     owner = new FormControl("", Validators.required);
     name = new FormControl("", Validators.required);
-    printerID = new FormControl("");
+    printerID = new FormControl("", Validators.required);
 
     constructor(private serviceQualityRequirement: QualityRequirementService, fb: FormBuilder) {
         this.myForm = fb.group({
@@ -146,22 +146,85 @@ export class QualityRequirementComponent implements OnInit {
     }
 
 
-    // Method called when a Designer wants to upload a new QualityRequirement Asset
+    // Method called when an End User wants to upload a new QualityRequirement Asset
     addAsset(form: any) {
       for (let printer of this.allPrinters) {
         if (printer.stakeholderID == this.printerID.value) {
           this.printer = printer;
 
           let pubKey = this.printer.pubKey;
-          let newPubKey = pubKey.slice(97, 1713);
+          let newPubKey = pubKey.slice(38, 1721);
           let newPubKey2 = newPubKey.split(" ").join("\n");
           let newPubKey3 = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP.js v3.0.12\nComment: https://openpgpjs.org\n\n` + newPubKey2;
           let newPubKey4 = newPubKey3 + `\n-----END PGP PUBLIC KEY BLOCK-----`;
-          console.log(newPubKey4);
+
+          this.progressMessage = 'Please wait... ';
+          let owner = this.owner.value;
+          let name = this.name.value;
 
           this.fileUploadComponent.encryptFile(newPubKey4)
-           .then(encryptedFile => {
-              console.log("TEST" + encryptedFile);
+          .then(encryptedFile => {
+            this.fileUploadComponent.postTextToIPFS(encryptedFile)
+          })
+          .then(ipfsHash => {
+            console.log('Uploaded quality requirement to ipfs. Returned hash: ' + ipfsHash);
+            this.fileUploadComponent.postKeyToBCDB(ipfsHash, name, owner)
+                .then(txId => {
+                    console.log('Added ipfs to BCDB. TxId: ' + txId);
+                    this.current_db_id++;
+                    let currentChecksum = this.fileUploadComponent.getChecksum();
+                    this.asset = {
+                        $class: "org.usecase.printer.QualityRequirement",
+                        "qualityRequirementID": "QReq_" + this.current_db_id,
+                        "txID": txId,
+                        "name": this.name.value,
+                        "owner": this.owner.value,
+                        "printerID": printer.stakeholderID
+                    };
+                    this.myForm.setValue({
+                        "qualityRequirementID": null,
+                        "txID": null,
+                        "name": null,
+                        "owner": null,
+                        "printerID": null
+                    });
+                    return this.serviceQualityRequirement.addAsset(this.asset)
+                        .toPromise()
+                        .then(() => {
+                            this.errorMessage = null;
+                            this.progressMessage = null;
+                            this.successMessage = 'Quality Requirement added successfully. Refreshing page...';
+                            this.myForm.setValue({
+                                "qualityRequirementID": null,
+                                "txID": null,
+                                "name": null,
+                                "owner": null,
+                                "printerID": null
+                            });
+                            location.reload();
+                        })
+                        .catch((error) => {
+                            if (error == 'Server error') {
+                                this.progressMessage = null;
+                                this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                            }
+                            else {
+                                this.progressMessage = null;
+                                this.errorMessage = error;
+                            }
+                        });
+                });
+
+
+          })
+          .catch(error => {
+            console.error(error);
+          })
+        }
+      }
+    }
+
+
               /*
               this.progressMessage = 'Please wait... ';
               let owner = this.owner.value;
@@ -213,13 +276,12 @@ export class QualityRequirementComponent implements OnInit {
                                   });
                           });
                   })
-                */
+
             }).catch(error => {
               console.error(error);
             });
-        }
-      }
-    }
+            */
+
 
     //Retrieve a QualityRequirement with a certain id and printingJob its values to the Form Object
     getForm(id: any): Promise<any> {
