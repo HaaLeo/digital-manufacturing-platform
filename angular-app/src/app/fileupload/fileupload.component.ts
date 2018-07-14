@@ -95,16 +95,7 @@ export class FileuploadComponent {
 
       const buffer:Buffer = await ipfs.cat(hash);
       console.log('Received buffer from ipfs: ' + buffer.toString());
-      //return buffer.toString();
-      return "";
-      /*
-      const retrievedFile = new File([buffer], filename);
-      return retrievedFile;
-      */
-
-
-
-
+      return buffer.toString();
   }
 
   public async getFileFromIPFS(hash: string, filename: string): Promise<File> {
@@ -141,32 +132,30 @@ export class FileuploadComponent {
     });
   }
 
-/*
-  public async encryptFile(pubKey) {
-    this.readAsTextAsync(this.acceptedFile).then(response => {
-      return new Promise(function(resolve, reject) {
-        let encrypted;
+  public async decryptFile(data: string, privateKey: string): Promise<string> {
+    return this.readAsTextAsync(this.acceptedFile).then(response => {
+      const privKeyObj = openpgp.key.readArmored(privateKey).keys[0];
 
-        const options = {
-          data: 'Hello, World!',
-          publicKeys: openpgp.key.readArmored(pubKey).keys,
-        }
+      //all generated PGP keys use this as passphrase, so hard-coded for now
+      privKeyObj.decrypt("printer-use-case");
 
-        openpgp.encrypt(options).then(ciphertext => {
-          let returnedEncrypted = ciphertext.data
-          return returnedEncrypted
-        })
-        .then(returnedEncrypted => {
-          encrypted = returnedEncrypted;
-          resolve(encrypted);
-        })
+      const options = {
+        message: openpgp.message.readArmored(data),
+        privateKeys: [privKeyObj]
+      }
+
+      return openpgp.decrypt(options).then(plaintext => {
+        console.log(plaintext.data)
+        return plaintext.data
+      })
+      .then(plaintext => {
+        return plaintext;
+      })
+      .catch(error => {
+        return error;
       });
-      //console.log(response);
-    }).catch(error => {
-      console.error(error);
-    })
+    });
   }
-  */
 
   async postBluePrintMasterBCDB(price, meta, ownerID) {
     return postBluePrintMaster(this.acceptedFile, price, meta, ownerID);
