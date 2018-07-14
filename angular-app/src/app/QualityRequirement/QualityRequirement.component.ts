@@ -165,58 +165,59 @@ export class QualityRequirementComponent implements OnInit {
           this.fileUploadComponent.encryptFile(newPubKey4)
           .then(encryptedFile => {
             this.fileUploadComponent.postTextToIPFS(encryptedFile)
-          })
-          .then(ipfsHash => {
-            console.log('Uploaded quality requirement to ipfs. Returned hash: ' + ipfsHash);
-            this.fileUploadComponent.postKeyToBCDB(ipfsHash, name, owner)
-                .then(txId => {
-                    console.log('Added ipfs to BCDB. TxId: ' + txId);
-                    this.current_db_id++;
-                    let currentChecksum = this.fileUploadComponent.getChecksum();
-                    this.asset = {
-                        $class: "org.usecase.printer.QualityRequirement",
-                        "qualityRequirementID": "QReq_" + this.current_db_id,
-                        "txID": txId,
-                        "name": this.name.value,
-                        "owner": this.owner.value,
-                        "printerID": this.printerID.value
-                    };
-                    this.myForm.setValue({
-                        "qualityRequirementID": null,
-                        "txID": null,
-                        "name": null,
-                        "owner": null,
-                        "printerID": null
-                    });
-                    return this.serviceQualityRequirement.addAsset(this.asset)
-                        .toPromise()
-                        .then(() => {
-                            this.errorMessage = null;
-                            this.progressMessage = null;
-                            this.successMessage = 'Quality Requirement added successfully. Refreshing page...';
-                            this.myForm.setValue({
-                                "qualityRequirementID": null,
-                                "txID": null,
-                                "name": null,
-                                "owner": null,
-                                "printerID": null
-                            });
-                            location.reload();
-                        })
-                        .catch((error) => {
-                            if (error == 'Server error') {
-                                this.progressMessage = null;
-                                this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-                            }
-                            else {
-                                this.progressMessage = null;
-                                this.errorMessage = error;
-                            }
-                        });
-                });
+            .then(ipfsHash => {
+              console.log('Uploaded quality requirement to ipfs. Returned hash: ' + ipfsHash);
+              this.fileUploadComponent.postKeyToBCDB(ipfsHash, name, owner)
+                  .then(txId => {
+                      console.log('Added ipfs to BCDB. TxId: ' + txId);
+                      this.current_db_id++;
+                      let currentChecksum = this.fileUploadComponent.getChecksum();
+                      this.asset = {
+                          $class: "org.usecase.printer.QualityRequirement",
+                          "qualityRequirementID": "QReq_" + this.current_db_id,
+                          "txID": txId,
+                          "name": this.name.value,
+                          "owner": this.owner.value,
+                          "printerID": this.printerID.value
+                      };
+                      this.myForm.setValue({
+                          "qualityRequirementID": null,
+                          "txID": null,
+                          "name": null,
+                          "owner": null,
+                          "printerID": null
+                      });
+                      return this.serviceQualityRequirement.addAsset(this.asset)
+                          .toPromise()
+                          .then(() => {
+                              this.errorMessage = null;
+                              this.progressMessage = null;
+                              this.successMessage = 'Quality Requirement added successfully. Refreshing page...';
+                              this.myForm.setValue({
+                                  "qualityRequirementID": null,
+                                  "txID": null,
+                                  "name": null,
+                                  "owner": null,
+                                  "printerID": null
+                              });
+                              location.reload();
+                          })
+                          .catch((error) => {
+                              if (error == 'Server error') {
+                                  this.progressMessage = null;
+                                  this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                              }
+                              else {
+                                  this.progressMessage = null;
+                                  this.errorMessage = error;
+                              }
+                          });
+                  });
 
 
+            })
           })
+
           .catch(error => {
             console.error(error);
           })

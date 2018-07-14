@@ -89,6 +89,24 @@ export class FileuploadComponent {
     return hashVal;
   }
 
+  public async getTextFromIPFS(hash: string): Promise<string> {
+
+      const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
+
+      const buffer:Buffer = await ipfs.cat(hash);
+      console.log('Received buffer from ipfs: ' + buffer.toString());
+      //return buffer.toString();
+      return "";
+      /*
+      const retrievedFile = new File([buffer], filename);
+      return retrievedFile;
+      */
+
+
+
+
+  }
+
   public async getFileFromIPFS(hash: string, filename: string): Promise<File> {
     const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
 
