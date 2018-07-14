@@ -277,10 +277,20 @@ export class BuyAssetTRComponent {
         }
         const fileHandler = new FileuploadComponent();
         const ipfsKey = (await fileHandler.getBCDB(this.qualityRequirementCurrent.txID)).data.asset.key;
+
+        /*
         const qualityRequirementFile = await fileHandler.getFileFromIPFS(
             ipfsKey,
             this.qualityRequirementCurrent.name);
+
         const requirementObj = JSON.parse(await fileHandler.readAsTextAsync(qualityRequirementFile));
+        */
+
+        //UNTESTED
+        const encryptedFile = await fileHandler.getTextFromIPFS(ipfsKey);
+        const decryptedFile = await fileHandler.decryptFile(encryptedFile, this.serviceTransaction.returnPrivateKey());
+
+        const requirementObj = JSON.parse(decryptedFile);
 
         // Ensure the QR JSON uploaded has that properties
         let peakTemperature = requirementObj.peakTemperature;
