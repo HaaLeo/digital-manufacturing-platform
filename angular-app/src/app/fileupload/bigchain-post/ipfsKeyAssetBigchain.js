@@ -54,14 +54,14 @@ export async function postKeyToBcDB(key, description, ownerID) {
         app_key: app_key,
     })
 
-    debugger;
+    //debugger;
     var retrievedTx = await conn.postTransactionCommit(txCreateSimpleSigned);
     console.log('Transaction', retrievedTx.id, 'successfully posted.');
     var queriedTx = await conn.getTransaction(txCreateSimpleSigned.id);
     console.log('Queried transaction: ', queriedTx);
     var assets = await conn.searchAssets(txCreateSimpleSigned.id);
     console.log('Found assets created by ', ownerID, ' ', assets);
-    debugger;
+    //debugger;
     return retrievedTx.id;
 }
 
@@ -77,6 +77,6 @@ export async function getAssetFromBcDB (txId) {
     var assets = await conn.searchAssets(txId);
     console.log('Found assets: ', assets);
     assert.equal(assets.length, 1);
-    debugger;
+    //debugger;
     return assets[0]
 }
