@@ -286,11 +286,12 @@ export class BuyAssetTRComponent {
         const requirementObj = JSON.parse(await fileHandler.readAsTextAsync(qualityRequirementFile));
         */
 
-        //UNTESTED
         const encryptedFile = await fileHandler.getTextFromIPFS(ipfsKey);
+        console.log("ENCRYPTED FILE" + encryptedFile);
         const decryptedFile = await fileHandler.decryptFile(encryptedFile, this.serviceTransaction.returnPrivateKey());
-
+        console.log("DECRYPTED FILE" + decryptedFile);
         const requirementObj = JSON.parse(decryptedFile);
+        console.log("REQUIREMENT OBJ" + requirementObj);
 
         // Ensure the QR JSON uploaded has that properties
         let peakTemperature = requirementObj.peakTemperature;
@@ -301,7 +302,6 @@ export class BuyAssetTRComponent {
                 this.qualityReportCurrent = qualityReport;
             }
         }
-
 				// Retrieving report data from MongoDB
 				console.log('Retrieving report from Job ID: ' + this.printingJobID.value);
 				this.http.get('http://localhost:3004/api/getData/' + this.printingJobID.value).subscribe(data => {
@@ -372,6 +372,9 @@ export class BuyAssetTRComponent {
 					let qualityReportRawData = data[0]["qualityReportRawData"];
 
 					console.log('Quality Report Raw Data: ' + JSON.stringify(qualityReportRawData));
+
+          //TODO: Encrypt Quality Report Raw Data with random string (password). Then encrypt password.
+          //Have class variable of password.
 
 	        this.current_db_id =(this.allQualityReportRawData).length;
 	        this.current_db_id ++;
@@ -450,7 +453,7 @@ export class BuyAssetTRComponent {
 
         this.current_db_id = (this.allQualityReports).length;
         this.current_db_id++;
-
+        //This one sent to customer
         this.qualityReportObj = {
             "$class": "org.usecase.printer.QualityReport",
             "qualityReportID": "QREP_" + this.current_db_id,

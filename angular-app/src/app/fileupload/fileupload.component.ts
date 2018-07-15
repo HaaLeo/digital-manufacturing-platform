@@ -132,28 +132,49 @@ export class FileuploadComponent {
     });
   }
 
-  public async decryptFile(data: string, privateKey: string): Promise<string> {
-    return this.readAsTextAsync(this.acceptedFile).then(response => {
-      const privKeyObj = openpgp.key.readArmored(privateKey).keys[0];
-
-      //all generated PGP keys use this as passphrase, so hard-coded for now
-      privKeyObj.decrypt("printer-use-case");
+  //UNTESTED
+  public async encryptText(pubKey: string, encryptText: string): Promise<string> {
+      let encrypted;
 
       const options = {
-        message: openpgp.message.readArmored(data),
-        privateKeys: [privKeyObj]
+        data: encryptText,
+        publicKeys: openpgp.key.readArmored(pubKey).keys,
       }
 
-      return openpgp.decrypt(options).then(plaintext => {
-        console.log(plaintext.data)
-        return plaintext.data
+      return openpgp.encrypt(options).then(ciphertext => {
+        let returnedEncrypted = ciphertext.data
+        return returnedEncrypted
       })
-      .then(plaintext => {
-        return plaintext;
+      .then(returnedEncrypted => {
+        encrypted = returnedEncrypted;
+        console.log(encrypted);
+        return encrypted;
       })
       .catch(error => {
         return error;
       });
+  }
+
+  public async decryptFile(data: string, privateKey: string): Promise<string> {
+    const privKeyObj = openpgp.key.readArmored(privateKey).keys[0];
+
+    //all generated PGP keys use this as passphrase, so hard-coded for now
+    privKeyObj.decrypt("printer-use-case");
+
+    const options = {
+      message: openpgp.message.readArmored(data),
+      privateKeys: [privKeyObj]
+    }
+
+    return openpgp.decrypt(options).then(plaintext => {
+      console.log(plaintext.data)
+      return plaintext.data
+    })
+    .then(plaintext => {
+      return plaintext;
+    })
+    .catch(error => {
+      return error;
     });
   }
 
