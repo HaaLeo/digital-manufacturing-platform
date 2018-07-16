@@ -170,7 +170,9 @@ export class FileuploadComponent {
     .then(returnEncrypted => {
       return returnEncrypted;
     })
-    .catch(error => return error);
+    .catch(error => {
+      return error
+    });
   }
 
   //UNTESTED
@@ -186,7 +188,9 @@ export class FileuploadComponent {
     return openpgp.decrypt(options).then(plaintext => {
       return plaintext.data;
     })
-    .catch(error => return error);
+    .catch(error => {
+      return error
+    });
   }
 
   public async decryptFile(data: string, privateKey: string): Promise<string> {

@@ -153,9 +153,9 @@ export class QualityRequirementComponent implements OnInit {
           this.printer = printer;
 
           let pubKey = this.printer.pubKey;
-          let newPubKey = pubKey.slice(38, 1721);
+          let newPubKey = pubKey.slice(92, 4599);
           let newPubKey2 = newPubKey.split(" ").join("\n");
-          let newPubKey3 = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP.js v3.0.12\nComment: https://openpgpjs.org\n\n` + newPubKey2;
+          let newPubKey3 = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + newPubKey2;
           let newPubKey4 = newPubKey3 + `\n-----END PGP PUBLIC KEY BLOCK-----`;
 
           this.progressMessage = 'Please wait... ';

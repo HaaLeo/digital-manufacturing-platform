@@ -304,7 +304,7 @@ export class BuyAssetTRComponent {
 
         const encryptedFile = await this.fileHandler.getTextFromIPFS(ipfsKey);
         console.log("ENCRYPTED FILE" + encryptedFile);
-        const decryptedFile = await this.fileHandler.decryptFile(encryptedFile, this.serviceTransaction.returnPrivateKey());
+        const decryptedFile = await this.fileHandler.decryptFile(encryptedFile, this.serviceTransaction.returnPrinterPrivateKey());
         console.log("DECRYPTED FILE" + decryptedFile);
         const requirementObj = JSON.parse(decryptedFile);
         console.log("REQUIREMENT OBJ" + requirementObj);
@@ -399,9 +399,9 @@ export class BuyAssetTRComponent {
           let password = this.makePassword();
           console.log(password);
 
-          let newPubKey = manufacturerPubKey.slice(38, 1721);
+          let newPubKey = manufacturerPubKey.slice(92, 4599);
           let newPubKey2 = newPubKey.split(" ").join("\n");
-          let newPubKey3 = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP.js v3.0.12\nComment: https://openpgpjs.org\n\n` + newPubKey2;
+          let newPubKey3 = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + newPubKey2;
           let newPubKey4 = newPubKey3 + `\n-----END PGP PUBLIC KEY BLOCK-----`;
           console.log(newPubKey4);
 
@@ -412,7 +412,13 @@ export class BuyAssetTRComponent {
             this.fileHandler.encryptText(newPubKey4, response)
             .then(response2 => {
               console.log(response2);
+            })
+            .catch(error => {
+              console.log(error);
             });
+          })
+          .catch(error => {
+            console.log(error);
           });
 
 
