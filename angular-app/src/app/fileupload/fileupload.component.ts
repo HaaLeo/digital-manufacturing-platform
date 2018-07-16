@@ -132,7 +132,6 @@ export class FileuploadComponent {
     });
   }
 
-  //UNTESTED
   public async encryptText(pubKey: string, encryptText: string): Promise<string> {
       let encrypted;
 
@@ -153,6 +152,41 @@ export class FileuploadComponent {
       .catch(error => {
         return error;
       });
+  }
+
+  //UNTESTED
+  public async encryptTextWithPassword(password: string, encryptText: string): Promise<string> {
+    var options, encrypted;
+
+    options = {
+        data: encryptText,
+        passwords: [password],
+        armor: false
+    };
+
+    return openpgp.encrypt(options).then(ciphertext => {
+      encrypted = ciphertext.data;
+    })
+    .then(returnEncrypted => {
+      return returnEncrypted;
+    })
+    .catch(error => return error);
+  }
+
+  //UNTESTED
+  public async decryptTextWithPassword(password: string, encryptedText: string): Promise<string> {
+    var options, encrypted;
+
+    options = {
+      message: openpgp.message.read(encrypted),
+      passwords: ['secret stuff'],
+      format: 'binary'
+    };
+
+    return openpgp.decrypt(options).then(plaintext => {
+      return plaintext.data;
+    })
+    .catch(error => return error);
   }
 
   public async decryptFile(data: string, privateKey: string): Promise<string> {

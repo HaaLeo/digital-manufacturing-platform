@@ -54,6 +54,8 @@ export class BuyAssetTRComponent {
     private evaluateReportObj;
     private current_db_id;
 
+    private fileHandler;
+
     constructor(private serviceTransaction: BuyAssetTRService, fb: FormBuilder,
         private serviceQualityReport: QualityReportService,
         private serviceQualityReportRawData: QualityReportRawService,
@@ -77,6 +79,17 @@ export class BuyAssetTRComponent {
         this.loadAllQualityReportRawData();
         this.loadAllQualityRequirements();
         this.loadAllManufacturers();
+    }
+
+    //Makes random string for Quality Report encryption
+    makePassword() {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for (var i = 0; i < 20; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text;
     }
 
     // Get all PrintingJobs
@@ -275,8 +288,11 @@ export class BuyAssetTRComponent {
                 this.qualityRequirementCurrent = qualityRequirement;
             }
         }
-        const fileHandler = new FileuploadComponent();
-        const ipfsKey = (await fileHandler.getBCDB(this.qualityRequirementCurrent.txID)).data.asset.key;
+
+        //const fileHandler = new FileuploadComponent();
+        this.fileHandler = new FileuploadComponent();
+
+        const ipfsKey = (await this.fileHandler.getBCDB(this.qualityRequirementCurrent.txID)).data.asset.key;
 
         /*
         const qualityRequirementFile = await fileHandler.getFileFromIPFS(
@@ -286,9 +302,9 @@ export class BuyAssetTRComponent {
         const requirementObj = JSON.parse(await fileHandler.readAsTextAsync(qualityRequirementFile));
         */
 
-        const encryptedFile = await fileHandler.getTextFromIPFS(ipfsKey);
+        const encryptedFile = await this.fileHandler.getTextFromIPFS(ipfsKey);
         console.log("ENCRYPTED FILE" + encryptedFile);
-        const decryptedFile = await fileHandler.decryptFile(encryptedFile, this.serviceTransaction.returnPrivateKey());
+        const decryptedFile = await this.fileHandler.decryptFile(encryptedFile, this.serviceTransaction.returnPrivateKey());
         console.log("DECRYPTED FILE" + decryptedFile);
         const requirementObj = JSON.parse(decryptedFile);
         console.log("REQUIREMENT OBJ" + requirementObj);
@@ -346,7 +362,9 @@ export class BuyAssetTRComponent {
     		});
     }
 
-    transferRawData(form: any) {
+    async transferRawData(form: any) {
+      let manufacturerPubKey;
+
         for (const printingJob of this.allPrintingJobs) {
             if (printingJob.printingJobID == this.printingJobID.value) {
                 this.printingJobCurrent = printingJob;
@@ -361,6 +379,8 @@ export class BuyAssetTRComponent {
         for (const manufacturer of this.allManufacturers) {
             if ("resource:org.usecase.printer.Manufacturer#"+manufacturer.stakeholderID==this.printer.printerManufacturer) {
                 this.manufacturerCurrent = "resource:org.usecase.printer.Manufacturer#"+manufacturer.stakeholderID;
+                console.log("TESTING THIS" + manufacturer.pubKey);
+                manufacturerPubKey = manufacturer.pubKey;
             }
         }
 
@@ -376,6 +396,27 @@ export class BuyAssetTRComponent {
           //TODO: Encrypt Quality Report Raw Data with random string (password). Then encrypt password.
           //Have class variable of password.
 
+          let password = this.makePassword();
+          console.log(password);
+
+          let newPubKey = manufacturerPubKey.slice(38, 1721);
+          let newPubKey2 = newPubKey.split(" ").join("\n");
+          let newPubKey3 = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP.js v3.0.12\nComment: https://openpgpjs.org\n\n` + newPubKey2;
+          let newPubKey4 = newPubKey3 + `\n-----END PGP PUBLIC KEY BLOCK-----`;
+          console.log(newPubKey4);
+
+          //const manufEncrypted = await
+          this.fileHandler.encryptText(newPubKey4, password)
+          .then(response => {
+            console.log(response);
+            this.fileHandler.encryptText(newPubKey4, response)
+            .then(response2 => {
+              console.log(response2);
+            });
+          });
+
+
+          /*
 	        this.current_db_id =(this.allQualityReportRawData).length;
 	        this.current_db_id ++;
 
@@ -408,6 +449,7 @@ export class BuyAssetTRComponent {
 	                    this.errorMessage = error;
 	                }
 	            });
+              */
     		});
     }
 
