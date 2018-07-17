@@ -18,8 +18,6 @@ let sha512 = require('js-sha512');
 
 var url = "http://localhost:3004/api/";
 
-
-
 @Component({
     selector: 'app-BuyAssetTR',
     templateUrl: './BuyAssetTR.component.html',
@@ -354,6 +352,7 @@ export class BuyAssetTRComponent {
                 this.qualityReportCurrent = qualityReport;
             }
         }
+
 				// Retrieving report data from MongoDB
 				console.log('Retrieving report from Job ID: ' + this.printingJobID.value);
 				this.http.get('http://localhost:3004/api/getData/' + this.printingJobID.value).subscribe(data => {
@@ -371,7 +370,8 @@ export class BuyAssetTRComponent {
 	            "customer": this.printingJobCurrent.buyer,
 	            "qualityReport": 'resource:org.usecase.printer.QualityReport#' + this.qualityReportCurrent.qualityReportID,
 	            "manufacturer": null
-                    };
+          };
+
 	        this.serviceTransaction.evaluateReport(this.evaluateReportObj)
 	            .toPromise()
 	            .then((result) => {
@@ -399,9 +399,6 @@ export class BuyAssetTRComponent {
     }
 
     async transferRawData(form: any) {
-      console.log("ENCRYPTED REPORT: " + this.encryptedReportData);
-      console.log("ENCRYPTED PSWD: " + this.encryptedPassword);
-
         for (const printingJob of this.allPrintingJobs) {
           if (printingJob.printingJobID == this.printingJobID.value) {
             this.printingJobCurrent = printingJob;
@@ -466,112 +463,6 @@ export class BuyAssetTRComponent {
       	                }
       	            });
               });
-      /*
-      let manufacturerPubKey;
-      let endUserPubKey;
-
-        for (const printingJob of this.allPrintingJobs) {
-            if (printingJob.printingJobID == this.printingJobID.value) {
-                this.printingJobCurrent = printingJob;
-            }
-        }
-
-        for (const printer of this.allPrinters) {
-            if (printer.stakeholderID == this.printingJobCurrent.printer.toString().split("#")[1]) {
-                this.printer = printer;
-            }
-        }
-
-        for (const manufacturer of this.allManufacturers) {
-            if ("resource:org.usecase.printer.Manufacturer#" + manufacturer.stakeholderID == this.printer.printerManufacturer) {
-                this.manufacturerCurrent = "resource:org.usecase.printer.Manufacturer#" + manufacturer.stakeholderID;
-                manufacturerPubKey = manufacturer.pubKey;
-            }
-        }
-
-        for (const endUser of this.allEndusers) {
-          if ("resource:org.usecase.printer.Enduser#" + endUser.stakeholderID == this.printingJobCurrent.buyer.toString()) {
-            endUserPubKey = endUser.pubKey;
-          }
-        }
-
-        // Search MongoDB for raw data
-				console.log('Searching MongoDB for job ID: ' + this.printingJobCurrent.printingJobID);
-				this.http.get('http://localhost:3004/api/getData/' + this.printingJobCurrent.printingJobID).subscribe(data => {
-
-					let qualityReportRawData = data[0]["qualityReportRawData"];
-
-					console.log('Quality Report Raw Data: ' + JSON.stringify(qualityReportRawData));
-
-          let password = this.makePassword();
-          console.log(password);
-
-          manufacturerPubKey = manufacturerPubKey.slice(92, 4599);
-          manufacturerPubKey = manufacturerPubKey.split(" ").join("\n");
-          manufacturerPubKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + manufacturerPubKey + `\n-----END PGP PUBLIC KEY BLOCK-----`;
-
-          endUserPubKey = endUserPubKey.slice(92, 4599);
-          endUserPubKey = endUserPubKey.split(" ").join("\n");
-          endUserPubKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + endUserPubKey + `\n-----END PGP PUBLIC KEY BLOCK-----`;
-
-          // Encrypt the raw quality report data with the password
-          this.fileHandler.encryptTextWithPassword(password, JSON.stringify(qualityReportRawData))
-          .then(encryptedData => {
-            // Encrypt the password with the manufacturer's public key
-            this.fileHandler.encryptText(manufacturerPubKey, password)
-            .then(encryptedWithManuf => {
-              // Encrypt the response with the End User's public key
-              this.fileHandler.encryptText(endUserPubKey, encryptedWithManuf)
-              .then(encryptedWithManufEnduser => {
-                this.current_db_id =(this.allQualityReportRawData).length;
-      	        this.current_db_id ++;
-
-      	        let stakeholderObjs = [];
-      	        stakeholderObjs.push(this.manufacturerCurrent);
-
-      	        this.qualityReportRawDataObj = {
-                      $class: "org.usecase.printer.QualityReportRaw",
-                      "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
-                      "qualityReportRawID": "QREPRAW_" + this.current_db_id,
-                      //"encryptedReport": JSON.stringify(qualityReportRawData),
-                      "encryptedReport": encryptedData,
-                      //"accessPermissionCode": 'None',
-                      "accessPermissionCode": encryptedWithManufEnduser,
-                      "stakeholder": stakeholderObjs
-                  };
-
-      	        return this.serviceQualityReportRawData.addAsset(this.qualityReportRawDataObj)
-      	            .toPromise()
-      	            .then(() => {
-      	                this.errorMessage = null;
-      	                this.progressMessage = null;
-      	                this.successMessage = 'QualityReportRawData added successfully for Manufacturer.';
-      	            })
-      	            .catch((error) => {
-      	                if(error == 'Server error'){
-      	                    this.progressMessage = null;
-      	                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-      	                }
-      	                else{
-      	                    this.progressMessage = null;
-      	                    this.errorMessage = error;
-      	                }
-      	            });
-              })
-              .catch(error => {
-                console.log(error);
-              });
-            })
-            .catch(error => {
-              console.log(error);
-            });
-          })
-          .catch(error => {
-            console.error(error);
-          });
-    		});
-
-        */
     }
 
     uploadQualityReport(form: any) {
@@ -632,7 +523,6 @@ export class BuyAssetTRComponent {
         this.current_db_id++;
 
         // Manages encryption of raw data with password
-        //let qualityReportRawData = JSON.stringify(qualityReportRawDataObj);
 
         console.log('Quality Report Raw Data: ' + JSON.stringify(qualityReportRawData));
 
@@ -698,36 +588,6 @@ export class BuyAssetTRComponent {
         .catch(error => {
           console.error(error);
         });
-
-        /*
-        //This one sent to customer
-        this.qualityReportObj = {
-            "$class": "org.usecase.printer.QualityReport",
-            "qualityReportID": "QREP_" + this.current_db_id,
-            "databaseHash": sha512(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 255)),
-            "owner": this.printer.printerManufacturer,
-            "printingJob": "resource:org.usecase.printer.PrintingJob#" + this.printingJobCurrent.printingJobID,
-            "accessPermissionCode": 'None',
-        };
-        return this.serviceQualityReport.addAsset(this.qualityReportObj)
-            .toPromise()
-            .then(() => {
-                this.errorMessage = null;
-                this.progressMessage = null;
-                this.successMessage = 'QualityReport added successfully. Reloading...';
-                location.reload();
-            })
-            .catch((error) => {
-                if (error == 'Server error') {
-                    this.progressMessage = null;
-                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-                }
-                else {
-                    this.progressMessage = null;
-                    this.errorMessage = error;
-                }
-            });
-            */
     }
 
   	execute(form: any){
