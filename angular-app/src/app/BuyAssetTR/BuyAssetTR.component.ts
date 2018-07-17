@@ -452,9 +452,40 @@ export class BuyAssetTRComponent {
               // Encrypt the response with the End User's public key
               this.fileHandler.encryptText(endUserPubKey, encryptedWithManuf)
               .then(encryptedWithManufEnduser => {
+                this.current_db_id =(this.allQualityReportRawData).length;
+      	        this.current_db_id ++;
 
+      	        let stakeholderObjs = [];
+      	        stakeholderObjs.push(this.manufacturerCurrent);
 
+      	        this.qualityReportRawDataObj = {
+                      $class: "org.usecase.printer.QualityReportRaw",
+                      "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
+                      "qualityReportRawID": "QREPRAW_" + this.current_db_id,
+                      //"encryptedReport": JSON.stringify(qualityReportRawData),
+                      "encryptedReport": encryptedData,
+                      //"accessPermissionCode": 'None',
+                      "accessPermissionCode": encryptedWithManufEnduser,
+                      "stakeholder": stakeholderObjs
+                  };
 
+      	        return this.serviceQualityReportRawData.addAsset(this.qualityReportRawDataObj)
+      	            .toPromise()
+      	            .then(() => {
+      	                this.errorMessage = null;
+      	                this.progressMessage = null;
+      	                this.successMessage = 'QualityReportRawData added successfully for Manufacturer.';
+      	            })
+      	            .catch((error) => {
+      	                if(error == 'Server error'){
+      	                    this.progressMessage = null;
+      	                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+      	                }
+      	                else{
+      	                    this.progressMessage = null;
+      	                    this.errorMessage = error;
+      	                }
+      	            });
               })
               .catch(error => {
                 console.log(error);
