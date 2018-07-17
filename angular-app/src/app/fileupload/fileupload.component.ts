@@ -154,18 +154,17 @@ export class FileuploadComponent {
       });
   }
 
-  //UNTESTED
-  public async encryptTextWithPassword(password: string, encryptText: string): Promise<string> {
+  public async encryptTextWithPassword(password: string, plaintext: string): Promise<string> {
     var options, encrypted;
 
     options = {
-        data: encryptText,
-        passwords: [password],
-        armor: false
+        data: plaintext,
+        passwords: password
     };
 
     return openpgp.encrypt(options).then(ciphertext => {
       encrypted = ciphertext.data;
+      return encrypted;
     })
     .then(returnEncrypted => {
       return returnEncrypted;

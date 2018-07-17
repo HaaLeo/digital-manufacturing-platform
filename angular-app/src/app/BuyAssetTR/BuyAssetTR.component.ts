@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { BuyAssetTRService } from './BuyAssetTR.service';
-import { Printer, PrintingJob, QualityReport, QualityReportRaw, Stakeholder, QualityRequirement } from "../org.usecase.printer";
+import { Printer, PrintingJob, QualityReport, QualityReportRaw, Stakeholder, QualityRequirement, Enduser} from "../org.usecase.printer";
 import { QualityReportService } from "../QualityReport/QualityReport.service";
 import { PrinterService } from "../Printer/Printer.service";
 import { QualityReportRawService } from "../QualityReportRaw/QualityReportRaw.service";
@@ -34,6 +34,7 @@ export class BuyAssetTRComponent {
     private errorMessage;
     private progressMessage;
     private successMessage;
+    private allEndusers;
     private allPrintingJobs;
     private allPrinters;
     private allQualityRequirements: QualityRequirement[];
@@ -79,6 +80,7 @@ export class BuyAssetTRComponent {
         this.loadAllQualityReportRawData();
         this.loadAllQualityRequirements();
         this.loadAllManufacturers();
+        this.loadAllEndUsers();
     }
 
     //Makes random string for Quality Report encryption
@@ -271,6 +273,34 @@ export class BuyAssetTRComponent {
             });
     };
 
+    // Get All End users
+    loadAllEndUsers(): Promise<any> {
+      let tempList = [];
+      return this.serviceTransaction.getAllEndusers()
+        .toPromise()
+        .then((result) => {
+          this.errorMessage = null;
+          result.forEach(enduser => {
+            tempList.push(enduser);
+          });
+          this.allEndusers = tempList;
+        })
+        .catch((error) => {
+          if (error == 'Server error') {
+            this.progressMessage = null;
+            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+          }
+          else if (error == '404 - Not Found') {
+            this.progressMessage = null;
+            this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
+          }
+          else {
+            this.progressMessage = null;
+            this.errorMessage = error;
+          }
+        });
+    }
+
 
     async evaluateReport(form: any) {
 
@@ -364,12 +394,14 @@ export class BuyAssetTRComponent {
 
     async transferRawData(form: any) {
       let manufacturerPubKey;
+      let endUserPubKey;
 
         for (const printingJob of this.allPrintingJobs) {
             if (printingJob.printingJobID == this.printingJobID.value) {
                 this.printingJobCurrent = printingJob;
             }
         }
+
         for (const printer of this.allPrinters) {
             if (printer.stakeholderID == this.printingJobCurrent.printer.toString().split("#")[1]) {
                 this.printer = printer;
@@ -377,13 +409,17 @@ export class BuyAssetTRComponent {
         }
 
         for (const manufacturer of this.allManufacturers) {
-            if ("resource:org.usecase.printer.Manufacturer#"+manufacturer.stakeholderID==this.printer.printerManufacturer) {
-                this.manufacturerCurrent = "resource:org.usecase.printer.Manufacturer#"+manufacturer.stakeholderID;
-                console.log("TESTING THIS" + manufacturer.pubKey);
+            if ("resource:org.usecase.printer.Manufacturer#" + manufacturer.stakeholderID == this.printer.printerManufacturer) {
+                this.manufacturerCurrent = "resource:org.usecase.printer.Manufacturer#" + manufacturer.stakeholderID;
                 manufacturerPubKey = manufacturer.pubKey;
             }
         }
 
+        for (const endUser of this.allEndusers) {
+          if ("resource:org.usecase.printer.Enduser#" + endUser.stakeholderID == this.printingJobCurrent.buyer.toString()) {
+            endUserPubKey = endUser.pubKey;
+          }
+        }
 
         // Search MongoDB for raw data
 				console.log('Searching MongoDB for job ID: ' + this.printingJobCurrent.printingJobID);
@@ -399,28 +435,38 @@ export class BuyAssetTRComponent {
           let password = this.makePassword();
           console.log(password);
 
-          let newPubKey = manufacturerPubKey.slice(92, 4599);
-          let newPubKey2 = newPubKey.split(" ").join("\n");
-          let newPubKey3 = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + newPubKey2;
-          let newPubKey4 = newPubKey3 + `\n-----END PGP PUBLIC KEY BLOCK-----`;
-          console.log(newPubKey4);
+          manufacturerPubKey = manufacturerPubKey.slice(92, 4599);
+          manufacturerPubKey = manufacturerPubKey.split(" ").join("\n");
+          manufacturerPubKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + manufacturerPubKey + `\n-----END PGP PUBLIC KEY BLOCK-----`;
 
-          //const manufEncrypted = await
-          this.fileHandler.encryptText(newPubKey4, password)
-          .then(response => {
-            console.log(response);
-            this.fileHandler.encryptText(newPubKey4, response)
-            .then(response2 => {
-              console.log(response2);
+          endUserPubKey = endUserPubKey.slice(92, 4599);
+          endUserPubKey = endUserPubKey.split(" ").join("\n");
+          endUserPubKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + endUserPubKey + `\n-----END PGP PUBLIC KEY BLOCK-----`;
+
+          // Encrypt the raw quality report data with the password
+          this.fileHandler.encryptTextWithPassword(password, JSON.stringify(qualityReportRawData))
+          .then(encryptedData => {
+            // Encrypt the password with the manufacturer's public key
+            this.fileHandler.encryptText(manufacturerPubKey, password)
+            .then(encryptedWithManuf => {
+              // Encrypt the response with the End User's public key
+              this.fileHandler.encryptText(endUserPubKey, encryptedWithManuf)
+              .then(encryptedWithManufEnduser => {
+
+
+
+              })
+              .catch(error => {
+                console.log(error);
+              });
             })
             .catch(error => {
               console.log(error);
             });
           })
           .catch(error => {
-            console.log(error);
+            console.error(error);
           });
-
 
           /*
 	        this.current_db_id =(this.allQualityReportRawData).length;

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import {ConfirmTransaction, EvaluateReport} from '../org.usecase.printer';
 
 import 'rxjs/Rx';
-import { Designer, PrintingJob, Printer, Cash } from 'app/org.usecase.printer';
+import { Designer, PrintingJob, Printer, Cash, Enduser } from 'app/org.usecase.printer';
 
 // Can be injected into a constructor
 @Injectable()
@@ -13,8 +13,12 @@ export class BuyAssetTRService {
     private PRINTINGJOB: string = 'org.usecase.printer.PrintingJob';
     private CONFIRM_TRANSACTION: string = 'org.usecase.printer.ConfirmTransaction';
     private EVALUTE_REPORT: string = 'org.usecase.printer.EvaluateReport';
+    private ENDUSER = 'org.usecase.printer.Enduser';
 
-    constructor(private printingJobService: DataService<PrintingJob>, private confirmTransactionService: DataService<ConfirmTransaction>, private evaluateReportService: DataService<EvaluateReport>) {
+    constructor(private printingJobService: DataService<PrintingJob>,
+                private confirmTransactionService: DataService<ConfirmTransaction>,
+                private evaluateReportService: DataService<EvaluateReport>,
+                private enduserService: DataService<Enduser>) {
     };
 
     public getAllPrintingJobs(): Observable<PrintingJob[]> {
@@ -27,6 +31,10 @@ export class BuyAssetTRService {
 
     public evaluateReport(itemToEvaluate: any): Observable<EvaluateReport>{
         return this.evaluateReportService.add(this.EVALUTE_REPORT, itemToEvaluate);
+    }
+
+    public getAllEndusers(): Observable<Enduser[]> {
+      return this.enduserService.getAll(this.ENDUSER);
     }
 
     public returnPrinterPrivateKey() {
