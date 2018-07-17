@@ -175,7 +175,7 @@ export class QualityReportRawComponent implements OnInit {
         $class: "org.usecase.printer.QualityReportRaw",
         "accessPermissionCode": this.currentAsset.accessPermissionCode, // decrypted by manufacturer and encrypted with Analyst pubkey
         "stakeholder": stakeholderObjs,
-        "encryptedReport": this.currentAsset.encryptedReport, //now encrypted with da pubkey
+        "encryptedReport": this.currentAsset.encryptedReport, //now encrypted with the pubkey
         "printingJob": this.currentAsset.printingJob
       };
       return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)

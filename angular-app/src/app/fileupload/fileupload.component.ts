@@ -192,7 +192,7 @@ export class FileuploadComponent {
     });
   }
 
-  public async decryptFile(data: string, privateKey: string): Promise<string> {
+  public async decryptTextWithPrivKey(data: string, privateKey: string): Promise<string> {
     const privKeyObj = openpgp.key.readArmored(privateKey).keys[0];
 
     //all generated PGP keys use this as passphrase, so hard-coded for now

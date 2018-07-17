@@ -18,6 +18,8 @@ let sha512 = require('js-sha512');
 
 var url = "http://localhost:3004/api/";
 
+
+
 @Component({
     selector: 'app-BuyAssetTR',
     templateUrl: './BuyAssetTR.component.html',
@@ -54,6 +56,10 @@ export class BuyAssetTRComponent {
     private selectedJob;
     private evaluateReportObj;
     private current_db_id;
+
+    private plainTextPswd;
+    private encryptedReportData;
+    private encryptedPassword;
 
     private fileHandler;
 
@@ -334,7 +340,7 @@ export class BuyAssetTRComponent {
 
         const encryptedFile = await this.fileHandler.getTextFromIPFS(ipfsKey);
         console.log("ENCRYPTED FILE" + encryptedFile);
-        const decryptedFile = await this.fileHandler.decryptFile(encryptedFile, this.serviceTransaction.returnPrinterPrivateKey());
+        const decryptedFile = await this.fileHandler.decryptTextWithPrivKey(encryptedFile, this.serviceTransaction.returnPrinterPrivateKey());
         console.log("DECRYPTED FILE" + decryptedFile);
         const requirementObj = JSON.parse(decryptedFile);
         console.log("REQUIREMENT OBJ" + requirementObj);
@@ -363,7 +369,7 @@ export class BuyAssetTRComponent {
 	            "peakPressure": peakPressure,
 	            "printingJob": 'resource:org.usecase.printer.PrintingJob#'+this.printingJobCurrent.printingJobID,
 	            "customer": this.printingJobCurrent.buyer,
-	            "qualityReport": 'resource:org.usecase.printer.QualityReport#'+this.qualityReportCurrent.qualityReportID,
+	            "qualityReport": 'resource:org.usecase.printer.QualityReport#' + this.qualityReportCurrent.qualityReportID,
 	            "manufacturer": null
                     };
 	        this.serviceTransaction.evaluateReport(this.evaluateReportObj)
@@ -393,6 +399,74 @@ export class BuyAssetTRComponent {
     }
 
     async transferRawData(form: any) {
+      console.log("ENCRYPTED REPORT: " + this.encryptedReportData);
+      console.log("ENCRYPTED PSWD: " + this.encryptedPassword);
+
+        for (const printingJob of this.allPrintingJobs) {
+          if (printingJob.printingJobID == this.printingJobID.value) {
+            this.printingJobCurrent = printingJob;
+          }
+        }
+
+        for (const printer of this.allPrinters) {
+          if (printer.stakeholderID == this.printingJobCurrent.printer.toString().split("#")[1]) {
+            this.printer = printer;
+          }
+        }
+
+        for (const manufacturer of this.allManufacturers) {
+          if ("resource:org.usecase.printer.Manufacturer#" + manufacturer.stakeholderID == this.printer.printerManufacturer) {
+            this.manufacturerCurrent = "resource:org.usecase.printer.Manufacturer#" + manufacturer.stakeholderID;
+          }
+        }
+
+        for (const endUser of this.allEndusers) {
+          if ("resource:org.usecase.printer.Enduser#" + endUser.stakeholderID == this.printingJobCurrent.buyer.toString()) {
+          }
+        }
+
+        // Search MongoDB for raw data
+				console.log('Searching MongoDB for job ID: ' + this.printingJobCurrent.printingJobID);
+				this.http.get('http://localhost:3004/api/getData/' + this.printingJobCurrent.printingJobID).subscribe(data => {
+
+					let qualityReportRawData = data[0]["qualityReportRawData"];
+
+					console.log('Quality Report Raw Data: ' + JSON.stringify(qualityReportRawData));
+
+                this.current_db_id =(this.allQualityReportRawData).length;
+      	        this.current_db_id ++;
+
+      	        let stakeholderObjs = [];
+      	        stakeholderObjs.push(this.manufacturerCurrent);
+
+      	        this.qualityReportRawDataObj = {
+                      $class: "org.usecase.printer.QualityReportRaw",
+                      "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
+                      "qualityReportRawID": "QREPRAW_" + this.current_db_id,
+                      "encryptedReport": this.encryptedReportData,
+                      "accessPermissionCode": this.encryptedPassword,
+                      "stakeholder": stakeholderObjs
+                  };
+
+      	        return this.serviceQualityReportRawData.addAsset(this.qualityReportRawDataObj)
+      	            .toPromise()
+      	            .then(() => {
+      	                this.errorMessage = null;
+      	                this.progressMessage = null;
+      	                this.successMessage = 'QualityReportRawData added successfully for Manufacturer.';
+      	            })
+      	            .catch((error) => {
+      	                if(error == 'Server error'){
+      	                    this.progressMessage = null;
+      	                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+      	                }
+      	                else{
+      	                    this.progressMessage = null;
+      	                    this.errorMessage = error;
+      	                }
+      	            });
+              });
+      /*
       let manufacturerPubKey;
       let endUserPubKey;
 
@@ -428,9 +502,6 @@ export class BuyAssetTRComponent {
 					let qualityReportRawData = data[0]["qualityReportRawData"];
 
 					console.log('Quality Report Raw Data: ' + JSON.stringify(qualityReportRawData));
-
-          //TODO: Encrypt Quality Report Raw Data with random string (password). Then encrypt password.
-          //Have class variable of password.
 
           let password = this.makePassword();
           console.log(password);
@@ -499,24 +570,41 @@ export class BuyAssetTRComponent {
             console.error(error);
           });
     		});
+
+        */
     }
 
     uploadQualityReport(form: any) {
+      let manufacturerPubKey;
+      let endUserPubKey;
+
+      this.fileHandler = new FileuploadComponent();
 
         for (const printingJob of this.allPrintingJobs) {
             if (printingJob.printingJobID == this.printingJobID.value) {
                 this.printingJobCurrent = printingJob;
             }
         }
+
         for (const printer of this.allPrinters) {
             if (printer.stakeholderID == this.printingJobCurrent.printer.toString().split("#")[1]) {
                 this.printer = printer;
             }
         }
 
-        // TODO Password first is encrypted with Manufacturer PubKey then with EnduserPubKey. encrypt qualityReportRawData with this
-        let password = "";
+        for (const manufacturer of this.allManufacturers) {
+            if ("resource:org.usecase.printer.Manufacturer#" + manufacturer.stakeholderID == this.printer.printerManufacturer) {
+                manufacturerPubKey = manufacturer.pubKey;
+            }
+        }
 
+        for (const endUser of this.allEndusers) {
+          if ("resource:org.usecase.printer.Enduser#" + endUser.stakeholderID == this.printingJobCurrent.buyer.toString()) {
+            endUserPubKey = endUser.pubKey;
+          }
+        }
+
+        // TODO Password first is encrypted with Manufacturer PubKey then with EnduserPubKey. encrypt qualityReportRawData with this
         let qualityReportRawData = {
             "peakPressure": Math.random() * 3000,
             "peakTemperature": Math.random() * 800
@@ -542,6 +630,76 @@ export class BuyAssetTRComponent {
 
         this.current_db_id = (this.allQualityReports).length;
         this.current_db_id++;
+
+        // Manages encryption of raw data with password
+        //let qualityReportRawData = JSON.stringify(qualityReportRawDataObj);
+
+        console.log('Quality Report Raw Data: ' + JSON.stringify(qualityReportRawData));
+
+        this.plainTextPswd = this.makePassword();
+        console.log("PLAIN TEXT PSWD: " + this.plainTextPswd);
+
+        manufacturerPubKey = manufacturerPubKey.slice(92, 4599);
+        manufacturerPubKey = manufacturerPubKey.split(" ").join("\n");
+        manufacturerPubKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + manufacturerPubKey + `\n-----END PGP PUBLIC KEY BLOCK-----`;
+
+        endUserPubKey = endUserPubKey.slice(92, 4599);
+        endUserPubKey = endUserPubKey.split(" ").join("\n");
+        endUserPubKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + endUserPubKey + `\n-----END PGP PUBLIC KEY BLOCK-----`;
+
+        // Encrypt the raw quality report data with the password
+        this.fileHandler.encryptTextWithPassword(this.plainTextPswd, JSON.stringify(qualityReportRawData))
+        .then(encryptedData => {
+          this.encryptedReportData = encryptedData;
+          // Encrypt the password with the manufacturer's public key
+          this.fileHandler.encryptText(manufacturerPubKey, this.plainTextPswd)
+          .then(encryptedWithManuf => {
+            // Encrypt the response with the End User's public key
+            this.fileHandler.encryptText(endUserPubKey, encryptedWithManuf)
+            .then(encryptedWithManufEnduser => {
+              this.encryptedPassword = encryptedWithManufEnduser;
+              console.log("THIS ENCRYPTED PSWD: " + this.encryptedPassword);
+              //This one sent to customer
+              this.qualityReportObj = {
+                  "$class": "org.usecase.printer.QualityReport",
+                  "qualityReportID": "QREP_" + this.current_db_id,
+                  "databaseHash": sha512(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 255)),
+                  "owner": this.printer.printerManufacturer,
+                  "printingJob": "resource:org.usecase.printer.PrintingJob#" + this.printingJobCurrent.printingJobID,
+                  "accessPermissionCode": this.encryptedPassword,
+              };
+              return this.serviceQualityReport.addAsset(this.qualityReportObj)
+                  .toPromise()
+                  .then(() => {
+                      this.errorMessage = null;
+                      this.progressMessage = null;
+                      this.successMessage = 'QualityReport added successfully. Reloading...';
+                      //location.reload();
+                  })
+                  .catch((error) => {
+                      if (error == 'Server error') {
+                          this.progressMessage = null;
+                          this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                      }
+                      else {
+                          this.progressMessage = null;
+                          this.errorMessage = error;
+                      }
+                  });
+            })
+            .catch(error => {
+              console.log(error);
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+        /*
         //This one sent to customer
         this.qualityReportObj = {
             "$class": "org.usecase.printer.QualityReport",
@@ -569,6 +727,7 @@ export class BuyAssetTRComponent {
                     this.errorMessage = error;
                 }
             });
+            */
     }
 
   	execute(form: any){
