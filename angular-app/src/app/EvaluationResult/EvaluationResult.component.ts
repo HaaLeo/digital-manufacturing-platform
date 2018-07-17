@@ -187,7 +187,7 @@ export class EvaluationResultComponent implements OnInit {
             });
     }
 
-    //allow update name of Printer
+    // TODO: Retrieve encrypted password from quality report and decrypt with End User public key, then add to qualityReportRawDataObj
     shareResult(form: any): Promise<any> {
         this.progressMessage = 'Please wait... ';
 
@@ -207,6 +207,8 @@ export class EvaluationResultComponent implements OnInit {
                 this.currentPrinter = printer;
             }
         }
+        console.log("TESTING HERE AIDAN");
+        console.log(this.currentEvaluationResult.qualityReport.accessPermissionCode);
 
         this.evaluationResult = {
             $class: "org.usecase.printer.EvaluationResult",
@@ -239,7 +241,7 @@ export class EvaluationResultComponent implements OnInit {
                     this.errorMessage = error;
                 }
             });
+
     }
 
 }
-

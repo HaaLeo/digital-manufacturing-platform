@@ -166,41 +166,41 @@ export class QualityReportRawComponent implements OnInit {
         this.currentAsset = asset;
     }
 
-    // TODO get info from existing qualityReport and update encryptedPassword
+    // TODO: Retrieve encrypted password from quality report and decrypt with End User public key, then add to qualityReportRawDataObj
     shareDataWithAnalyst(form: any) {
-        let stakeholderObjs = this.currentAsset.stakeholder;
-        stakeholderObjs.push(this.dataAnalystID.value);
+      let stakeholderObjs = this.currentAsset.stakeholder;
+      stakeholderObjs.push(this.dataAnalystID.value);
 
-        this.qualityReportRawDataObj = {
-            $class: "org.usecase.printer.QualityReportRaw",
-            "accessPermissionCode": this.currentAsset.accessPermissionCode, // decrypted by manufacturer and encrypted with Analyst pubkey
-            "stakeholder": stakeholderObjs,
-            "encryptedReport": this.currentAsset.encryptedReport, //now encrypted with da pubkey
-            "printingJob": this.currentAsset.printingJob
-        };
-        return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)
-            .toPromise()
-            .then(() => {
-                this.errorMessage = null;
-                this.progressMessage = null;
-                this.successMessage = 'Quality Report Raw shared successfully. Refreshing page...';
-                location.reload();
-            })
-            .catch((error) => {
-                if(error == 'Server error'){
-                    this.progressMessage = null;
-                    this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-                }
-                else if(error == '404 - Not Found'){
-                    this.progressMessage = null;
-                    this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
-                }
-                else{
-                    this.progressMessage = null;
-                    this.errorMessage = error;
-                }
-            });
-  }
+      this.qualityReportRawDataObj = {
+        $class: "org.usecase.printer.QualityReportRaw",
+        "accessPermissionCode": this.currentAsset.accessPermissionCode, // decrypted by manufacturer and encrypted with Analyst pubkey
+        "stakeholder": stakeholderObjs,
+        "encryptedReport": this.currentAsset.encryptedReport, //now encrypted with da pubkey
+        "printingJob": this.currentAsset.printingJob
+      };
+      return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)
+        .toPromise()
+        .then(() => {
+          this.errorMessage = null;
+          this.progressMessage = null;
+          this.successMessage = 'Quality Report Raw shared successfully. Refreshing page...';
+          location.reload();
+        })
+        .catch((error) => {
+          if(error == 'Server error') {
+            this.progressMessage = null;
+            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+          }
+          else if(error == '404 - Not Found') {
+            this.progressMessage = null;
+            this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
+          }
+          else {
+            this.progressMessage = null;
+            this.errorMessage = error;
+          }
+        });
+   }
 
 
 }
