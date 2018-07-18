@@ -4,6 +4,7 @@ import { QualityReportRawService } from './QualityReportRaw.service';
 import {DataAnalystService} from "../DataAnalyst/DataAnalyst.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {EvaluationResultService} from "../EvaluationResult/EvaluationResult.service";
+import { FileuploadComponent } from '../fileupload/fileupload.component';
 import {any} from "codelyzer/util/function";
 
 @Component({
@@ -21,10 +22,12 @@ export class QualityReportRawComponent implements OnInit {
   private currentAsset;
 
   private allAccessibleQualityReportsRaw = [];
-    private allInaccessibleQualityReportsRaw = [];
-    private allAnalysts;
+  private allInaccessibleQualityReportsRaw = [];
+  private allAnalysts;
   private allEvaluationResults: any;
   private qualityReportRawDataObj;
+
+  private fileHandler;
 
   private current_db_id;
     dataAnalystID = new FormControl("");
@@ -166,8 +169,20 @@ export class QualityReportRawComponent implements OnInit {
         this.currentAsset = asset;
     }
 
-    // TODO: Retrieve encrypted password from quality report and decrypt with End User public key, then add to qualityReportRawDataObj
+    // TODO: Retrieve encrypted password from quality report. Decrypt with Manufacturer's private key. Encrypt with analyst's public key
     shareDataWithAnalyst(form: any) {
+
+      this.fileHandler = new FileuploadComponent();
+
+      this.fileHandler.decryptTextWithPrivKey(
+                  this.currentAsset.encryptedReport,
+                  this.serviceQualityReportRaw.returnManufacturerPrivateKey())
+        .then(result => {
+          console.log(result);
+        });
+
+
+      /*
       let stakeholderObjs = this.currentAsset.stakeholder;
       stakeholderObjs.push(this.dataAnalystID.value);
 
@@ -200,6 +215,7 @@ export class QualityReportRawComponent implements OnInit {
             this.errorMessage = error;
           }
         });
+        */
    }
 
 
