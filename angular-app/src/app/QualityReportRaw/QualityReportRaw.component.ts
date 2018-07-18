@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { QualityReport, QualityReportRaw } from '../org.usecase.printer';
+import { QualityReport, QualityReportRaw, PrintingJob } from '../org.usecase.printer';
 import { QualityReportRawService } from './QualityReportRaw.service';
 import {DataAnalystService} from "../DataAnalyst/DataAnalyst.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {EvaluationResultService} from "../EvaluationResult/EvaluationResult.service";
 import {any} from "codelyzer/util/function";
 import { FileuploadComponent } from '../fileupload/fileupload.component';
+import { QualityReportService } from "../QualityReport/QualityReport.service";
 
 @Component({
   selector: 'app-quality-report-raw',
   templateUrl: './QualityReportRaw.component.html',
   styleUrls: ['./QualityReportRaw.component.css'],
-  providers: [QualityReportRawService, DataAnalystService, EvaluationResultService]
+  providers: [QualityReportRawService, DataAnalystService, EvaluationResultService, QualityReportService]
 })
 export class QualityReportRawComponent implements OnInit {
     myForm: FormGroup;
@@ -24,6 +25,8 @@ export class QualityReportRawComponent implements OnInit {
   private allAccessibleQualityReportsRaw = [];
   private allInaccessibleQualityReportsRaw = [];
   private allAnalysts;
+  private allPrintingJobs;
+  private allQualityReports;
   private allEvaluationResults: any;
   private qualityReportRawDataObj;
 
@@ -37,7 +40,8 @@ export class QualityReportRawComponent implements OnInit {
   constructor(private serviceQualityReportRaw: QualityReportRawService,
               fb: FormBuilder,
               private serviceDataAnalyst: DataAnalystService,
-              private serviceEvaluationResult: EvaluationResultService) {
+              private serviceEvaluationResult: EvaluationResultService,
+              private serviceQualityReport: QualityReportService,) {
       this.myForm = fb.group({
           qualityReportRawID: this.qualityReportRawID,
           encryptedReport: this.encryptedReport,
@@ -51,6 +55,8 @@ export class QualityReportRawComponent implements OnInit {
         this.loadAllEvaluationResults();
         this.loadAllQualityReportsRaw();
         this.loadAllDataAnalysts();
+        this.loadAllPrintingJobs();
+        this.loadAllQualityReports();
   }
 
   loadAllQualityReportsRaw(): Promise<any> {
@@ -102,6 +108,68 @@ export class QualityReportRawComponent implements OnInit {
       });
   }
 
+  // Get all PrintingJobs
+  loadAllPrintingJobs(): Promise<any> {
+      const tempList = [];
+      return this.serviceQualityReportRaw.getAllPrintingJobs()
+          .toPromise()
+          .then((result) => {
+              this.errorMessage = null;
+              result.forEach(printingJob => {
+                  //DISPLAY ONLY PRINTING JOBS THAT HAVEN'T PRINTED YET
+                  if (printingJob.txID != '' && !printingJob.printed)
+                      tempList.push(printingJob);
+              });
+              this.allPrintingJobs = tempList;
+          })
+          .catch((error) => {
+              if (error == 'Server error') {
+                  this.progressMessage = null;
+                  this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+              }
+              else if (error == '404 - Not Found') {
+                  this.progressMessage = null;
+                  this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+              }
+              else {
+                  this.progressMessage = null;
+                  this.errorMessage = error;
+              }
+          });
+  };
+
+  // Get all QualityReports
+  loadAllQualityReports(): Promise<any> {
+      const tempList = [];
+      return this.serviceQualityReport.getAll()
+          .toPromise()
+          .then((result) => {
+              this.errorMessage = null;
+              result.forEach(qualityReport => {
+                  tempList.push(qualityReport);
+              });
+              this.allQualityReports = tempList;
+              if (0 < tempList.length) {
+                  this.current_db_id = tempList[tempList.length - 1];
+              } else {
+                  this.current_db_id = 0;
+              }
+          })
+          .catch((error) => {
+              if (error == 'Server error') {
+                  this.progressMessage = null;
+                  this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+              }
+              else if (error == '404 - Not Found') {
+                  this.progressMessage = null;
+                  this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+              }
+              else {
+                  this.progressMessage = null;
+                  this.errorMessage = error;
+              }
+          });
+  }
 
     //Get all data analysts
     loadAllDataAnalysts(): Promise<any> {
@@ -171,54 +239,70 @@ export class QualityReportRawComponent implements OnInit {
 
       let fileHandler = new FileuploadComponent();
 
-      //This will only work once EvaluationResult is working successfully. Needs EndUser to decrypt accessPermissionCode first
-      fileHandler.decryptTextWithPrivKey(this.currentAsset.accessPermissionCode, this.serviceQualityReportRaw.returnManufacturerPrivateKey())
-      .then(decryptedPassword => {
-        fileHandler.decryptTextWithPassword(decryptedPassword, this.currentAsset.encryptedReport)
-        .then(decryptedReport => {
-          //Find the Analyst's PubKey
-          for (const analyst of this.allAnalysts) {
-              if (analyst.stakeholderID  == this.dataAnalystID.value) {
-                //Encrypt report with Analyst's public key
-                fileHandler.encryptText(analyst.pubKey, decryptedReport)
-                .then(encryptedReport => {
-                  let stakeholderObjs = this.currentAsset.stakeholder;
-                  stakeholderObjs.push(this.dataAnalystID.value);
+      console.log("CHECKING FOR PRINTING JOB ID: " + this.currentAsset.printingJob)
 
-                  this.qualityReportRawDataObj = {
-                    $class: "org.usecase.printer.QualityReportRaw",
-                    "accessPermissionCode": this.currentAsset.accessPermissionCode, // decrypted by manufacturer and encrypted with Analyst pubkey
-                    "stakeholder": stakeholderObjs,
-                    "encryptedReport": encryptedReport, //now encrypted with the pubkey
-                    "printingJob": this.currentAsset.printingJob
-                  };
-                  return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)
-                    .toPromise()
-                    .then(() => {
-                      this.errorMessage = null;
-                      this.progressMessage = null;
-                      this.successMessage = 'Quality Report Raw shared successfully. Refreshing page...';
-                      location.reload();
-                    })
-                    .catch((error) => {
-                      if(error == 'Server error') {
-                        this.progressMessage = null;
-                        this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-                      }
-                      else if(error == '404 - Not Found') {
-                        this.progressMessage = null;
-                        this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
-                      }
-                      else {
-                        this.progressMessage = null;
-                        this.errorMessage = error;
-                      }
+      for (const printingJob of this.allPrintingJobs) {
+        console.log("FOUND PRINTING JOB ID: " + printingJob.printingJobID);
+          if ("resource:org.usecase.printer.PrintingJob#" + printingJob.printingJobID == this.currentAsset.printingJob) {
+            console.log("CHECKING FOR QUALITY REPORT WITH PRINTING JOB: " + printingJob.printingJobID);
+            for (const qualityReport of this.allQualityReports) {
+              console.log("FOUND QUALITY REPORT WITH PRINTING JOB: " + qualityReport.printingJob);
+                if ("resource:org.usecase.printer.QualityReport#" + qualityReport.printingJob == this.currentAsset.printingJob) {
+                    console.log("FOUND ONE");
+
+                    //This will only work once EvaluationResult is working successfully. Needs EndUser to decrypt accessPermissionCode first
+                    fileHandler.decryptTextWithPrivKey(qualityReport.accessPermissionCode, this.serviceQualityReportRaw.returnManufacturerPrivateKey())
+                    .then(decryptedPassword => {
+                      fileHandler.decryptTextWithPassword(decryptedPassword, this.currentAsset.encryptedReport)
+                      .then(decryptedReport => {
+                        //Find the Analyst's PubKey
+                        for (const analyst of this.allAnalysts) {
+                            if (analyst.stakeholderID  == this.dataAnalystID.value) {
+                              //Encrypt report with Analyst's public key
+                              fileHandler.encryptText(analyst.pubKey, decryptedReport)
+                              .then(encryptedReport => {
+                                let stakeholderObjs = this.currentAsset.stakeholder;
+                                stakeholderObjs.push(this.dataAnalystID.value);
+
+                                this.qualityReportRawDataObj = {
+                                  $class: "org.usecase.printer.QualityReportRaw",
+                                  "accessPermissionCode": this.currentAsset.accessPermissionCode,
+                                  "stakeholder": stakeholderObjs,
+                                  "encryptedReport": encryptedReport, //now encrypted with the pubkey
+                                  "printingJob": this.currentAsset.printingJob
+                                };
+                                return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)
+                                  .toPromise()
+                                  .then(() => {
+                                    this.errorMessage = null;
+                                    this.progressMessage = null;
+                                    this.successMessage = 'Quality Report Raw shared successfully. Refreshing page...';
+                                    location.reload();
+                                  })
+                                  .catch((error) => {
+                                    if(error == 'Server error') {
+                                      this.progressMessage = null;
+                                      this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                                    }
+                                    else if(error == '404 - Not Found') {
+                                      this.progressMessage = null;
+                                      this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
+                                    }
+                                    else {
+                                      this.progressMessage = null;
+                                      this.errorMessage = error;
+                                    }
+                                  });
+
+                              });
+                            }
+                        }
+                      });
                     });
 
-                });
-              }
+                }
+            }
           }
-        });
-      });
+      }
    }
 }
