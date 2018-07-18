@@ -52,7 +52,7 @@ export class EvaluationResultService {
     }
 
     public updateQualityReport(id: any, itemToUpdate: any): Observable<QualityReport> {
-        return this.qualityReportService.update(this.NAMESPACE, id, itemToUpdate);
+        return this.qualityReportService.update(this.QUALITYREPORT, id, itemToUpdate);
     }
 
     public returnEndUserPrivateKey() {

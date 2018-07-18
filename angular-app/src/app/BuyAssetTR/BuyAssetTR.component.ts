@@ -307,7 +307,8 @@ export class BuyAssetTRComponent {
 
 
     async evaluateReport(form: any) {
-
+      this.loadAllQualityReports();
+      
         this.progressMessage = 'Please wait... ';
         console.log(this.allPrintingJobs);
         for (const printingJob of this.allPrintingJobs) {
@@ -563,7 +564,7 @@ export class BuyAssetTRComponent {
                   .then(() => {
                       this.errorMessage = null;
                       this.progressMessage = null;
-                      this.successMessage = 'QualityReport added successfully. Reloading...';
+                      this.successMessage = 'QualityReport added successfully.';
                       //location.reload();
                   })
                   .catch((error) => {

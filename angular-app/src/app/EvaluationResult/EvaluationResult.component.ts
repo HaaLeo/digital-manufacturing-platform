@@ -4,13 +4,12 @@ import {FileuploadComponent} from "../fileupload/fileupload.component";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {EvaluationResultService} from "./EvaluationResult.service";
 import {PrintingJobService} from "../PrintingJob/PrintingJob.service";
-import { QualityReportService } from "../QualityReport/QualityReport.service";
 
 @Component({
   selector: 'app-evaluation-result',
   templateUrl: './EvaluationResult.component.html',
   styleUrls: ['./EvaluationResult.component.css'],
-    providers: [EvaluationResultService, PrintingJobService, QualityReportService]
+    providers: [EvaluationResultService, PrintingJobService]
 })
 export class EvaluationResultComponent implements OnInit {
 
@@ -25,17 +24,12 @@ export class EvaluationResultComponent implements OnInit {
     private allEndusers;
     private allPrinters;
     private allPrintingJobs;
-    private allQualityReports;
 
     private current_db_id;
     private evaluationResult;
     private currentEvaluationResult;
     private currentPrintingJob;
     private currentPrinter;
-    private qualityReport;
-    private currentQualityReport;
-
-    private fileHandler;
 
     evaluationResultID = new FormControl("", Validators.required);
     txID = new FormControl("", Validators.required);
@@ -43,7 +37,7 @@ export class EvaluationResultComponent implements OnInit {
     customer = new FormControl("", Validators.required);
     printingJob = new FormControl("", Validators.required);
 
-    constructor(private serviceEvaluationResult:EvaluationResultService, fb: FormBuilder, private servicePrintingJob: PrintingJobService, private serviceQualityReport: QualityReportService,) {
+    constructor(private serviceEvaluationResult:EvaluationResultService, fb: FormBuilder, private servicePrintingJob: PrintingJobService) {
         this.myForm = fb.group({
             evaluationResultID:this.evaluationResultID,
             txID:this.txID,
@@ -62,9 +56,8 @@ export class EvaluationResultComponent implements OnInit {
             this.load_OnlyPrinters();
         }).then(()=> {
             this.load_OnlyPrintingJobs();
-        }).then(() => {
-          this.loadAllQualityReports();
         });
+
     }
 
     //Get all Designers
@@ -89,39 +82,6 @@ export class EvaluationResultComponent implements OnInit {
                     this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
                 }
                 else{
-                    this.progressMessage = null;
-                    this.errorMessage = error;
-                }
-            });
-    }
-
-    // Get all QualityReports
-    loadAllQualityReports(): Promise<any> {
-        const tempList = [];
-        return this.serviceQualityReport.getAll()
-            .toPromise()
-            .then((result) => {
-                this.errorMessage = null;
-                result.forEach(qualityReport => {
-                    tempList.push(qualityReport);
-                });
-                this.allQualityReports = tempList;
-                if (0 < tempList.length) {
-                    this.current_db_id = tempList[tempList.length - 1];
-                } else {
-                    this.current_db_id = 0;
-                }
-            })
-            .catch((error) => {
-                if (error == 'Server error') {
-                    this.progressMessage = null;
-                    this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-                }
-                else if (error == '404 - Not Found') {
-                    this.progressMessage = null;
-                    this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-                }
-                else {
                     this.progressMessage = null;
                     this.errorMessage = error;
                 }
@@ -227,120 +187,28 @@ export class EvaluationResultComponent implements OnInit {
             });
     }
 
-    // TODO: Retrieve encrypted password from quality report and decrypt with End User public key, then add to the quality report in evaluation result
+    //allow update name of Printer
     shareResult(form: any): Promise<any> {
         this.progressMessage = 'Please wait... ';
-
-        this.fileHandler = new FileuploadComponent();
-
-        let encryptedPassword;
 
         for (const evaluationResult of this.allAssets){
             if (evaluationResult.evaluationResultID == form){
                 this.currentEvaluationResult = evaluationResult;
             }
         }
-
         for (const printingJob of this.allPrintingJobs){
-            if ("resource:org.usecase.printer.PrintingJob#" + printingJob.printingJobID == this.currentEvaluationResult.printingJob){
+            if ("resource:org.usecase.printer.PrintingJob#"+printingJob.printingJobID == this.currentEvaluationResult.printingJob){
                 this.currentPrintingJob = printingJob;
             }
         }
 
         for (const printer of this.allPrinters){
-          if ("resource:org.usecase.printer.Printer#" + printer.stakeholderID == this.currentPrintingJob.printer){
-            this.currentPrinter = printer;
-          }
+            if ("resource:org.usecase.printer.Printer#"+printer.stakeholderID == this.currentPrintingJob.printer){
+                this.currentPrinter = printer;
+            }
         }
 
-        for (const qualityReport of this.allQualityReports) {
-          if ("resource:org.usecase.printer.QualityReport#" + qualityReport.qualityReportID == this.currentEvaluationResult.qualityReport) {
-            encryptedPassword = qualityReport.accessPermissionCode;
-            this.currentQualityReport = qualityReport;
-          }
-        }
-
-        // Decrypts the encrypted password so it is now only encrypted with the Manufacturer's public key
-        return this.fileHandler.decryptTextWithPrivKey(encryptedPassword, this.serviceEvaluationResult.returnEndUserPrivateKey())
-        .then(decryptedPassword => {
-
-          // NEED TO UPDATE THE QUALITY REPORT HERE
-          this.qualityReport = {
-            $class: "org.usecase.printer.QualityReport",
-            "qualityReportID": this.currentQualityReport.qualityReportID,
-            "accessPermissionCode": decryptedPassword,
-            "databaseHash": this.currentQualityReport.databaseHash,
-            "owner": this.currentQualityReport.owner,  //Manufacturer
-            "printingJob": this.currentQualityReport.printingJob //PrintingJob
-          };
-
-          return this.serviceEvaluationResult.updateQualityReport(this.currentQualityReport.qualityReportID, this.qualityReport)
-              .toPromise()
-              .then(() => {
-                  this.errorMessage = null;
-                  this.progressMessage = null;
-                  this.successMessage = 'Evaluation Result shared successfully. Refreshing page...';
-                  location.reload();
-              })
-              .catch((error) => {
-                  if(error == 'Server error'){
-                      this.progressMessage = null;
-                      this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-                  }
-                  else if(error == '404 - Not Found'){
-                      this.progressMessage = null;
-                      this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
-                  }
-                  else{
-                      this.progressMessage = null;
-                      this.errorMessage = error;
-                  }
-              });
-
-
-
-          //UNCOMMENT THIS EVENTUALLY
-          /*
-          this.evaluationResult = {
-              $class: "org.usecase.printer.EvaluationResult",
-              "txID": this.currentEvaluationResult.txID+"_",
-              "requirementsMet": this.currentEvaluationResult.requirementsMet,
-              "customer": this.currentEvaluationResult.customer,
-              "printingJob": this.currentEvaluationResult.printingJob,
-              "qualityReport": this.currentEvaluationResult.qualityReport,
-              "manufacturer": this.currentPrinter.printerManufacturer,
-          };
-
-          return this.serviceEvaluationResult.updateEvaluationResult(form,this.evaluationResult)
-              .toPromise()
-              .then(() => {
-                  this.errorMessage = null;
-                  this.progressMessage = null;
-                  this.successMessage = 'Evaluation Result shared successfully. Refreshing page...';
-                  location.reload();
-              })
-              .catch((error) => {
-                  if(error == 'Server error'){
-                      this.progressMessage = null;
-                      this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-                  }
-                  else if(error == '404 - Not Found'){
-                      this.progressMessage = null;
-                      this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
-                  }
-                  else{
-                      this.progressMessage = null;
-                      this.errorMessage = error;
-                  }
-              });
-              */
-        })
-        .catch(error => {
-          console.error(error);
-        });
-
-        /*
-        this.evaluationResult = {E
+        this.evaluationResult = {
             $class: "org.usecase.printer.EvaluationResult",
             "txID": this.currentEvaluationResult.txID+"_",
             "requirementsMet": this.currentEvaluationResult.requirementsMet,
@@ -349,7 +217,6 @@ export class EvaluationResultComponent implements OnInit {
             "qualityReport": this.currentEvaluationResult.qualityReport,
             "manufacturer": this.currentPrinter.printerManufacturer,
         };
-
         return this.serviceEvaluationResult.updateEvaluationResult(form,this.evaluationResult)
             .toPromise()
             .then(() => {
@@ -372,6 +239,6 @@ export class EvaluationResultComponent implements OnInit {
                     this.errorMessage = error;
                 }
             });
-            */
     }
+
 }
