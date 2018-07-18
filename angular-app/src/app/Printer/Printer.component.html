@@ -8,12 +8,12 @@
         <form [formGroup]="myForm">
           <div class="modal-body">
               <div class="form-group text-left">
-                <label for="pubKey">Public Key</label>  
+                <label for="pubKey">Public Key</label>
                   <input formControlName="pubKey" type="text" class="form-control">          
               </div>
               <div class="form-group text-left">
-                <label for="name">Name</label>  
-                  <input formControlName="name" type="text" class="form-control">          
+                <label for="name">Name</label>
+                  <input formControlName="name" type="text" class="form-control">
               </div>
 	          <div class="form-group text-left">
 		          <label for="printerManufacturer">Printer Manufacturer</label>
@@ -62,12 +62,12 @@
           <div class="modal-body">
               <div class="form-group text-left">
                 <label for="pubKey">PubKey</label>
-                  <input [ngModel]="pubKey" formControlName="pubKey" type="text" class="form-control">              
-              </div> 
+                  <input [ngModel]="pubKey" formControlName="pubKey" type="text" class="form-control">
+              </div>
               <div class="form-group text-left">
                 <label for="name">Name</label>
-                  <input [ngModel]="name" formControlName="name" type="text" class="form-control">              
-              </div>          
+                  <input [ngModel]="name" formControlName="name" type="text" class="form-control">
+              </div>
           </div>
           <div class="modal-footer">
             <button (click)="updatePrinter(myForm)" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
@@ -104,9 +104,9 @@
           <thead class="thead">
             <tr class="thead-cols">
                   <th class="bc">ID</th>
-                  <th class="bc">Pubkey</th> 
+                  <th class="bc">Pubkey</th>
                   <th class="bc">Name</th>
-                  <th class="bc">Actions</th>       
+                  <th class="bc">Actions</th>
             </tr>
           </thead>
           <tbody>

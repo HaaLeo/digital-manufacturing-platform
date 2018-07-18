@@ -63,7 +63,6 @@ export default async function postToDB(dataPayload, price, description, ownerID)
         app_key: app_key,
     })
 
-    debugger;
     var retrievedTx = await conn.postTransactionCommit(txCreateSimpleSigned);
     console.log('Transaction', retrievedTx.id, 'successfully posted.');
     var queriedTx = await conn.getTransaction(txCreateSimpleSigned.id);

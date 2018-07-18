@@ -47,27 +47,26 @@ export class BlueprintMasterService {
 
     public getAllDesigners(): Observable<Designer[]> {
       return this.designerService.getAll(this.DESIGNER);
-  }
-
-  public getDesigner(id: any): Observable<Designer> {
-    return this.designerService.getSingle(this.DESIGNER, id);
-  }
-
-  public getAllEndusers(): Observable<Enduser[]> {
-    return this.enduserService.getAll(this.ENDUSER);
-}
-
-public getAllPrinters(): Observable<Printer[]> {
-  return this.printerService.getAll(this.PRINTER);
-}
-
-    public getAllQualityRequirements(): Observable<QualityRequirement[]> {
-        return this.qualityRequirementService.getAll(this.QUALITY_REQUIREMENT);
     }
 
-//create requestBlueprint transaction
-public requestBlueprint(itemToAdd: any): Observable<RequestBlueprint> {
-        return this.requestBlueprintService.add(this.REQUESTBLUEPRINT, itemToAdd);
-}
+    public getDesigner(id: any): Observable<Designer> {
+      return this.designerService.getSingle(this.DESIGNER, id);
+    }
 
+    public getAllEndusers(): Observable<Enduser[]> {
+      return this.enduserService.getAll(this.ENDUSER);
+    }
+
+    public getAllPrinters(): Observable<Printer[]> {
+      return this.printerService.getAll(this.PRINTER);
+    }
+
+    public getAllQualityRequirements(): Observable<QualityRequirement[]> {
+      return this.qualityRequirementService.getAll(this.QUALITY_REQUIREMENT);
+    }
+
+    //create requestBlueprint transaction
+    public requestBlueprint(itemToAdd: any): Observable<RequestBlueprint> {
+            return this.requestBlueprintService.add(this.REQUESTBLUEPRINT, itemToAdd);
+    }
 }

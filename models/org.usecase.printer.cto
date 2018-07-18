@@ -81,6 +81,7 @@ asset QualityRequirement identified by qualityRequirementID {
 	o String name
     o String txID
     --> Enduser owner
+    --> Printer printerID
 }
 
 asset QualityReport identified by qualityReportID {

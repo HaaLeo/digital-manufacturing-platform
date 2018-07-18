@@ -242,4 +242,3 @@ export class EvaluationResultComponent implements OnInit {
     }
 
 }
-
