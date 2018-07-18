@@ -180,12 +180,12 @@ export class FileuploadComponent {
       passwords: password
     };
 
-    return openpgp.decrypt(decOpt).then(plainText => {
+    return openpgp.decrypt(options).then(plainText => {
       return plainText;
     })
     .catch(error => {
       return error;
-    }
+    });
   }
 
   public async decryptTextWithPrivKey(data: string, privateKey: string): Promise<string> {
