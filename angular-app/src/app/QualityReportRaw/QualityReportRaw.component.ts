@@ -4,8 +4,8 @@ import { QualityReportRawService } from './QualityReportRaw.service';
 import {DataAnalystService} from "../DataAnalyst/DataAnalyst.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {EvaluationResultService} from "../EvaluationResult/EvaluationResult.service";
-import { FileuploadComponent } from '../fileupload/fileupload.component';
 import {any} from "codelyzer/util/function";
+import { FileuploadComponent } from '../fileupload/fileupload.component';
 
 @Component({
   selector: 'app-quality-report-raw',
@@ -26,8 +26,6 @@ export class QualityReportRawComponent implements OnInit {
   private allAnalysts;
   private allEvaluationResults: any;
   private qualityReportRawDataObj;
-
-  private fileHandler;
 
   private current_db_id;
     dataAnalystID = new FormControl("");
@@ -94,8 +92,6 @@ export class QualityReportRawComponent implements OnInit {
             else{
                 this.allInaccessibleQualityReportsRaw.push(rawReport);
             }
-
-
           }
 
         if (0 < tempList.length) {
@@ -169,54 +165,60 @@ export class QualityReportRawComponent implements OnInit {
         this.currentAsset = asset;
     }
 
-    // TODO: Retrieve encrypted password from quality report. Decrypt with Manufacturer's private key. Encrypt with analyst's public key
     shareDataWithAnalyst(form: any) {
-
-      this.fileHandler = new FileuploadComponent();
-
-      this.fileHandler.decryptTextWithPrivKey(
-                  this.currentAsset.encryptedReport,
-                  this.serviceQualityReportRaw.returnManufacturerPrivateKey())
-        .then(result => {
-          console.log(result);
-        });
-
-
-      /*
       let stakeholderObjs = this.currentAsset.stakeholder;
       stakeholderObjs.push(this.dataAnalystID.value);
 
-      this.qualityReportRawDataObj = {
-        $class: "org.usecase.printer.QualityReportRaw",
-        "accessPermissionCode": this.currentAsset.accessPermissionCode, // decrypted by manufacturer and encrypted with Analyst pubkey
-        "stakeholder": stakeholderObjs,
-        "encryptedReport": this.currentAsset.encryptedReport, //now encrypted with the pubkey
-        "printingJob": this.currentAsset.printingJob
-      };
-      return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)
-        .toPromise()
-        .then(() => {
-          this.errorMessage = null;
-          this.progressMessage = null;
-          this.successMessage = 'Quality Report Raw shared successfully. Refreshing page...';
-          location.reload();
-        })
-        .catch((error) => {
-          if(error == 'Server error') {
-            this.progressMessage = null;
-            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-          }
-          else if(error == '404 - Not Found') {
-            this.progressMessage = null;
-            this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
-          }
-          else {
-            this.progressMessage = null;
-            this.errorMessage = error;
+      let fileHandler = new FileuploadComponent();
+
+      //This will only work once EvaluationResult is working successfully. Needs EndUser to decrypt accessPermissionCode first
+      fileHandler.decryptTextWithPrivKey(this.currentAsset.accessPermissionCode, this.serviceQualityReportRaw.returnManufacturerPrivateKey())
+      .then(decryptedPassword => {
+        fileHandler.decryptTextWithPassword(decryptedPassword, this.currentAsset.encryptedReport)
+        .then(decryptedReport => {
+          //Find the Analyst's PubKey
+          for (const analyst of this.allAnalysts) {
+              if (analyst.stakeholderID  == this.dataAnalystID.value) {
+                //Encrypt report with Analyst's public key
+                fileHandler.encryptText(analyst.pubKey, decryptedReport)
+                .then(encryptedReport => {
+                  let stakeholderObjs = this.currentAsset.stakeholder;
+                  stakeholderObjs.push(this.dataAnalystID.value);
+
+                  this.qualityReportRawDataObj = {
+                    $class: "org.usecase.printer.QualityReportRaw",
+                    "accessPermissionCode": this.currentAsset.accessPermissionCode, // decrypted by manufacturer and encrypted with Analyst pubkey
+                    "stakeholder": stakeholderObjs,
+                    "encryptedReport": encryptedReport, //now encrypted with the pubkey
+                    "printingJob": this.currentAsset.printingJob
+                  };
+                  return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)
+                    .toPromise()
+                    .then(() => {
+                      this.errorMessage = null;
+                      this.progressMessage = null;
+                      this.successMessage = 'Quality Report Raw shared successfully. Refreshing page...';
+                      location.reload();
+                    })
+                    .catch((error) => {
+                      if(error == 'Server error') {
+                        this.progressMessage = null;
+                        this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                      }
+                      else if(error == '404 - Not Found') {
+                        this.progressMessage = null;
+                        this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
+                      }
+                      else {
+                        this.progressMessage = null;
+                        this.errorMessage = error;
+                      }
+                    });
+
+                });
+              }
           }
         });
-        */
+      });
    }
-
-
 }

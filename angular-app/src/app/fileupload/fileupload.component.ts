@@ -179,9 +179,8 @@ export class FileuploadComponent {
     var options, encrypted;
 
     options = {
-      message: openpgp.message.read(encrypted),
-      passwords: ['secret stuff'],
-      format: 'binary'
+      message: openpgp.message.read(encryptedText),
+      passwords: password
     };
 
     return openpgp.decrypt(options).then(plaintext => {
