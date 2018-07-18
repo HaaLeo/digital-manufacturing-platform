@@ -174,21 +174,18 @@ export class FileuploadComponent {
     });
   }
 
-  //UNTESTED
   public async decryptTextWithPassword(password: string, encryptedText: string): Promise<string> {
-    var options, encrypted;
-
-    options = {
-      message: openpgp.message.read(encryptedText),
+    const options = {
+      message: encryptedText,
       passwords: password
     };
 
-    return openpgp.decrypt(options).then(plaintext => {
-      return plaintext.data;
+    return openpgp.decrypt(decOpt).then(plainText => {
+      return plainText;
     })
     .catch(error => {
-      return error
-    });
+      return error;
+    }
   }
 
   public async decryptTextWithPrivKey(data: string, privateKey: string): Promise<string> {
