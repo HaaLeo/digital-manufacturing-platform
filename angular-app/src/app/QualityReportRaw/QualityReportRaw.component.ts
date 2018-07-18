@@ -116,8 +116,6 @@ export class QualityReportRawComponent implements OnInit {
           .then((result) => {
               this.errorMessage = null;
               result.forEach(printingJob => {
-                  //DISPLAY ONLY PRINTING JOBS THAT HAVEN'T PRINTED YET
-                  if (printingJob.txID != '' && !printingJob.printed)
                       tempList.push(printingJob);
               });
               this.allPrintingJobs = tempList;
@@ -229,7 +227,7 @@ export class QualityReportRawComponent implements OnInit {
             });
     }
 
-    setAsset(asset: any): void {
+    setAsset(asset: any, printingJobs: any): void {
         this.currentAsset = asset;
     }
 
@@ -247,12 +245,14 @@ export class QualityReportRawComponent implements OnInit {
             console.log("CHECKING FOR QUALITY REPORT WITH PRINTING JOB: " + printingJob.printingJobID);
             for (const qualityReport of this.allQualityReports) {
               console.log("FOUND QUALITY REPORT WITH PRINTING JOB: " + qualityReport.printingJob);
-                if ("resource:org.usecase.printer.QualityReport#" + qualityReport.printingJob == this.currentAsset.printingJob) {
+              debugger;
+                if (qualityReport.printingJob == this.currentAsset.printingJob) {
                     console.log("FOUND ONE");
 
                     //This will only work once EvaluationResult is working successfully. Needs EndUser to decrypt accessPermissionCode first
                     fileHandler.decryptTextWithPrivKey(qualityReport.accessPermissionCode, this.serviceQualityReportRaw.returnManufacturerPrivateKey())
                     .then(decryptedPassword => {
+                        debugger;
                       fileHandler.decryptTextWithPassword(decryptedPassword, this.currentAsset.encryptedReport)
                       .then(decryptedReport => {
                         //Find the Analyst's PubKey
@@ -263,6 +263,7 @@ export class QualityReportRawComponent implements OnInit {
                               .then(encryptedReport => {
                                 let stakeholderObjs = this.currentAsset.stakeholder;
                                 stakeholderObjs.push(this.dataAnalystID.value);
+
 
                                 this.qualityReportRawDataObj = {
                                   $class: "org.usecase.printer.QualityReportRaw",
