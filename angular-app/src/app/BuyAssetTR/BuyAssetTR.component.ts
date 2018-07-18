@@ -307,6 +307,7 @@ export class BuyAssetTRComponent {
 
 
     async evaluateReport(form: any) {
+      this.successMessage = null;
       this.loadAllQualityReports();
 
         this.progressMessage = 'Please wait... ';
