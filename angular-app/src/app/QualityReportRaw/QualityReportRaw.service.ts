@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs/Observable';
-import { QualityReportRaw } from '../org.usecase.printer';
+import { QualityReportRaw, PrintingJob } from '../org.usecase.printer';
 import 'rxjs/Rx';
 
 // Can be injected into a constructor
@@ -10,8 +10,10 @@ export class QualityReportRawService {
 
 
     private NAMESPACE = 'org.usecase.printer.QualityReportRaw';
+    private PRINTINGJOB: string = 'org.usecase.printer.PrintingJob';
 
-    constructor(private dataService: DataService<QualityReportRaw>) {
+    constructor(private dataService: DataService<QualityReportRaw>,
+                private printingJobService: DataService<PrintingJob>) {
     };
 
     public getAll(): Observable<QualityReportRaw[]> {
@@ -32,6 +34,10 @@ export class QualityReportRawService {
 
     public deleteAsset(id: any): Observable<QualityReportRaw> {
         return this.dataService.delete(this.NAMESPACE, id);
+    }
+
+    public getAllPrintingJobs(): Observable<PrintingJob[]> {
+        return this.printingJobService.getAll(this.PRINTINGJOB);
     }
 
     public returnManufacturerPrivateKey() {
