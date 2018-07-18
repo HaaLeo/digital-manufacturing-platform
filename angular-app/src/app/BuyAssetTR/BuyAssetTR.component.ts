@@ -307,6 +307,7 @@ export class BuyAssetTRComponent {
 
 
     async evaluateReport(form: any) {
+      this.successMessage = null;
       this.loadAllQualityReports();
 
         this.progressMessage = 'Please wait... ';
@@ -442,7 +443,7 @@ export class BuyAssetTRComponent {
                       "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
                       "qualityReportRawID": "QREPRAW_" + this.current_db_id,
                       "encryptedReport": this.encryptedReportData,
-                      "accessPermissionCode": this.encryptedPassword,
+                      "accessPermissionCode": "none",
                       "stakeholder": stakeholderObjs
                   };
 
