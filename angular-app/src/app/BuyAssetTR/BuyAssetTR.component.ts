@@ -307,8 +307,9 @@ export class BuyAssetTRComponent {
 
 
     async evaluateReport(form: any) {
+      this.successMessage = null;
       this.loadAllQualityReports();
-      
+
         this.progressMessage = 'Please wait... ';
         console.log(this.allPrintingJobs);
         for (const printingJob of this.allPrintingJobs) {
@@ -442,7 +443,7 @@ export class BuyAssetTRComponent {
                       "printingJob": 'resource:org.usecase.printer.PrintingJob#' + this.printingJobCurrent.printingJobID,
                       "qualityReportRawID": "QREPRAW_" + this.current_db_id,
                       "encryptedReport": this.encryptedReportData,
-                      "accessPermissionCode": this.encryptedPassword,
+                      "accessPermissionCode": "none",
                       "stakeholder": stakeholderObjs
                   };
 
@@ -542,6 +543,10 @@ export class BuyAssetTRComponent {
         this.fileHandler.encryptTextWithPassword(this.plainTextPswd, JSON.stringify(qualityReportRawData))
         .then(encryptedData => {
           this.encryptedReportData = encryptedData;
+          this.encryptedReportData = this.encryptedReportData.substr(92);
+          this.encryptedReportData = this.encryptedReportData.slice(0, -25);
+          this.encryptedReportData = this.encryptedReportData.split(" ").join("\n");
+          this.encryptedReportData = `-----BEGIN PGP MESSAGE-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + this.encryptedReportData + `\n-----END PGP MESSAGE-----`;
           // Encrypt the password with the manufacturer's public key
           this.fileHandler.encryptText(manufacturerPubKey, this.plainTextPswd)
           .then(encryptedWithManuf => {
