@@ -41,7 +41,7 @@ export class QualityReportRawService {
     }
 
     public returnNewReport() {
-      `-----BEGIN PGP MESSAGE-----
+      return `-----BEGIN PGP MESSAGE-----
 Version: OpenPGP.js v3.0.12
 Comment: https://openpgpjs.org
 

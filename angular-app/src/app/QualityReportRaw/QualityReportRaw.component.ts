@@ -14,6 +14,9 @@ import { QualityReportService } from "../QualityReport/QualityReport.service";
   styleUrls: ['./QualityReportRaw.component.css'],
   providers: [QualityReportRawService, DataAnalystService, EvaluationResultService, QualityReportService]
 })
+
+
+
 export class QualityReportRawComponent implements OnInit {
     myForm: FormGroup;
 
@@ -232,12 +235,9 @@ export class QualityReportRawComponent implements OnInit {
     }
 
     shareDataWithAnalyst(form: any) {
-      let stakeholderObjs = this.currentAsset.stakeholder;
-      stakeholderObjs.push(this.dataAnalystID.value);
-
       let fileHandler = new FileuploadComponent();
 
-      console.log("CHECKING FOR PRINTING JOB ID: " + this.currentAsset.printingJob)
+      console.log("CHECKING FOR PRINTING JOB ID: " + this.currentAsset.printingJob);
 
       for (const printingJob of this.allPrintingJobs) {
         console.log("FOUND PRINTING JOB ID: " + printingJob.printingJobID);
