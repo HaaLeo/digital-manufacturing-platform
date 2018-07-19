@@ -40,6 +40,23 @@ export class QualityReportRawService {
         return this.printingJobService.getAll(this.PRINTINGJOB);
     }
 
+    public returnNewReport() {
+      `-----BEGIN PGP MESSAGE-----
+Version: OpenPGP.js v3.0.12
+Comment: https://openpgpjs.org
+
+wcBMA0myTJWiknf4AQf9E9YI88tYtQDJJB7UiHpLNPcx6ywu6dPW9jfZ5dqz
+dtT+XjpSrSc1ncTk3UGGV3U01VNGUal/hfU6lPKPFyeoy91wPH9tOM5H9KWP
+fyzDejQ8B8dNkA4N+xyv+qGmgy12Ti56ZDQj+bOQnEEoSlEQvk87GD4Jr/qI
+iESk492EkH36LVnKeEj9OvcPNSdyRE65dmCFZL0duZ0TTChmstohiTf4WCck
+3pwNyzGIremydwsD6fJO5dCRFmSu/NPXRIgq4iCzwMdAFusmI71NjcDDrYgU
+f/5QyCBzBRVzYqeT2fjYNzSFWytHppQqRFw7vVMwQQtB8/SsJcXVqi7mzs+e
+XdJFAVcok/mqdmTNYDaJI4AX+NXMIfmsS9vCeRZ+2y1PZj3o0OnbWWmYQs3P
+Dqg1Pcq7m52Ly7838LKvMF0IHNpxCa+ZeauY
+=rfmy
+-----END PGP MESSAGE-----`;
+    }
+
     public returnManufacturerPrivateKey() {
       return `-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: OpenPGP v2.0.8
