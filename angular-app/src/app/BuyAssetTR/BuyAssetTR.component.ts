@@ -194,6 +194,7 @@ export class BuyAssetTRComponent {
             });
     }
 
+    //Get all printers
     loadAllPrinters(): Promise<any> {
         const tempList = [];
         return this.servicePrinter.getAllPrinters()
@@ -221,6 +222,7 @@ export class BuyAssetTRComponent {
             });
     }
 
+    //Get all quality requirements
     loadAllQualityRequirements(): Promise<any> {
         const tempList = [];
         return this.serviceQualityRequirement.getAll()
@@ -330,18 +332,12 @@ export class BuyAssetTRComponent {
 
         const ipfsKey = (await this.fileHandler.getBCDB(this.qualityRequirementCurrent.txID)).data.asset.key;
 
-        /*
-        const qualityRequirementFile = await fileHandler.getFileFromIPFS(
-            ipfsKey,
-            this.qualityRequirementCurrent.name);
-
-        const requirementObj = JSON.parse(await fileHandler.readAsTextAsync(qualityRequirementFile));
-        */
-
+        //Retrieves file from IPFS. Decrypts file with private key of Printer
         const encryptedFile = await this.fileHandler.getTextFromIPFS(ipfsKey);
         console.log("ENCRYPTED FILE" + encryptedFile);
         const decryptedFile = await this.fileHandler.decryptTextWithPrivKey(encryptedFile, this.serviceTransaction.returnPrinterPrivateKey());
         console.log("DECRYPTED FILE" + decryptedFile);
+        //Creates quality requirement json object of returned values
         const requirementObj = JSON.parse(decryptedFile);
         console.log("REQUIREMENT OBJ" + requirementObj);
 
@@ -467,6 +463,7 @@ export class BuyAssetTRComponent {
               });
     }
 
+    //Generates quality report data and uploads to mongodb.s
     uploadQualityReport(form: any) {
       let manufacturerPubKey;
       let endUserPubKey;
@@ -497,7 +494,6 @@ export class BuyAssetTRComponent {
           }
         }
 
-        // TODO Password first is encrypted with Manufacturer PubKey then with EnduserPubKey. encrypt qualityReportRawData with this
         let qualityReportRawData = {
             "peakPressure": Math.random() * 3000,
             "peakTemperature": Math.random() * 800
@@ -524,22 +520,23 @@ export class BuyAssetTRComponent {
         this.current_db_id = (this.allQualityReports).length;
         this.current_db_id++;
 
-        // Manages encryption of raw data with password
-
         console.log('Quality Report Raw Data: ' + JSON.stringify(qualityReportRawData));
 
+        //Generate random string for quality report password,
         this.plainTextPswd = this.makePassword();
         console.log("PLAIN TEXT PSWD: " + this.plainTextPswd);
 
+        //String manipulation on Manufacture Publi Key
         manufacturerPubKey = manufacturerPubKey.slice(92, 4599);
         manufacturerPubKey = manufacturerPubKey.split(" ").join("\n");
         manufacturerPubKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + manufacturerPubKey + `\n-----END PGP PUBLIC KEY BLOCK-----`;
 
+        //String manipulation on End User public key
         endUserPubKey = endUserPubKey.slice(92, 4599);
         endUserPubKey = endUserPubKey.split(" ").join("\n");
         endUserPubKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + endUserPubKey + `\n-----END PGP PUBLIC KEY BLOCK-----`;
 
-        // Encrypt the raw quality report data with the password
+        //Encrypt the raw quality report data with the password
         this.fileHandler.encryptTextWithPassword(this.plainTextPswd, JSON.stringify(qualityReportRawData))
         .then(encryptedData => {
           this.encryptedReportData = encryptedData;
@@ -555,7 +552,7 @@ export class BuyAssetTRComponent {
             .then(encryptedWithManufEnduser => {
               this.encryptedPassword = encryptedWithManufEnduser;
               console.log("THIS ENCRYPTED PSWD: " + this.encryptedPassword);
-              //This one sent to customer
+              //This is the quality report that is sent to the customer.
               this.qualityReportObj = {
                   "$class": "org.usecase.printer.QualityReport",
                   "qualityReportID": "QREP_" + this.current_db_id,

@@ -64,6 +64,7 @@ export class FileuploadComponent {
     return this.checksum;
   }
 
+  //Converts file into buffer and posts file to IPFS. Returns the hash value of the file from IPFS
   public async postFileToIPFS(): Promise<string> {
     const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
 
@@ -77,6 +78,7 @@ export class FileuploadComponent {
     return hashVal;
   }
 
+  //Posts text to IPFS. Accepts string value. Returns the hash value of the item uploaded to Ipfs
   public async postTextToIPFS(text: string): Promise<string> {
     const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
 
@@ -89,6 +91,7 @@ export class FileuploadComponent {
     return hashVal;
   }
 
+  //Retrieves text from IPFS based on accepted hash value.
   public async getTextFromIPFS(hash: string): Promise<string> {
 
       const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
@@ -98,6 +101,7 @@ export class FileuploadComponent {
       return buffer.toString();
   }
 
+  //Retrieves File from IPFS based on received hash value
   public async getFileFromIPFS(hash: string, filename: string): Promise<File> {
     const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
 
@@ -107,6 +111,7 @@ export class FileuploadComponent {
     return retrievedFile;
   }
 
+  //Uses OpenPGP. Accepts string value of public key. Encrypts the accepted file.
   public async encryptFile(pubKey: string): Promise<string> {
     return this.readAsTextAsync(this.acceptedFile).then(response => {
       console.log(response);
@@ -132,6 +137,7 @@ export class FileuploadComponent {
     });
   }
 
+  //Accepts public key and string value to encrypt. Uses OpenPGP to encrypt string value. Returns encrypted string.
   public async encryptText(pubKey: string, encryptText: string): Promise<string> {
       let encrypted;
 
@@ -154,6 +160,7 @@ export class FileuploadComponent {
       });
   }
 
+  //Accepts string password and plaintext. Uses OpenPGP to encrypt text with password. Returns encrypted string.
   public async encryptTextWithPassword(password: string, plaintext: string): Promise<string> {
     var options, encrypted;
 
@@ -174,6 +181,7 @@ export class FileuploadComponent {
     });
   }
 
+  //Takes in password and encrypted text. Decrypts text using password
   public async decryptTextWithPassword(password: string, encryptedText: string): Promise<string> {
     const options = {
       message: encryptedText,
@@ -188,10 +196,11 @@ export class FileuploadComponent {
     });
   }
 
+  //Accepts data and a private key. Decrypts the data with the private key and passphrase
   public async decryptTextWithPrivKey(data: string, privateKey: string): Promise<string> {
     const privKeyObj = openpgp.key.readArmored(privateKey).keys[0];
 
-    //all generated PGP keys use this as passphrase, so hard-coded for now
+    //all generated PGP keys use this as passphrase, so hard-coded passphrase
     privKeyObj.decrypt("printer-use-case");
 
     const options = {

@@ -57,6 +57,7 @@ Dqg1Pcq7m52Ly7838LKvMF0IHNpxCa+ZeauY
 -----END PGP MESSAGE-----`;
     }
 
+    //Returns private key of the manufacturer
     public returnManufacturerPrivateKey() {
       return `-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: OpenPGP v2.0.8
