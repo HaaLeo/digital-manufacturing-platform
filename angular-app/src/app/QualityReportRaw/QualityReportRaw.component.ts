@@ -62,6 +62,7 @@ export class QualityReportRawComponent implements OnInit {
         this.loadAllQualityReports();
   }
 
+  //Gets all raw quality reports
   loadAllQualityReportsRaw(): Promise<any> {
     //retrieve all BlueprintMaster
     let tempList = [];
@@ -111,7 +112,7 @@ export class QualityReportRawComponent implements OnInit {
       });
   }
 
-  // Get all PrintingJobs
+  //Get all PrintingJobs
   loadAllPrintingJobs(): Promise<any> {
       const tempList = [];
       return this.serviceQualityReportRaw.getAllPrintingJobs()
@@ -139,7 +140,7 @@ export class QualityReportRawComponent implements OnInit {
           });
   };
 
-  // Get all QualityReports
+  //Get all QualityReports
   loadAllQualityReports(): Promise<any> {
       const tempList = [];
       return this.serviceQualityReport.getAll()
@@ -234,6 +235,7 @@ export class QualityReportRawComponent implements OnInit {
         this.currentAsset = asset;
     }
 
+    //
     shareDataWithAnalyst(form: any) {
       let fileHandler = new FileuploadComponent();
 
@@ -251,7 +253,6 @@ export class QualityReportRawComponent implements OnInit {
 
                     let stakeholderObjs = this.currentAsset.stakeholder;
                     stakeholderObjs.push(this.dataAnalystID.value);
-
 
                     this.qualityReportRawDataObj = {
                       $class: "org.usecase.printer.QualityReportRaw",

@@ -55,6 +55,7 @@ export class EvaluationResultService {
         return this.qualityReportService.update(this.QUALITYREPORT, id, itemToUpdate);
     }
 
+    //Returns private key of the End User
     public returnEndUserPrivateKey() {
       return `-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: OpenPGP v2.0.8

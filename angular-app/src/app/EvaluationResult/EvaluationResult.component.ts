@@ -227,6 +227,7 @@ export class EvaluationResultComponent implements OnInit {
             });
     }
 
+    //Allows customer to 'Share' quality report data with the manufacturer. Quality report is updated with decrypted accessPermissionCode
     shareResult(form: any): Promise<any> {
         this.progressMessage = 'Please wait... ';
 
@@ -252,6 +253,7 @@ export class EvaluationResultComponent implements OnInit {
           }
         }
 
+        //Retrieves the current encrypted password (accessPermissionCode) from the quality report.
         for (const qualityReport of this.allQualityReports) {
           if ("resource:org.usecase.printer.QualityReport#" + qualityReport.qualityReportID == this.currentEvaluationResult.qualityReport) {
             encryptedPassword = qualityReport.accessPermissionCode;
@@ -259,11 +261,11 @@ export class EvaluationResultComponent implements OnInit {
           }
         }
 
-        // Decrypts the encrypted password so it is now only encrypted with the Manufacturer's public key
+        //Decrypts the encrypted password so it is now only encrypted with the Manufacturer's public key
         return this.fileHandler.decryptTextWithPrivKey(encryptedPassword, this.serviceEvaluationResult.returnEndUserPrivateKey())
         .then(decryptedPassword => {
 
-          // Update only the accessPermissionCode in the quality report
+          //Update only the accessPermissionCode in the quality report
           this.qualityReport = {
             "accessPermissionCode": decryptedPassword,
             "databaseHash": this.currentQualityReport.databaseHash,
@@ -275,7 +277,7 @@ export class EvaluationResultComponent implements OnInit {
               .toPromise()
               .then(() => {
 
-                // After updating Quality Report, update Evaluation Result (with the updated quality report included)
+                //After updating Quality Report, update Evaluation Result (with the updated quality report included)
                 this.evaluationResult = {
                     $class: "org.usecase.printer.EvaluationResult",
                     "txID": this.currentEvaluationResult.txID+"_",

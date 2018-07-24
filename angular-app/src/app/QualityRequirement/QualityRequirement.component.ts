@@ -146,12 +146,13 @@ export class QualityRequirementComponent implements OnInit {
     }
 
 
-    // Method called when an End User wants to upload a new QualityRequirement Asset
+    //Method called when an End User wants to upload a new QualityRequirement Asset
     addAsset(form: any) {
       for (let printer of this.allPrinters) {
         if (printer.stakeholderID == this.printerID.value) {
-          this.printer = printer;
 
+          //Retrieves public key of printer. Performs string manipulation.
+          this.printer = printer;
           let pubKey = this.printer.pubKey;
           let newPubKey = pubKey.slice(92, 4599);
           let newPubKey2 = newPubKey.split(" ").join("\n");
@@ -162,11 +163,14 @@ export class QualityRequirementComponent implements OnInit {
           let owner = this.owner.value;
           let name = this.name.value;
 
+          //Encrypts quality requirement with public key of printer
           this.fileUploadComponent.encryptFile(newPubKey4)
           .then(encryptedFile => {
+            //Uploads encrypted quality requirement
             this.fileUploadComponent.postTextToIPFS(encryptedFile)
             .then(ipfsHash => {
               console.log('Uploaded quality requirement to ipfs. Returned hash: ' + ipfsHash);
+              //Uploads hash of file into BCDB
               this.fileUploadComponent.postKeyToBCDB(ipfsHash, name, owner)
                   .then(txId => {
                       console.log('Added ipfs to BCDB. TxId: ' + txId);
@@ -280,7 +284,7 @@ export class QualityRequirementComponent implements OnInit {
 
     }
 
-    // Reset all Value incurrently saved in the Form Object
+    //Reset all Value currently saved in the Form Object
     resetForm(): void {
         this.myForm.setValue({
             "qualityRequirementID": null,
