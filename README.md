@@ -25,10 +25,10 @@ Follow these steps to setup and run the application:
 2.	[Setup Fabric](#2-setup-fabric)
 3.	[Generate the Business Network Archive](#3-generate-the-business-network-archive)
 4.	[Deploy to Fabric](#4-deploy-to-fabric)
-5.	[Run the Application](#5-run-the-application)
-6.	[Generate a REST Server](#6-generate-a-rest-server)
-7.	[Stop Fabric](#7-stop-fabric)
-8.	[Additional Resources](#8-additional-resources)
+5.	[Run the Application](#6-run-the-application)
+6.	[Generate a REST Server](#7-generate-a-rest-server)
+7.	[Stop Fabric](#8-stop-fabric)
+8.	[Additional Resources](#9-additional-resources)
 
 ### 1. Clone the repo
 
@@ -115,8 +115,42 @@ Ping the network to check that the business network has been deployed successful
 composer network ping --card admin@printer-use-case
 ```
 
+### 5.	Set up PGP keys
 
-### 5.	Run the Application
+First, install GPG. On Ubuntu/Debian, use the following command:
+
+```
+apt-get install gnupg
+```
+
+If you are on a mac, use Brew to install GPG:
+
+```
+brew install gnupg
+```
+
+The Analyst, End User, Manufacturer, and Printer all need PGP keys. Generate four keys using the following command. For simplicity, use the same passphrase for each keypair, and name each of the keypairs according to their use.
+
+```
+gpg --gen-key
+```
+
+Now export the public and private keys of each of the generated PGP keypairs, where "User Name" is the name you gave the PGP key.
+
+```
+gpg --export -a "User Name" > public.key
+gpg --export-secret-key -a "User Name" > private.key
+```
+
+As the private keys for the entities are used in the application, you will need to go through several of the files and put the private keys in them. They are placed in the 'service' files. You can find the private key locations below. Ensure you copy the whole private key, including the header and footer.
+
+* Printer private key - angular-app/src/app/BuyAssetTR/BuyAssetTR.service.ts
+* End User private key - angular-app/src/app/EvaluationResult/EvaluationResult.service.ts
+* Manufacturer private key - angular-app/src/app/QualityReportRaw/QualityReportRaw.service.ts
+
+When creating the entities in the application, use the public keys from the generated PGP keys.
+
+### 6.	Run the Application
 
 First, inside the `angular-app` directory install the dependencies:
 
@@ -134,7 +168,7 @@ npm start
 NOTE: The application is now running at: http://localhost:4200
 We are using the single BigchainDB node running at the fortiss network at the following IP and port: http://78.47.44.213:8209
 
-### 6. Generate a REST server
+### 7. Generate a REST server
 
 The application needs a REST server in order to communicate with the network. The generated API is connected to the blockchain and the business network.
 
@@ -155,7 +189,7 @@ composer-rest-server
 
 The REST server is available at: `http://localhost:3000/explorer/`
 
-### 7. Set Up Local BCDB Node
+### 8. Set Up Local BCDB Node
 
 1. Clone the BCDB github
 ```
@@ -173,7 +207,7 @@ make start
 make stop
 ```
 
-### 8.	Install and run IPFS
+### 9.	Install and run IPFS
 
 1. Follow these instructions to install IPFS https://ipfs.io/docs/install/
 
@@ -187,7 +221,7 @@ ipfs init
 ipfs daemon
 ```
 
-### 9.	Install and run MongoDB
+### 10.	Install and run MongoDB
 
 1. Follow these instructions to install MongoDB depending on your Operating System https://docs.mongodb.com/manual/administration/install-community/
 
@@ -196,7 +230,7 @@ ipfs daemon
 mongod
 ```
 
-### 10.	Stop Fabric
+### 11.	Stop Fabric
 
 To stop the fabric, run the following commands inside the `fabric-tools` directory:
 
@@ -206,6 +240,6 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ```
 
 
-### 11.	Additional resources
+### 12.	Additional resources
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
