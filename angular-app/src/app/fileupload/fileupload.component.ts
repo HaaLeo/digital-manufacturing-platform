@@ -189,6 +189,8 @@ export class FileuploadComponent {
     };
 
     return openpgp.decrypt(options).then(plainText => {
+      console.log("Look here" + plainText);
+      console.log("Look here again" + plainText.data);
       return plainText;
     })
     .catch(error => {
