@@ -184,7 +184,7 @@ export class FileuploadComponent {
   //Takes in password and encrypted text. Decrypts text using password
   public async decryptTextWithPassword(password: string, encryptedText: string): Promise<string> {
     const options = {
-      message: encryptedText,
+      message: openpgp.message.readArmored(encryptedText),
       passwords: password
     };
 
