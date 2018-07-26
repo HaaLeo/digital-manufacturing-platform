@@ -150,6 +150,8 @@ As the private keys for the entities are used in the application, you will need 
 
 When creating the entities in the application, use the public keys from the generated PGP keys.
 
+Finally, update the 'passphrase' variable in angular-app/src/app/fileupload/fileupload.component.ts
+
 ### 6.	Run the Application
 
 First, inside the `angular-app` directory install the dependencies:

@@ -30,8 +30,8 @@ export class FileuploadComponent {
   private currentFileName;
   private encryptedFile;
 
-  // Set web worker path for openpgp
-  //openpgp.initWorker({ path:'openpgp.worker.js' });
+  //UPDATE THIS WITH NEW PASSPHRASE IF REQUIRED
+  private passphrase = "printer-use-case";
 
   // File being dragged has moved into the drop region
   private dragFileOverStart() {
@@ -201,7 +201,7 @@ export class FileuploadComponent {
     const privKeyObj = openpgp.key.readArmored(privateKey).keys[0];
 
     //all generated PGP keys use this as passphrase, so hard-coded passphrase
-    privKeyObj.decrypt("printer-use-case");
+    privKeyObj.decrypt(passphrase);
 
     const options = {
       message: openpgp.message.readArmored(data),
