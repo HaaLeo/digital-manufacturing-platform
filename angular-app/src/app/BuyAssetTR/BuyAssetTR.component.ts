@@ -539,19 +539,25 @@ export class BuyAssetTRComponent {
         //Encrypt the raw quality report data with the password
         this.fileHandler.encryptTextWithPassword(this.plainTextPswd, JSON.stringify(qualityReportRawData))
         .then(encryptedData => {
+          console.log("REPORT ENCRYPTED WITH PSWD\n" + encryptedData);
           this.encryptedReportData = encryptedData;
+          /*
           this.encryptedReportData = this.encryptedReportData.substr(92);
           this.encryptedReportData = this.encryptedReportData.slice(0, -25);
           this.encryptedReportData = this.encryptedReportData.split(" ").join("\n");
-          this.encryptedReportData = `-----BEGIN PGP MESSAGE-----\nVersion: OpenPGP v2.0.8\nComment: https://sela.io/pgp/\n\n` + this.encryptedReportData + `\n-----END PGP MESSAGE-----`;
+          this.encryptedReportData = `-----BEGIN PGP MESSAGE-----\nVersion: OpenPGP.js v3.0.12\nComment: https://openpgpjs.org\n\n` + this.encryptedReportData + `\n-----END PGP MESSAGE-----`;
+          console.log("REPORT ENCRYPTED WITH PSWD2\n" + this.encryptedReportData);
+          */
           // Encrypt the password with the manufacturer's public key
           this.fileHandler.encryptText(manufacturerPubKey, this.plainTextPswd)
           .then(encryptedWithManuf => {
+            console.log("ENCRYPTED WITH MANUFACTURER\n" + encryptedWithManuf);
             // Encrypt the response with the End User's public key
             this.fileHandler.encryptText(endUserPubKey, encryptedWithManuf)
             .then(encryptedWithManufEnduser => {
               this.encryptedPassword = encryptedWithManufEnduser;
-              console.log("THIS ENCRYPTED PSWD: " + this.encryptedPassword);
+              console.log("ENCRYPTED WITH MANUFACTURER & END USER\n" + encryptedWithManufEnduser);
+
               //This is the quality report that is sent to the customer.
               this.qualityReportObj = {
                   "$class": "org.usecase.printer.QualityReport",

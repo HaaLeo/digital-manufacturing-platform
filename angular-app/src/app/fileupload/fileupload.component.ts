@@ -184,11 +184,13 @@ export class FileuploadComponent {
   //Takes in password and encrypted text. Decrypts text using password
   public async decryptTextWithPassword(password: string, encryptedText: string): Promise<string> {
     const options = {
-      message: encryptedText,
+      message: openpgp.message.readArmored(encryptedText),
       passwords: password
     };
 
     return openpgp.decrypt(options).then(plainText => {
+      console.log("Look here" + plainText);
+      console.log("Look here again" + plainText.data);
       return plainText;
     })
     .catch(error => {
@@ -198,6 +200,13 @@ export class FileuploadComponent {
 
   //Accepts data and a private key. Decrypts the data with the private key and passphrase
   public async decryptTextWithPrivKey(data: string, privateKey: string): Promise<string> {
+    console.log("------ MESSAGE ------");
+    console.log(data);
+    console.log("---------------------");
+
+    console.log("------ PRIV KEY ------");
+    console.log(privateKey);
+    console.log("----------------------");
     const privKeyObj = openpgp.key.readArmored(privateKey).keys[0];
 
     //all generated PGP keys use this as passphrase, so hard-coded passphrase

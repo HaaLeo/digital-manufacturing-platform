@@ -251,38 +251,59 @@ export class QualityReportRawComponent implements OnInit {
                 if (qualityReport.printingJob == this.currentAsset.printingJob) {
                     console.log("FOUND ONE");
 
-                    let stakeholderObjs = this.currentAsset.stakeholder;
-                    stakeholderObjs.push(this.dataAnalystID.value);
+                    //This will only work once EvaluationResult is working successfully. Needs EndUser to decrypt accessPermissionCode first
+                    fileHandler.decryptTextWithPrivKey(qualityReport.accessPermissionCode, this.serviceQualityReportRaw.returnManufacturerPrivateKey())
+                    .then(decryptedPassword => {
+                        debugger;
+                      fileHandler.decryptTextWithPassword(decryptedPassword, this.currentAsset.encryptedReport)
+                      .then(decryptedReport => {
+                        //Find the Analyst's PubKey
+                        for (const analyst of this.allAnalysts) {
+                            if (analyst.stakeholderID  == this.dataAnalystID.value) {
+                              //Encrypt report with Analyst's public key
+                              fileHandler.encryptText(analyst.pubKey, decryptedReport)
+                              .then(encryptedReport => {
+                                let stakeholderObjs = this.currentAsset.stakeholder;
+                                stakeholderObjs.push(this.dataAnalystID.value);
 
-                    this.qualityReportRawDataObj = {
-                      $class: "org.usecase.printer.QualityReportRaw",
-                      "accessPermissionCode": this.currentAsset.accessPermissionCode,
-                      "stakeholder": stakeholderObjs,
-                      "encryptedReport": this.serviceQualityReportRaw.returnNewReport(),
-                      "printingJob": this.currentAsset.printingJob
-                    };
-                    return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)
-                      .toPromise()
-                      .then(() => {
-                        this.errorMessage = null;
-                        this.progressMessage = null;
-                        this.successMessage = 'Quality Report Raw shared successfully. Refreshing page...';
-                        location.reload();
-                      })
-                      .catch((error) => {
-                        if(error == 'Server error') {
-                          this.progressMessage = null;
-                          this.errorMessage = "Could not connect to REST server. Please check your configuration details";
-                        }
-                        else if(error == '404 - Not Found') {
-                          this.progressMessage = null;
-                          this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
-                        }
-                        else {
-                          this.progressMessage = null;
-                          this.errorMessage = error;
+
+                                this.qualityReportRawDataObj = {
+                                  $class: "org.usecase.printer.QualityReportRaw",
+                                  "accessPermissionCode": this.currentAsset.accessPermissionCode,
+                                  "stakeholder": stakeholderObjs,
+                                  "encryptedReport": encryptedReport, //now encrypted with the pubkey
+                                  "printingJob": this.currentAsset.printingJob
+                                };
+                                return this.serviceQualityReportRaw.updateAsset(this.currentAsset.qualityReportRawID,this.qualityReportRawDataObj)
+                                  .toPromise()
+                                  .then(() => {
+                                    this.errorMessage = null;
+                                    this.progressMessage = null;
+                                    this.successMessage = 'Quality Report Raw shared successfully. Refreshing page...';
+                                    location.reload();
+                                  })
+                                  .catch((error) => {
+                                    if(error == 'Server error') {
+                                      this.progressMessage = null;
+                                      this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+                                    }
+                                    else if(error == '404 - Not Found') {
+                                      this.progressMessage = null;
+                                      this.errorMessage = "404 - Could not find API route. Please check your available APIs.";
+                                    }
+                                    else {
+                                      this.progressMessage = null;
+                                      this.errorMessage = error;
+                                    }
+                                  });
+
+                              });
+                            }
                         }
                       });
+                    });
+
+
 
                     /*
                     //This will only work once EvaluationResult is working successfully. Needs EndUser to decrypt accessPermissionCode first
