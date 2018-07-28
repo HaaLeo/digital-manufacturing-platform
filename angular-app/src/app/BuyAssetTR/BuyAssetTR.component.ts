@@ -307,7 +307,7 @@ export class BuyAssetTRComponent {
         });
     }
 
-
+    // This function triggers our evaluate Report transaction which happens on the chaincode.
     async evaluateReport(form: any) {
       this.successMessage = null;
       this.loadAllQualityReports();
@@ -330,6 +330,8 @@ export class BuyAssetTRComponent {
         //const fileHandler = new FileuploadComponent();
         this.fileHandler = new FileuploadComponent();
 
+        // Getting the inputparameter for the evaluation. QualityRequirement is loaded form ipfs and decrypted in the
+        // following lines
         const ipfsKey = (await this.fileHandler.getBCDB(this.qualityRequirementCurrent.txID)).data.asset.key;
 
         //Retrieves file from IPFS. Decrypts file with private key of Printer
@@ -341,7 +343,7 @@ export class BuyAssetTRComponent {
         const requirementObj = JSON.parse(decryptedFile);
         console.log("REQUIREMENT OBJ" + requirementObj);
 
-        // Ensure the QR JSON uploaded has that properties
+        // Ensure the QR JSON uploaded has that properties, this could be tailored for a lot of different Requirements in the future.
         let peakTemperature = requirementObj.peakTemperature;
         let peakPressure = requirementObj.peakPressure;
 
@@ -369,7 +371,7 @@ export class BuyAssetTRComponent {
 	            "qualityReport": 'resource:org.usecase.printer.QualityReport#' + this.qualityReportCurrent.qualityReportID,
 	            "manufacturer": null
           };
-
+            // Calling the chaincode for the report evaluation
 	        this.serviceTransaction.evaluateReport(this.evaluateReportObj)
 	            .toPromise()
 	            .then((result) => {
@@ -396,6 +398,8 @@ export class BuyAssetTRComponent {
     		});
     }
 
+    // Creating an asset QualityReport Raw, which will be owned by the manufacturer. Contains the actual qualityData of the printer,
+    // but encrypted with a password, which is only visible to the enduser
     async transferRawData(form: any) {
         for (const printingJob of this.allPrintingJobs) {
           if (printingJob.printingJobID == this.printingJobID.value) {
@@ -420,7 +424,7 @@ export class BuyAssetTRComponent {
           }
         }
 
-        // Search MongoDB for raw data
+        // Search MongoDB for raw data -> Getting the actual data from the database
 				console.log('Searching MongoDB for job ID: ' + this.printingJobCurrent.printingJobID);
 				this.http.get('http://localhost:3004/api/getData/' + this.printingJobCurrent.printingJobID).subscribe(data => {
 
@@ -464,6 +468,7 @@ export class BuyAssetTRComponent {
     }
 
     //Generates quality report data and uploads to mongodb.s
+    // This is some kind of a security asset. it contains metadata like a hash of our data collection
     uploadQualityReport(form: any) {
       let manufacturerPubKey;
       let endUserPubKey;
@@ -613,6 +618,7 @@ export class BuyAssetTRComponent {
 	      "printingJob": "resource:org.usecase.printer.PrintingJob#"+this.printingJobCurrent.printingJobID
 	    };
 
+			// finnishing the printingjob and marking it as printed
 	   return this.serviceTransaction.printBlueprint(this.confirmTransactionObj)
 	    .toPromise()
 	    .then((result) => {

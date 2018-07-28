@@ -210,7 +210,7 @@ export class FileuploadComponent {
     const privKeyObj = openpgp.key.readArmored(privateKey).keys[0];
 
     //all generated PGP keys use this as passphrase, so hard-coded passphrase
-    privKeyObj.decrypt(passphrase);
+    privKeyObj.decrypt("secret_passphrase");
 
     const options = {
       message: openpgp.message.readArmored(data),

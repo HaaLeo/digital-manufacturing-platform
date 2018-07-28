@@ -15,7 +15,11 @@ import { QualityReportService } from "../QualityReport/QualityReport.service";
   providers: [QualityReportRawService, DataAnalystService, EvaluationResultService, QualityReportService]
 })
 
-
+/*
+Qualityreport Raw represents the raw quality data from the printer, which are sent from the Printer to the Manufacturer.
+The data are encrypted. The password for the decryption is sent to the Enduser via the QualityReport.
+As soon as the Enduser shares the QualityReport, the Manufacturer is able to decrypt it and grant access to the Analyst
+*/
 
 export class QualityReportRawComponent implements OnInit {
     myForm: FormGroup;
@@ -235,12 +239,12 @@ export class QualityReportRawComponent implements OnInit {
         this.currentAsset = asset;
     }
 
-    //
+    // Here the printerdata will be shared with the Analyst.
     shareDataWithAnalyst(form: any) {
       let fileHandler = new FileuploadComponent();
 
       console.log("CHECKING FOR PRINTING JOB ID: " + this.currentAsset.printingJob);
-
+      // in the following lines we get the qualityReport which has the same printingJobId as the qualityReportRaw.
       for (const printingJob of this.allPrintingJobs) {
         console.log("FOUND PRINTING JOB ID: " + printingJob.printingJobID);
           if ("resource:org.usecase.printer.PrintingJob#" + printingJob.printingJobID == this.currentAsset.printingJob) {
