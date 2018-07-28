@@ -245,3 +245,4 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ### 12.	Additional resources
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
+*   @Tasos, please Refer to the video I sent you the link to on Jul 28, 2018 for a video documentation on how to start the application.
