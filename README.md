@@ -25,10 +25,14 @@ Follow these steps to setup and run the application:
 2.	[Setup Fabric](#2-setup-fabric)
 3.	[Generate the Business Network Archive](#3-generate-the-business-network-archive)
 4.	[Deploy to Fabric](#4-deploy-to-fabric)
-5.	[Run the Application](#6-run-the-application)
-6.	[Generate a REST Server](#7-generate-a-rest-server)
-7.	[Stop Fabric](#8-stop-fabric)
-8.	[Additional Resources](#9-additional-resources)
+5.	[Set up PGP keys](#5-set-up-pgp-keys)
+6.	[Run the Application](#6-run-the-application)
+7.	[Generate a REST Server](#7-generate-a-rest-server)
+8.	[Set Up Local BCDB Node](#8-set-up-local-bcdb-node)
+9.	[Install and run IPFS](#9-install-and-run-ipfs)
+10.	[Install and run MongoDB](#10-install-and-run-mongodb)
+11.	[Stop Fabric](#11-stop-fabric)
+12.	[Additional Resources](#12-additional-resources)
 
 ### 1. Clone the repo
 
@@ -56,7 +60,7 @@ These steps are described in detail below.
 
 NOTE: The application is using the single BigchainDB node running at the fortiss network at the following IP and port: http://78.47.44.213:8209
 
-### 2.	Setup Fabric
+### 2. Setup Fabric
 
 Remove all previously created Hyperledger Fabric chaincode images:
 
@@ -76,7 +80,7 @@ cd fabric-tools/
 ./createPeerAdminCard.sh
 ```
 
-### 3.	Generate the Business Network Archive
+### 3. Generate the Business Network Archive
 
 Generate the Business Network Archive (BNA) file from the `root` directory:
 
@@ -89,7 +93,7 @@ composer archive create -a dist/printer-use-case.bna --sourceType dir --sourceNa
 The `composer archive create` command will created a file called `printer-use-case.bna` in the `dist` folder.
 
 
-### 4.	Deploy to Fabric
+### 4. Deploy to Fabric
 
 
 First, install the composer runtime on the peer:
@@ -115,7 +119,7 @@ Ping the network to check that the business network has been deployed successful
 composer network ping --card admin@printer-use-case
 ```
 
-### 5.	Set up PGP keys
+### 5. Set up PGP keys
 
 First, install GPG. On Ubuntu/Debian, use the following command:
 
@@ -152,7 +156,7 @@ When creating the entities in the application, use the public keys from the gene
 
 Finally, update the 'passphrase' variable in angular-app/src/app/fileupload/fileupload.component.ts
 
-### 6.	Run the Application
+### 6. Run the Application
 
 First, inside the `angular-app` directory install the dependencies:
 
@@ -209,7 +213,7 @@ make start
 make stop
 ```
 
-### 9.	Install and run IPFS
+### 9. Install and run IPFS
 
 1. Follow these instructions to install IPFS https://ipfs.io/docs/install/
 
@@ -223,7 +227,7 @@ ipfs init
 ipfs daemon
 ```
 
-### 10.	Install and run MongoDB
+### 10. Install and run MongoDB
 
 1. Follow these instructions to install MongoDB depending on your Operating System https://docs.mongodb.com/manual/administration/install-community/
 
@@ -232,7 +236,7 @@ ipfs daemon
 mongod
 ```
 
-### 11.	Stop Fabric
+### 11. Stop Fabric
 
 To stop the fabric, run the following commands inside the `fabric-tools` directory:
 
@@ -242,7 +246,7 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ```
 
 
-### 12.	Additional resources
+### 12. Additional resources
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/introduction/introduction.html)
 *   @Tasos, please Refer to the video I sent you the link to on Jul 28, 2018 for a video documentation on how to start the application.
