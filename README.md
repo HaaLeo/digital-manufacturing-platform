@@ -13,7 +13,7 @@ Follow these steps to setup and run the application:
 * [Docker](https://www.docker.com/)
 *	[npm](https://www.npmjs.com/)
 *	[Node](https://nodejs.org/en/)
-* [Hyperledger Composer](https://hyperledger.github.io/composer/installing/development-tools.html)
+* [Hyperledger Composer](https://hyperledger.github.io/composer/latest/installing/development-tools.html)
 	* to install composer cli `npm install -g composer-cli`
 	*	to install composer-rest-server `npm install -g composer-rest-server`
 
