@@ -250,5 +250,15 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 
 *	[Hyperledger Composer Docs](https://hyperledger.github.io/composer/latest/introduction/introduction.html)
 *   @Tasos, please Refer to the video I sent you the link to on Jul 28, 2018 for a video documentation on how to start the application.
-*   Please find the keys for printer, dataAnalyst, manufacturer and enduser in the same folder:
+*   Please find the keys for printer, manufacturer and enduser in the same folder:
 *   https://drive.google.com/drive/folders/11ssyeta3TSkieHlnTP6ostBVsKvB9y60
+*   The qualityRequirement has to be of the following structure:
+
+```
+{
+    "peakPressure": <integer>,
+    "peakTemperature": <integer>
+}
+```
+
+* an example of a valid quality requirement can be found in the drive folder as well
