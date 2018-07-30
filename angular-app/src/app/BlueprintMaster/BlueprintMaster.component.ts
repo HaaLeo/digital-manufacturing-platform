@@ -314,7 +314,7 @@ export class BlueprintMasterComponent implements OnInit {
         this.blueprintMaster = blueprintMaster;
       }
     }
-    //transaction object
+    //transaction object, now contains qualityrequirement and printer.
     this.requestBlueprintMasterObj = {
       $class: "org.usecase.printer.RequestBlueprint",
       "buyer": this.buyerID.value,

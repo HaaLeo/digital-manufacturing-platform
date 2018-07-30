@@ -37,7 +37,7 @@ export class BuyAssetTRService {
       return this.enduserService.getAll(this.ENDUSER);
     }
 
-    //Returns PGP public key of the printer
+    //UPDATE THIS WITH NEW PRIVATE KEY IF REQUIRED
     public returnPrinterPrivateKey() {
       return `-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: OpenPGP v2.0.8

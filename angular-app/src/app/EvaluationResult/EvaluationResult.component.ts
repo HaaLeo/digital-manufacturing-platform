@@ -12,6 +12,9 @@ import { QualityReportService } from "../QualityReport/QualityReport.service";
   styleUrls: ['./EvaluationResult.component.css'],
     providers: [EvaluationResultService, PrintingJobService, QualityReportService]
 })
+
+// This asset is created in the EvaluateReport TR and can be saved in whatever form required by the customer. It is
+// a guarantee for compliance with qualityRequirements
 export class EvaluationResultComponent implements OnInit {
 
     myForm: FormGroup;
