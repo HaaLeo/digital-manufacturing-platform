@@ -262,3 +262,8 @@ To stop the fabric, run the following commands inside the `fabric-tools` directo
 ```
 
 * an example of a valid quality requirement can be found in the drive folder as well
+
+### 13. Usage
+
+* For usage examples please refer to the final presentation and the demo video (both available in the drive folder as well.)
+
