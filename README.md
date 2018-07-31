@@ -33,6 +33,7 @@ Follow these steps to setup and run the application:
 10.	[Install and run MongoDB](#10-install-and-run-mongodb)
 11.	[Stop Fabric](#11-stop-fabric)
 12.	[Additional Resources](#12-additional-resources)
+13.	[Usage](#13-usage)
 
 ### 1. Clone the repo
 
