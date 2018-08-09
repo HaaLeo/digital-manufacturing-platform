@@ -94,18 +94,18 @@ export class FileuploadComponent {
   //Retrieves text from IPFS based on accepted hash value.
   public async getTextFromIPFS(hash: string): Promise<string> {
 
-      const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
+    const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
 
-      const buffer:Buffer = await ipfs.cat(hash);
-      console.log('Received buffer from ipfs: ' + buffer.toString());
-      return buffer.toString();
+    const buffer: Buffer = await ipfs.cat(hash);
+    console.log('Received buffer from ipfs: ' + buffer.toString());
+    return buffer.toString();
   }
 
   //Retrieves File from IPFS based on received hash value
   public async getFileFromIPFS(hash: string, filename: string): Promise<File> {
     const ipfs = ipfsAPI(this.ipfsHost, this.ipfsPort);
 
-    const buffer:Buffer = await ipfs.cat(hash);
+    const buffer: Buffer = await ipfs.cat(hash);
     console.log('Received buffer from ipfs: ' + buffer.toString());
     const retrievedFile = new File([buffer], filename);
     return retrievedFile;
@@ -113,49 +113,52 @@ export class FileuploadComponent {
 
   //Uses OpenPGP. Accepts string value of public key. Encrypts the accepted file.
   public async encryptFile(pubKey: string): Promise<string> {
-    return this.readAsTextAsync(this.acceptedFile).then(response => {
-      console.log(response);
-      let encrypted;
+    const response = await this.readAsTextAsync(this.acceptedFile);
+    console.log(response);
+    let encrypted;
+    const keys = openpgp.key.readArmored(pubKey).keys;
+    console.log(keys);
+    const options = {
+      data: response,
+      publicKeys: openpgp.key.readArmored(pubKey).keys,
+    };
 
-      const options = {
-        data: response,
-        publicKeys: openpgp.key.readArmored(pubKey).keys,
-      }
-
-      return openpgp.encrypt(options).then(ciphertext => {
-        let returnedEncrypted = ciphertext.data
-        return returnedEncrypted
-      })
+    return openpgp.encrypt(options).then(ciphertext => {
+      let returnedEncrypted = ciphertext.data;
+      return returnedEncrypted;
+    })
       .then(returnedEncrypted => {
         encrypted = returnedEncrypted;
         console.log(encrypted);
         return encrypted;
       })
       .catch(error => {
+        console.log(error);
         return error;
       });
-    });
+
   }
 
   //Accepts public key and string value to encrypt. Uses OpenPGP to encrypt string value. Returns encrypted string.
   public async encryptText(pubKey: string, encryptText: string): Promise<string> {
-      let encrypted;
+    let encrypted;
 
-      const options = {
-        data: encryptText,
-        publicKeys: openpgp.key.readArmored(pubKey).keys,
-      }
+    const options = {
+      data: encryptText,
+      publicKeys: openpgp.key.readArmored(pubKey).keys,
+    }
 
-      return openpgp.encrypt(options).then(ciphertext => {
-        let returnedEncrypted = ciphertext.data
-        return returnedEncrypted
-      })
+    return openpgp.encrypt(options).then(ciphertext => {
+      let returnedEncrypted = ciphertext.data
+      return returnedEncrypted
+    })
       .then(returnedEncrypted => {
         encrypted = returnedEncrypted;
         console.log(encrypted);
         return encrypted;
       })
       .catch(error => {
+        console.log(error);
         return error;
       });
   }
@@ -165,20 +168,21 @@ export class FileuploadComponent {
     var options, encrypted;
 
     options = {
-        data: plaintext,
-        passwords: password
+      data: plaintext,
+      passwords: password
     };
 
     return openpgp.encrypt(options).then(ciphertext => {
       encrypted = ciphertext.data;
       return encrypted;
     })
-    .then(returnEncrypted => {
-      return returnEncrypted;
-    })
-    .catch(error => {
-      return error
-    });
+      .then(returnEncrypted => {
+        return returnEncrypted;
+      })
+      .catch(error => {
+        console.log(error);
+        return error
+      });
   }
 
   //Takes in password and encrypted text. Decrypts text using password
@@ -193,9 +197,10 @@ export class FileuploadComponent {
       console.log("Look here again" + plainText.data);
       return plainText;
     })
-    .catch(error => {
-      return error;
-    });
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
   }
 
   //Accepts data and a private key. Decrypts the data with the private key and passphrase
@@ -221,12 +226,12 @@ export class FileuploadComponent {
       console.log(plaintext.data)
       return plaintext.data
     })
-    .then(plaintext => {
-      return plaintext;
-    })
-    .catch(error => {
-      return error;
-    });
+      .then(plaintext => {
+        return plaintext;
+      })
+      .catch(error => {
+        return error;
+      });
   }
 
   async postBluePrintMasterBCDB(price, meta, ownerID) {
